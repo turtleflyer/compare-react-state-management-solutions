@@ -2,6 +2,7 @@ import { useInterstate } from '@smart-hooks/use-interstate';
 import React, { useRef, useState } from 'react';
 import type { FC, ReactElement } from 'react';
 import { Button } from './Button';
+import { HOW_MANY_LINES, LINE_LENGTH, PIXEL_SIZE } from './env';
 import { ParentLine } from './ParentLine';
 import { getRandomColor } from './randomColor';
 
@@ -13,17 +14,15 @@ function updateKeys(c: number): [string, string] {
   return [formatKey`even${c}`, formatKey`odd${c}`];
 }
 
-const lineLength = 60;
-const howManyLines = 60;
 const defColor = '#f0f0f0';
 const defKeys = updateKeys(0);
 const controlKeys = ['even-control', 'odd-control'];
 
 let currentLine: ReactElement | null = null;
 
-for (let i = 0; i < howManyLines; i++) {
+for (let i = 0; i < HOW_MANY_LINES; i++) {
   currentLine = (
-    <ParentLine {...{ length: lineLength, controlKey: controlKeys[(howManyLines + i + 1) % 2] }}>
+    <ParentLine {...{ length: LINE_LENGTH, controlKey: controlKeys[(HOW_MANY_LINES + i + 1) % 2] }}>
       {currentLine}
     </ParentLine>
   );
@@ -75,7 +74,7 @@ export const App: FC = () => {
 
   return (
     <>
-      {currentLine}
+      <div {...{ style: { height: `${PIXEL_SIZE * HOW_MANY_LINES}px` } }}>{currentLine}</div>
       <Button {...{ callback: repaintCallback, name: 're-paint' }} />
       <Button
         {...{

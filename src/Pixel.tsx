@@ -1,8 +1,11 @@
 import { useInterstate } from '@smart-hooks/use-interstate';
 import React, { memo } from 'react';
 import type { CSSProperties } from 'react';
+import { PIXEL_SIZE } from './env';
 
-const style: CSSProperties = { height: '10px', width: '10px' };
+const pixelSizeString = `${PIXEL_SIZE}px`;
+
+const style: CSSProperties = { height: pixelSizeString, width: pixelSizeString };
 
 // eslint-disable-next-line react/display-name
 export const Pixel = memo<{ stateKey: string }>(({ stateKey }) => {
