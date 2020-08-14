@@ -1,17 +1,20 @@
-import { useInterstate } from '@smart-hooks/use-interstate';
 import React, { memo } from 'react';
 import type { FC } from 'react';
+import { useRecoilValue } from 'recoil';
+import type { RecoilState } from 'recoil';
 import { PixelsLine } from './PixelsLine';
 
-// eslint-disable-next-line react/display-name
-export const ParentLine: FC<{ length: number; controlKey: string }> = memo(
-  ({ children, length, controlKey }) => {
-    const [useSubscribeControl] = useInterstate<string | null>(controlKey);
-    const stateKey = useSubscribeControl();
+export const ParentLine: FC<{
+  length: number;
+  controlAtom: RecoilState<{ stateAtom: RecoilState<string> } | null>;
+  // eslint-disable-next-line react/display-name
+}> = memo(
+  ({ children, length, controlAtom }) => {
+    const atomRecord = useRecoilValue(controlAtom);
 
     return (
       <div>
-        {stateKey && <PixelsLine {...{ length, stateKey }} />}
+        {atomRecord && <PixelsLine {...{ length, stateAtom: atomRecord.stateAtom }} />}
         {children}
       </div>
     );
