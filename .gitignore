@@ -10,6 +10,8 @@
 
 # production
 /build
+/build-use-interstate
+/build-recoil
 
 # misc
 .DS_Store
