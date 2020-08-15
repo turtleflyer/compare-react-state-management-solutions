@@ -22,6 +22,7 @@ module.exports = {
     'comma-dangle': 'off',
     'func-call-spacing': 'off',
     'function-paren-newline': 'off',
+    'implicit-arrow-linebreak': 'off',
     'linebreak-style': 'off',
     'max-len': 'off',
     'no-nested-ternary': 'off',
