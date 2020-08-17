@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import type { CSSProperties, FC, ReactElement } from 'react';
 import { atom, RecoilRoot, useSetRecoilState } from 'recoil';
-import type { SetterOrUpdater } from 'recoil';
 import { Button } from './Button';
 import {
   carryAtomsControlAtoms,
@@ -12,7 +11,7 @@ import {
   LINE_LENGTH,
   PIXEL_SIZE,
 } from './constants';
-import type { CarryAtom, EvenAndOddAtoms, RecoilStringState } from './constants';
+import type { EvenAndOddAtoms, RecoilStringState } from './constants';
 import { getNextAtom } from './getNextAtom';
 import { PixelsLine } from './PixelsLine';
 import { getRandomColor } from './randomColor';
@@ -37,13 +36,6 @@ const _App: FC = () => {
 
   const [atoms, setAtoms] = useState(defAtoms);
 
-  type CarryStringAtomSetter = SetterOrUpdater<CarryAtom<string> | null>;
-  /**
-   * It is not possible to use "carryAtomsControlAtoms.map((a) => useSetRecoilState(a))" because of
-   * error: "React Hook "useSetRecoilState" cannot be called inside a callback. React Hooks must be
-   * called in a React function component or a custom React Hook function
-   * react-hooks/rules-of-hooks"
-   */
   const sendAtoms = [
     useSetRecoilState(carryAtomsControlAtoms[0]),
     useSetRecoilState(carryAtomsControlAtoms[1]),

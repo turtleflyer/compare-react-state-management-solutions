@@ -13,8 +13,8 @@ export const PixelsLine: FC<{
   defKeyChoice: 0 | 1;
 }> = memo(
   // eslint-disable-next-line prefer-arrow-callback
-  function PixelLine({ children, length, defKeyChoice }) {
-    const pixelRow: Array<ReactElement> = Array<ReactElement>(length)
+  function PixelsLine({ children, length, defKeyChoice }) {
+    const pixelsRow: Array<ReactElement> = Array<ReactElement>(length)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .fill(null as any)
       .map((_, i) => (
@@ -29,7 +29,7 @@ export const PixelsLine: FC<{
 
     return (
       <div>
-        <div {...{ style }}>{pixelRow}</div>
+        <div {...{ style }}>{pixelsRow}</div>
         {children}
       </div>
     );
