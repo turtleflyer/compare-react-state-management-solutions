@@ -1,12 +1,10 @@
 import React, { memo } from 'react';
 import type { CSSProperties, FC, ReactElement } from 'react';
-import { pixelControlPrefix, PIXEL_SIZE } from './constants';
+import { pixelControlPrefix } from './constants';
 import { ControlPixel } from './ControlPixel';
 import { getNextAtom } from './getNextAtom';
 
-const pixelSizeString = `${PIXEL_SIZE}px`;
-
-const style: CSSProperties = { height: pixelSizeString, display: 'flex' };
+const style: CSSProperties = { display: 'flex' };
 
 export const PixelsLine: FC<{
   length: number;

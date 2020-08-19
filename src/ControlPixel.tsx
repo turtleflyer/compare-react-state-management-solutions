@@ -1,9 +1,13 @@
-import React, { memo } from 'react';
-import type { FC } from 'react';
+import React, { memo, useEffect } from 'react';
+import type { CSSProperties, FC } from 'react';
 import { useRecoilValue } from 'recoil';
 import type { RecoilState } from 'recoil';
-import { carryAtomsControlAtoms } from './constants';
+import { carryAtomsControlAtoms, PIXEL_SIZE, storeAtomsMethods } from './constants';
 import { Pixel } from './Pixel';
+
+const pixelSizeString = `${PIXEL_SIZE}px`;
+
+const style: CSSProperties = { height: pixelSizeString, width: pixelSizeString };
 
 export const ControlPixel: FC<{
   pixelControlAtom: RecoilState<0 | 1>;
@@ -16,5 +20,11 @@ export const ControlPixel: FC<{
   const choice = useRecoilValue(pixelControlAtom);
   const possibleStateAtom = useRecoilValue(carryAtomsControlAtoms[choice]);
 
-  return possibleStateAtom && <Pixel {...{ stateAtom: possibleStateAtom.atom }} />;
+  useEffect(() => storeAtomsMethods.push(pixelControlAtom), []);
+
+  return (
+    <div {...{ style }}>
+      {possibleStateAtom === null ? null : <Pixel {...{ stateAtom: possibleStateAtom.atom }} />}
+    </div>
+  );
 });

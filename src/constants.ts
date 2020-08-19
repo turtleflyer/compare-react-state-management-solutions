@@ -19,7 +19,17 @@ export const defAtoms = keysPrefs.map((p) => getNextAtom(p, defColor)) as EvenAn
 export const carryAtomsControlAtoms = keysPrefs.map((pref, i) =>
   atom({ key: `carry-${pref}`, default: { atom: defAtoms[i] } })
 ) as [RecoilStateCarryStringAtom, RecoilStateCarryStringAtom];
-export const storeAtoms = atom({
-  key: 'store-atom',
-  default: [] as RecoilState<0 | 1>[],
-});
+
+const storeAtoms = [] as RecoilState<0 | 1>[];
+interface StoreAtomsMethods {
+  push: (newKey: RecoilState<0 | 1>) => void;
+  get: (n: number) => RecoilState<0 | 1>;
+}
+export const storeAtomsMethods: StoreAtomsMethods = {
+  push(newKey) {
+    storeAtoms.push(newKey);
+  },
+  get(n) {
+    return storeAtoms[n];
+  },
+};

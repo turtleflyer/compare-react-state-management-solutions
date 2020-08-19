@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { CSSProperties, FC, ReactElement } from 'react';
 import { atom, RecoilRoot, useSetRecoilState } from 'recoil';
+import type { RecoilState } from 'recoil';
 import { Button } from './Button';
 import {
   carryAtomsControlAtoms,
@@ -10,6 +11,7 @@ import {
   keysPrefs,
   LINE_LENGTH,
   PIXEL_SIZE,
+  storeAtomsMethods,
 } from './constants';
 import type { EvenAndOddAtoms, RecoilStringState } from './constants';
 import { getNextAtom } from './getNextAtom';
@@ -46,6 +48,15 @@ const _App: FC = () => {
     useSetRecoilState(atoms[1] || placeholderAtom),
   ];
 
+  const [randomIndexToPaint, setIndex] = useState<RecoilState<0 | 1>>();
+  const paintRandomPixel = useSetRecoilState<0 | 1>(randomIndexToPaint || (placeholderAtom as any));
+
+  useEffect(() => {
+    if (randomIndexToPaint) {
+      paintRandomPixel((prev) => (1 - prev) as 0 | 1);
+    }
+  }, [randomIndexToPaint]);
+
   function repaintCallback() {
     const { current: choice } = recordChoice;
     if (atoms[choice] !== null) {
@@ -76,6 +87,11 @@ const _App: FC = () => {
     };
   }
 
+  function randomPaint() {
+    const randomIndex = Math.floor(Math.random() * LINE_LENGTH * HOW_MANY_LINES);
+    setIndex(storeAtomsMethods.get(randomIndex));
+  }
+
   return (
     <>
       <div {...{ style }}>{currentLine}</div>
@@ -91,6 +107,13 @@ const _App: FC = () => {
         {...{
           callback: getHitter(1),
           name: 'enable/disable odd rows',
+          addStyle: { width: '300px' },
+        }}
+      />
+      <Button
+        {...{
+          callback: randomPaint,
+          name: 'paint random pixel',
           addStyle: { width: '300px' },
         }}
       />
