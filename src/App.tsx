@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, Profiler } from 'react';
 import type { CSSProperties, FC, ReactElement } from 'react';
 import { atom, RecoilRoot, useSetRecoilState } from 'recoil';
 import type { RecoilState } from 'recoil';
@@ -122,8 +122,25 @@ const _App: FC = () => {
 };
 
 export const App: FC = () => (
-  <RecoilRoot>
-    {/* eslint-disable-next-line react/jsx-pascal-case */}
-    <_App />
-  </RecoilRoot>
+  <Profiler
+    {...{
+      id: 'App',
+      onRender(id, phase, actualDuration, baseDuration, startTime, commitTime) {
+        console.log(
+          'id, phase, actualDuration, baseDuration, startTime, commitTime: ',
+          id,
+          phase,
+          actualDuration,
+          baseDuration,
+          startTime,
+          commitTime
+        );
+      },
+    }}
+  >
+    <RecoilRoot>
+      {/* eslint-disable-next-line react/jsx-pascal-case */}
+      <_App />
+    </RecoilRoot>
+  </Profiler>
 );
