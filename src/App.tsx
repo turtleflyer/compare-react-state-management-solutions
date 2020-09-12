@@ -1,24 +1,23 @@
-import React, { useEffect, useRef, useState, Profiler } from 'react';
 import type { CSSProperties, FC, ReactElement } from 'react';
-import { atom, RecoilRoot, useSetRecoilState } from 'recoil';
-import type { RecoilState } from 'recoil';
+import React, { Profiler, useEffect, useRef, useState } from 'react';
+import { RecoilRoot, useSetRecoilState } from 'recoil';
 import { Button } from './Button';
-import {
-  carryAtomsControlAtoms,
-  defAtoms,
-  defColor,
-  HOW_MANY_LINES,
-  keysPrefs,
-  LINE_LENGTH,
-  PIXEL_SIZE,
-  storeAtomsMethods,
-} from './constants';
-import type { EvenAndOddAtoms, RecoilStringState } from './constants';
 import { getNextAtom } from './getNextAtom';
 import { PixelsLine } from './PixelsLine';
 import { getRandomColor } from './randomColor';
-
-const placeholderAtom = atom({ key: '_', default: '' });
+import type { OneOfTwoAlternativesControlAtomsSet, OneOfTwoAlternativesState } from './State';
+import {
+  defColor,
+  defOneOfTwoAlternativesControl,
+  HOW_MANY_LINES,
+  LINE_LENGTH,
+  oneOfTwoAlternativesControlPrefs,
+  PIXEL_SIZE,
+  placeholderAtomForAlternatives,
+  placeholderAtomForPixelControl,
+  sendAtomsControlAtoms,
+  storeAtomsMethods,
+} from './State';
 
 let currentLine: ReactElement | null = null;
 for (let i = 0; i < HOW_MANY_LINES; i++) {
@@ -36,20 +35,19 @@ const _App: FC = () => {
   const recordChoice = useRef<0 | 1>(0);
   const recordColors = useRef<[string, string]>([defColor, defColor]);
 
-  const [atoms, setAtoms] = useState(defAtoms);
+  const [atoms, setAtoms] = useState(defOneOfTwoAlternativesControl);
 
   const sendAtoms = [
-    useSetRecoilState(carryAtomsControlAtoms[0]),
-    useSetRecoilState(carryAtomsControlAtoms[1]),
-  ];
-
+    useSetRecoilState(sendAtomsControlAtoms[0]),
+    useSetRecoilState(sendAtomsControlAtoms[1]),
+  ] as const;
   const setColors = [
-    useSetRecoilState(atoms[0] || placeholderAtom),
-    useSetRecoilState(atoms[1] || placeholderAtom),
-  ];
+    useSetRecoilState(atoms[0] || placeholderAtomForAlternatives),
+    useSetRecoilState(atoms[1] || placeholderAtomForAlternatives),
+  ] as const;
 
-  const [randomIndexToPaint, setIndex] = useState<RecoilState<0 | 1>>();
-  const paintRandomPixel = useSetRecoilState<0 | 1>(randomIndexToPaint || (placeholderAtom as any));
+  const [randomIndexToPaint, setIndex] = useState(placeholderAtomForPixelControl);
+  const paintRandomPixel = useSetRecoilState(randomIndexToPaint);
 
   useEffect(() => {
     if (randomIndexToPaint) {
@@ -73,14 +71,17 @@ const _App: FC = () => {
 
   function getHitter(evenOrOdd: 0 | 1): () => void {
     return () => {
-      let changeAtom: RecoilStringState | null;
+      let changeAtom: OneOfTwoAlternativesState | null;
       if (atoms[evenOrOdd] === null) {
-        changeAtom = getNextAtom(keysPrefs[evenOrOdd], recordColors.current[evenOrOdd]);
+        changeAtom = getNextAtom(
+          oneOfTwoAlternativesControlPrefs[evenOrOdd],
+          recordColors.current[evenOrOdd]
+        );
       } else {
         changeAtom = null;
         recordChoice.current = (1 - evenOrOdd) as 0 | 1;
       }
-      const newAtoms: EvenAndOddAtoms = [...atoms];
+      const newAtoms: OneOfTwoAlternativesControlAtomsSet = [...atoms];
       newAtoms[evenOrOdd] = changeAtom;
       setAtoms(newAtoms);
       sendAtoms[evenOrOdd](changeAtom && { atom: changeAtom });
@@ -126,6 +127,7 @@ export const App: FC = () => (
     {...{
       id: 'App',
       onRender(id, phase, actualDuration, baseDuration, startTime, commitTime) {
+        // eslint-disable-next-line no-console
         console.log(
           'id, phase, actualDuration, baseDuration, startTime, commitTime: ',
           id,

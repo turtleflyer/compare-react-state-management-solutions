@@ -1,45 +1,78 @@
+const defRules = {
+  'comma-dangle': 'off',
+  'func-call-spacing': 'off',
+  'function-paren-newline': 'off',
+  'implicit-arrow-linebreak': 'off',
+  'import/no-extraneous-dependencies': 'off',
+  'linebreak-style': 'off',
+  'max-len': 'off',
+  'no-confusing-arrow': 'off',
+  'no-nested-ternary': 'off',
+  'no-plusplus': 'off',
+  'no-prototype-builtins': 'off',
+  'no-spaced-func': 'off',
+  'object-curly-newline': 'off',
+  'operator-linebreak': 'off',
+  'import/extensions': 'off',
+  'import/prefer-default-export': 'off',
+  indent: 'off',
+  'jsx-a11y/label-has-associated-control': ['error', { assert: 'either', depth: 2 }],
+  'react/jsx-props-no-spreading': 'off',
+  'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx', '.tsx'] }],
+  'react/destructuring-assignment': 'off',
+  'react/jsx-curly-newline': 'off',
+  'react/prop-types': 'off',
+  'react/state-in-constructor': 'off',
+};
+
 module.exports = {
-  env: {
-    browser: true,
-    es2020: true,
-  },
-  extends: [
-    'airbnb',
-    'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended',
-    // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
-  ],
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
+  overrides: [
+    {
+      files: ['**/*.js', '**/*.jsx', '**/*.json'],
+      env: {
+        browser: true,
+        es2020: true,
+      },
+      extends: ['plugin:react/recommended', 'airbnb'],
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+        ecmaVersion: 11,
+        sourceType: 'module',
+      },
+      plugins: ['react'],
+      rules: { ...defRules },
     },
-    ecmaVersion: 11,
-    sourceType: 'module',
-  },
-  plugins: ['react', '@typescript-eslint'],
-  rules: {
-    'comma-dangle': 'off',
-    'func-call-spacing': 'off',
-    'function-paren-newline': 'off',
-    'implicit-arrow-linebreak': 'off',
-    'linebreak-style': 'off',
-    'max-len': 'off',
-    'no-nested-ternary': 'off',
-    'no-plusplus': 'off',
-    'no-spaced-func': 'off',
-    'object-curly-newline': 'off',
-    'import/extensions': 'off',
-    'import/prefer-default-export': 'off',
-    'react/jsx-filename-extension': 'off',
-    'react/jsx-one-expression-per-line': 'off',
-    'react/prop-types': 'off',
-  },
-  settings: {
-    'import/resolver': {
-      node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    {
+      files: ['**/*.ts', '**/*.tsx'],
+      settings: {
+        'import/resolver': {
+          node: {
+            extensions: ['.ts', '.tsx', '.d.ts'],
+          },
+        },
+      },
+      env: {
+        browser: true,
+        es2020: true,
+      },
+      extends: ['plugin:react/recommended', 'airbnb', 'plugin:@typescript-eslint/recommended'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+        ecmaVersion: 11,
+        sourceType: 'module',
+      },
+      plugins: ['react', '@typescript-eslint'],
+      rules: {
+        ...defRules,
+        '@typescript-eslint/ban-types': ['error', { types: { object: false } }],
+        '@typescript-eslint/no-use-before-define': 'error',
+        'no-use-before-define': 'off',
       },
     },
-  },
+  ],
 };
