@@ -53,7 +53,7 @@ const _App: FC = () => {
     if (randomIndexToPaint) {
       paintRandomPixel((prev) => (1 - prev) as 0 | 1);
     }
-  }, [randomIndexToPaint]);
+  }, [paintRandomPixel, randomIndexToPaint]);
 
   function repaintCallback() {
     const { current: choice } = recordChoice;

@@ -20,7 +20,7 @@ export const ControlPixel: FC<{
   const choice = useRecoilValue(pixelControlAtom);
   const possibleStateAtom = useRecoilValue(sendAtomsControlAtoms[choice]);
 
-  useEffect(() => storeAtomsMethods.push(pixelControlAtom), []);
+  useEffect(() => storeAtomsMethods.push(pixelControlAtom), [pixelControlAtom]);
 
   return (
     <div {...{ style }}>
