@@ -12,9 +12,8 @@ export const PixelsLine: FC<{
 }> = memo(
   // eslint-disable-next-line prefer-arrow-callback
   function PixelsLine({ children, length, defKeyChoice }) {
-    const pixelsRow: Array<ReactElement> = Array<ReactElement>(length)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .fill(null as any)
+    const pixelsRow: ReactElement[] = Array(length)
+      .fill(null)
       .map((_, i) => (
         <ControlPixel
           {...{
