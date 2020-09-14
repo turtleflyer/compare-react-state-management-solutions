@@ -1,9 +1,9 @@
-import type { CSSProperties, FC, ReactElement } from 'react';
+import type { CSSProperties, FC } from 'react';
 import React, { Profiler, useEffect, useRef, useState } from 'react';
 import { RecoilRoot, useSetRecoilState } from 'recoil';
 import { Button } from './Button';
 import { getNextAtom } from './getNextAtom';
-import { PixelsLine } from './PixelsLine';
+import { PixelsStage } from './PixelsStage';
 import { getRandomColor } from './randomColor';
 import type { OneOfTwoAlternativesControlAtomsSet, OneOfTwoAlternativesState } from './State';
 import {
@@ -12,23 +12,17 @@ import {
   HOW_MANY_LINES,
   LINE_LENGTH,
   oneOfTwoAlternativesControlPrefs,
-  PIXEL_SIZE,
   placeholderAtomForAlternatives,
   placeholderAtomForPixelControl,
   sendAtomsControlAtoms,
   storeAtomsMethods,
 } from './State';
 
-let currentLine: ReactElement | null = null;
-for (let i = 0; i < HOW_MANY_LINES; i++) {
-  currentLine = (
-    <PixelsLine {...{ length: LINE_LENGTH, defKeyChoice: ((HOW_MANY_LINES + i + 1) % 2) as 0 | 1 }}>
-      {currentLine}
-    </PixelsLine>
-  );
-}
-
-const style: CSSProperties = { height: `${PIXEL_SIZE * HOW_MANY_LINES}px` };
+const containersStyle: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100vh',
+};
 
 // eslint-disable-next-line no-underscore-dangle
 const _App: FC = () => {
@@ -94,31 +88,33 @@ const _App: FC = () => {
   }
 
   return (
-    <>
-      <div {...{ style }}>{currentLine}</div>
-      <Button {...{ callback: repaintCallback, name: 're-paint' }} />
-      <Button
-        {...{
-          callback: getHitter(0),
-          name: 'enable/disable even rows',
-          addStyle: { width: '300px' },
-        }}
-      />
-      <Button
-        {...{
-          callback: getHitter(1),
-          name: 'enable/disable odd rows',
-          addStyle: { width: '300px' },
-        }}
-      />
-      <Button
-        {...{
-          callback: randomPaint,
-          name: 'paint random pixel',
-          addStyle: { width: '300px' },
-        }}
-      />
-    </>
+    <div {...{ style: containersStyle }}>
+      <PixelsStage />
+      <div>
+        <Button {...{ callback: repaintCallback, name: 're-paint' }} />
+        <Button
+          {...{
+            callback: getHitter(0),
+            name: 'enable/disable even rows',
+            addStyle: { width: '300px' },
+          }}
+        />
+        <Button
+          {...{
+            callback: getHitter(1),
+            name: 'enable/disable odd rows',
+            addStyle: { width: '300px' },
+          }}
+        />
+        <Button
+          {...{
+            callback: randomPaint,
+            name: 'paint random pixel',
+            addStyle: { width: '300px' },
+          }}
+        />
+      </div>
+    </div>
   );
 };
 
