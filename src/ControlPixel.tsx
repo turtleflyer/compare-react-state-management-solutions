@@ -1,5 +1,5 @@
 import type { CSSProperties, FC } from 'react';
-import React, { memo, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Pixel } from './Pixel';
 import type { PixelState } from './State';
@@ -11,8 +11,7 @@ const style: CSSProperties = { height: pixelSizeString, width: pixelSizeString }
 
 export const ControlPixel: FC<{
   pixelControlAtom: PixelState;
-  // eslint-disable-next-line prefer-arrow-callback
-}> = memo(function ControlPixel({ pixelControlAtom }) {
+}> = ({ pixelControlAtom }) => {
   /**
    * Trying to use selector cause an error in developing mode: "Warning: Cannot update a component
    * (`Batcher`) while rendering a different component (`ControlPixel`)."
@@ -27,4 +26,4 @@ export const ControlPixel: FC<{
       {possibleStateAtom && <Pixel {...{ stateAtom: possibleStateAtom.atom }} />}
     </div>
   );
-});
+};
