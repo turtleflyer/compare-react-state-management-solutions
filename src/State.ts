@@ -2,9 +2,7 @@ import { atom } from 'recoil';
 import type { RecoilState } from 'recoil';
 import { getNextAtom } from './getNextAtom';
 
-export const LINE_LENGTH = 60;
-export const HOW_MANY_LINES = 60;
-export const PIXEL_SIZE = 10;
+export const SQUARE_SIZE = 60;
 export const defColor = '#f0f0f0';
 
 export const pixelControlPrefix = 'pixel-control' as const;

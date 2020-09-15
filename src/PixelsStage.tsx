@@ -1,21 +1,37 @@
+import { useSmartRef } from '@smart-hooks/use-smart-ref';
 import type { CSSProperties, FC, ReactElement } from 'react';
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { PixelsLine } from './PixelsLine';
-import { HOW_MANY_LINES, LINE_LENGTH } from './State';
+import { SQUARE_SIZE } from './State';
 
 const style: CSSProperties = { flexGrow: 1 };
 
 export const PixelsStage: FC = memo(function PixelsStage() {
-  let currentLine: ReactElement | null = null;
-  for (let i = 0; i < HOW_MANY_LINES; i++) {
-    currentLine = (
-      <PixelsLine
-        {...{ length: LINE_LENGTH, defKeyChoice: ((HOW_MANY_LINES + i + 1) % 2) as 0 | 1 }}
-      >
-        {currentLine}
-      </PixelsLine>
-    );
-  }
+  const [lines, setLines] = useState<ReactElement>();
 
-  return <div {...{ style }}>{currentLine}</div>;
+  const ref = useSmartRef((e) => {
+    setLines(() => {
+      const { height } = e.getBoundingClientRect();
+      const pixelSize = `${height / SQUARE_SIZE}px`;
+
+      let currentLine: ReactElement | null = null;
+      for (let i = 0; i < SQUARE_SIZE; i++) {
+        currentLine = (
+          <PixelsLine
+            {...{
+              length: SQUARE_SIZE,
+              pixelSize,
+              defKeyChoice: ((SQUARE_SIZE + i + 1) % 2) as 0 | 1,
+            }}
+          >
+            {currentLine}
+          </PixelsLine>
+        );
+      }
+
+      return currentLine as ReactElement;
+    });
+  });
+
+  return <div {...{ style, ref }}>{lines}</div>;
 });

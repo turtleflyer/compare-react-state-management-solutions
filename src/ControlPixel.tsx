@@ -3,15 +3,13 @@ import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Pixel } from './Pixel';
 import type { PixelState } from './State';
-import { PIXEL_SIZE, sendAtomsControlAtoms, storeAtomsMethods } from './State';
-
-const pixelSizeString = `${PIXEL_SIZE}px`;
-
-const style: CSSProperties = { height: pixelSizeString, width: pixelSizeString };
+import { sendAtomsControlAtoms, storeAtomsMethods } from './State';
 
 export const ControlPixel: FC<{
+  pixelSize: string;
   pixelControlAtom: PixelState;
-}> = ({ pixelControlAtom }) => {
+}> = ({ pixelSize, pixelControlAtom }) => {
+  const style: CSSProperties = { height: pixelSize, width: pixelSize };
   /**
    * Trying to use selector cause an error in developing mode: "Warning: Cannot update a component
    * (`Batcher`) while rendering a different component (`ControlPixel`)."

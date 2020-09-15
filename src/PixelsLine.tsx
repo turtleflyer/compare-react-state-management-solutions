@@ -7,14 +7,16 @@ import { pixelControlPrefix } from './State';
 const style: CSSProperties = { display: 'flex' };
 
 export const PixelsLine: FC<{
+  pixelSize: string;
   length: number;
   defKeyChoice: 0 | 1;
-}> = ({ children, length, defKeyChoice }) => {
+}> = ({ children, length, pixelSize, defKeyChoice }) => {
   const pixelsRow: ReactElement[] = Array(length)
     .fill(null)
     .map((_, i) => (
       <ControlPixel
         {...{
+          pixelSize,
           pixelControlAtom: getNextAtom(pixelControlPrefix, defKeyChoice),
         }}
         // eslint-disable-next-line react/no-array-index-key

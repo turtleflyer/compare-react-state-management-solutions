@@ -9,19 +9,21 @@ import type { OneOfTwoAlternativesControlAtomsSet, OneOfTwoAlternativesState } f
 import {
   defColor,
   defOneOfTwoAlternativesControl,
-  HOW_MANY_LINES,
-  LINE_LENGTH,
   oneOfTwoAlternativesControlPrefs,
   placeholderAtomForAlternatives,
   placeholderAtomForPixelControl,
   sendAtomsControlAtoms,
+  SQUARE_SIZE,
   storeAtomsMethods,
 } from './State';
 
-const containersStyle: CSSProperties = {
+const pixelsContainersStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   height: '100vh',
+};
+const buttonsContainersStyle: CSSProperties = {
+  marginTop: '10px',
 };
 
 // eslint-disable-next-line no-underscore-dangle
@@ -83,14 +85,14 @@ const _App: FC = () => {
   }
 
   function randomPaint() {
-    const randomIndex = Math.floor(Math.random() * LINE_LENGTH * HOW_MANY_LINES);
+    const randomIndex = Math.floor(Math.random() * SQUARE_SIZE ** 2);
     setIndex(storeAtomsMethods.get(randomIndex));
   }
 
   return (
-    <div {...{ style: containersStyle }}>
+    <div {...{ style: pixelsContainersStyle }}>
       <PixelsStage />
-      <div>
+      <div {...{ style: buttonsContainersStyle }}>
         <Button {...{ callback: repaintCallback, name: 're-paint' }} />
         <Button
           {...{
