@@ -91,6 +91,7 @@ const _App: FC = () => {
       let changeAtom: OneOfTwoAlternativesState | null;
       if (atoms[evenOrOdd] === null) {
         changeAtom = getNextAtom(oneOfTwoAlternativesControlPrefs[evenOrOdd], defColor);
+        updateInnerState = { ...updateInnerState, choice: evenOrOdd };
       } else {
         changeAtom = null;
         updateInnerState = { ...updateInnerState, choice: (1 - evenOrOdd) as 0 | 1 };
