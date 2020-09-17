@@ -28,8 +28,16 @@ const buttonsContainersStyle: CSSProperties = {
 
 // eslint-disable-next-line no-underscore-dangle
 const _App: FC = () => {
-  const recordChoice = useRef<0 | 1>(0);
-  const recordColors = useRef<[string, string]>([defColor, defColor]);
+  interface AppInnerState {
+    choice: 0 | 1;
+    colors: { 0: string; 1: string };
+  }
+
+  const defInnerState: AppInnerState = {
+    choice: 0,
+    colors: { 0: defColor, 1: defColor },
+  };
+  const innerStateRecord = useRef(defInnerState);
 
   const [atoms, setAtoms] = useState(defOneOfTwoAlternativesControl);
 
@@ -51,36 +59,47 @@ const _App: FC = () => {
     }
   }, [paintRandomPixel, randomIndexToPaint]);
 
-  function repaintCallback() {
-    const { current: choice } = recordChoice;
-    if (atoms[choice] !== null) {
-      const newColor = getRandomColor(recordColors.current[choice]);
-      recordColors.current[choice] = newColor;
-      setColors[choice](newColor);
+  function repaintRow() {
+    const {
+      current: currentInnerState,
+      current: { choice: currentChoice, colors: currentColors },
+    } = innerStateRecord;
+    let updateInnerState: Partial<AppInnerState> = {};
+
+    if (atoms[currentChoice] !== null) {
+      const newColor = getRandomColor(currentColors[currentChoice]);
+      updateInnerState = {
+        ...updateInnerState,
+        colors: { ...currentColors, [currentChoice]: newColor },
+      };
+      setColors[currentChoice](newColor);
     }
 
-    const nextPotentialChoice = (1 - choice) as 0 | 1;
+    const nextPotentialChoice = (1 - currentChoice) as 0 | 1;
     if (atoms[nextPotentialChoice] !== null) {
-      recordChoice.current = nextPotentialChoice;
+      updateInnerState = { ...updateInnerState, choice: nextPotentialChoice };
     }
+
+    innerStateRecord.current = { ...currentInnerState, ...updateInnerState };
   }
 
   function getEvenOrOddRowSwitch(evenOrOdd: 0 | 1): () => void {
     return () => {
+      const { current: currentInnerState } = innerStateRecord;
+      let updateInnerState: Partial<AppInnerState> = {};
+
       let changeAtom: OneOfTwoAlternativesState | null;
       if (atoms[evenOrOdd] === null) {
-        changeAtom = getNextAtom(
-          oneOfTwoAlternativesControlPrefs[evenOrOdd],
-          recordColors.current[evenOrOdd]
-        );
+        changeAtom = getNextAtom(oneOfTwoAlternativesControlPrefs[evenOrOdd], defColor);
       } else {
         changeAtom = null;
-        recordChoice.current = (1 - evenOrOdd) as 0 | 1;
+        updateInnerState = { ...updateInnerState, choice: (1 - evenOrOdd) as 0 | 1 };
       }
       const newAtoms: OneOfTwoAlternativesControlAtomsSet = [...atoms];
       newAtoms[evenOrOdd] = changeAtom;
       setAtoms(newAtoms);
       sendAtoms[evenOrOdd](changeAtom && { atom: changeAtom });
+      innerStateRecord.current = { ...currentInnerState, ...updateInnerState };
     };
   }
 
@@ -93,7 +112,7 @@ const _App: FC = () => {
     <div {...{ style: pixelsContainersStyle }}>
       <PixelsStage />
       <div {...{ style: buttonsContainersStyle }}>
-        <Button {...{ callback: repaintCallback, name: 're-paint' }} />
+        <Button {...{ callback: repaintRow, name: 're-paint' }} />
         <Button
           {...{
             callback: getEvenOrOddRowSwitch(0),
