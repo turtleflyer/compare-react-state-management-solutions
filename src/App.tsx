@@ -65,7 +65,7 @@ const _App: FC = () => {
     }
   }
 
-  function getHitter(evenOrOdd: 0 | 1): () => void {
+  function getEvenOrOddRowSwitch(evenOrOdd: 0 | 1): () => void {
     return () => {
       let changeAtom: OneOfTwoAlternativesState | null;
       if (atoms[evenOrOdd] === null) {
@@ -96,14 +96,14 @@ const _App: FC = () => {
         <Button {...{ callback: repaintCallback, name: 're-paint' }} />
         <Button
           {...{
-            callback: getHitter(0),
+            callback: getEvenOrOddRowSwitch(0),
             name: 'enable/disable even rows',
             addStyle: { width: '300px' },
           }}
         />
         <Button
           {...{
-            callback: getHitter(1),
+            callback: getEvenOrOddRowSwitch(1),
             name: 'enable/disable odd rows',
             addStyle: { width: '300px' },
           }}
