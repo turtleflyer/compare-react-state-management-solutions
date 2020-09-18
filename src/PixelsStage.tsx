@@ -1,15 +1,15 @@
 import { useSmartRef } from '@smart-hooks/use-smart-ref';
 import type { CSSProperties, FC, ReactElement } from 'react';
-import React, { memo, useState } from 'react';
+import React, { useState } from 'react';
 import { PixelsLine } from './PixelsLine';
 import { SQUARE_SIZE } from './State';
 
 const style: CSSProperties = { flexGrow: 1 };
 
-export const PixelsStage: FC = memo(function PixelsStage() {
+export const PixelsStage: FC = () => {
   const [lines, setLines] = useState<ReactElement>();
 
-  const ref = useSmartRef((e) => {
+  const ref = useSmartRef((e) =>
     setLines(() => {
       const { height } = e.getBoundingClientRect();
       const pixelSize = `${height / SQUARE_SIZE}px`;
@@ -30,8 +30,8 @@ export const PixelsStage: FC = memo(function PixelsStage() {
       }
 
       return currentLine as ReactElement;
-    });
-  });
+    })
+  );
 
   return <div {...{ style, ref }}>{lines}</div>;
-});
+};

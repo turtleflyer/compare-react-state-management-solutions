@@ -1,5 +1,5 @@
-import { atom } from 'recoil';
 import type { RecoilState } from 'recoil';
+import { atom } from 'recoil';
 import { getNextAtom } from './getNextAtom';
 
 export const SQUARE_SIZE = 60;
@@ -25,9 +25,14 @@ export const defOneOfTwoAlternativesControl = oneOfTwoAlternativesControlPrefs.m
   getNextAtom(p, defColor)
 ) as OneOfTwoAlternativesControlAtomsSet;
 
-export const placeholderAtomForAlternatives: OneOfTwoAlternativesState = atom({
+export const placeholderAtomForAlternativesState: OneOfTwoAlternativesState = atom({
   key: oneOfTwoAlternativesControlPrefs[0],
   default: defColor,
+});
+
+export const alternativesControlAtomsState = atom({
+  key: 'alternativesControlAtoms',
+  default: defOneOfTwoAlternativesControl,
 });
 
 // It is not possible to make R extends RecoilState<unknown> because "__cTag" property of

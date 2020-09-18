@@ -1,23 +1,12 @@
 import type { CSSProperties, FC } from 'react';
-import React, { Profiler, useEffect, useRef, useState } from 'react';
-import { RecoilRoot, useSetRecoilState } from 'recoil';
-import { Button } from './Button';
-import { getNextAtom } from './getNextAtom';
+import React, { Profiler, useRef } from 'react';
+import { RecoilRoot } from 'recoil';
+import { DisableEnableButtons } from './DisableEnableButtons';
 import { PixelsStage } from './PixelsStage';
-import { getRandomColor } from './randomColor';
-import type { OneOfTwoAlternativesControlAtomsSet, OneOfTwoAlternativesState } from './State';
-import {
-  defColor,
-  defOneOfTwoAlternativesControl,
-  oneOfTwoAlternativesControlPrefs,
-  placeholderAtomForAlternatives,
-  placeholderAtomForPixelControl,
-  sendAtomsControlAtoms,
-  SQUARE_SIZE,
-  storeAtomsMethods,
-} from './State';
+import { RandomPaintButton } from './RandomPaintButton';
+import { ChoiceState, RepaintButton } from './RepaintButton';
 
-const pixelsContainersStyle: CSSProperties = {
+const mainWrapperStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   height: '100vh',
@@ -28,113 +17,18 @@ const buttonsContainersStyle: CSSProperties = {
 
 // eslint-disable-next-line no-underscore-dangle
 const _App: FC = () => {
-  interface AppInnerState {
-    choice: 0 | 1;
-    colors: { 0: string; 1: string };
-  }
-
-  const defInnerState: AppInnerState = {
+  const defChoiceState: ChoiceState = {
     choice: 0,
-    colors: { 0: defColor, 1: defColor },
   };
-  const innerStateRecord = useRef(defInnerState);
-
-  const [atoms, setAtoms] = useState(defOneOfTwoAlternativesControl);
-
-  const sendAtoms = [
-    useSetRecoilState(sendAtomsControlAtoms[0]),
-    useSetRecoilState(sendAtomsControlAtoms[1]),
-  ] as const;
-  const setColors = [
-    useSetRecoilState(atoms[0] || placeholderAtomForAlternatives),
-    useSetRecoilState(atoms[1] || placeholderAtomForAlternatives),
-  ] as const;
-
-  const [randomIndexToPaint, setIndex] = useState(placeholderAtomForPixelControl);
-  const paintRandomPixel = useSetRecoilState(randomIndexToPaint);
-
-  useEffect(() => {
-    if (randomIndexToPaint) {
-      paintRandomPixel((prev) => (1 - prev) as 0 | 1);
-    }
-  }, [paintRandomPixel, randomIndexToPaint]);
-
-  function repaintRow() {
-    const {
-      current: currentInnerState,
-      current: { choice: currentChoice, colors: currentColors },
-    } = innerStateRecord;
-    let updateInnerState: Partial<AppInnerState> = {};
-
-    if (atoms[currentChoice] !== null) {
-      const newColor = getRandomColor(currentColors[currentChoice]);
-      updateInnerState = {
-        ...updateInnerState,
-        colors: { ...currentColors, [currentChoice]: newColor },
-      };
-      setColors[currentChoice](newColor);
-    }
-
-    const nextPotentialChoice = (1 - currentChoice) as 0 | 1;
-    if (atoms[nextPotentialChoice] !== null) {
-      updateInnerState = { ...updateInnerState, choice: nextPotentialChoice };
-    }
-
-    innerStateRecord.current = { ...currentInnerState, ...updateInnerState };
-  }
-
-  function getEvenOrOddRowSwitch(evenOrOdd: 0 | 1): () => void {
-    return () => {
-      const { current: currentInnerState } = innerStateRecord;
-      let updateInnerState: Partial<AppInnerState> = {};
-
-      let changeAtom: OneOfTwoAlternativesState | null;
-      if (atoms[evenOrOdd] === null) {
-        changeAtom = getNextAtom(oneOfTwoAlternativesControlPrefs[evenOrOdd], defColor);
-        updateInnerState = { ...updateInnerState, choice: evenOrOdd };
-      } else {
-        changeAtom = null;
-        updateInnerState = { ...updateInnerState, choice: (1 - evenOrOdd) as 0 | 1 };
-      }
-      const newAtoms: OneOfTwoAlternativesControlAtomsSet = [...atoms];
-      newAtoms[evenOrOdd] = changeAtom;
-      setAtoms(newAtoms);
-      sendAtoms[evenOrOdd](changeAtom && { atom: changeAtom });
-      innerStateRecord.current = { ...currentInnerState, ...updateInnerState };
-    };
-  }
-
-  function randomPaint() {
-    const randomIndex = Math.floor(Math.random() * SQUARE_SIZE ** 2);
-    setIndex(storeAtomsMethods.get(randomIndex));
-  }
+  const choiceStateRecord = useRef(defChoiceState);
 
   return (
-    <div {...{ style: pixelsContainersStyle }}>
+    <div {...{ style: mainWrapperStyle }}>
       <PixelsStage />
       <div {...{ style: buttonsContainersStyle }}>
-        <Button {...{ callback: repaintRow, name: 're-paint' }} />
-        <Button
-          {...{
-            callback: getEvenOrOddRowSwitch(0),
-            name: 'enable/disable even rows',
-            addStyle: { width: '300px' },
-          }}
-        />
-        <Button
-          {...{
-            callback: getEvenOrOddRowSwitch(1),
-            name: 'enable/disable odd rows',
-            addStyle: { width: '300px' },
-          }}
-        />
-        <Button
-          {...{
-            callback: randomPaint,
-            name: 'paint random pixel',
-            addStyle: { width: '300px' },
-          }}
-        />
+        <RepaintButton {...{ choiceStateRecord }} />
+        <DisableEnableButtons {...{ choiceStateRecord }} />
+        <RandomPaintButton />
       </div>
     </div>
   );
