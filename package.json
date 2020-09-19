@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@smart-hooks/use-multi-state": "^2.0.1",
+    "@smart-hooks/use-smart-memo": "^3.0.1",
     "@smart-hooks/use-smart-ref": "^3.0.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.2",

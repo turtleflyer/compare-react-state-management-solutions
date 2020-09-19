@@ -1,10 +1,12 @@
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Button } from './Button';
-import { placeholderAtomForPixelControl, SQUARE_SIZE, storeAtomsMethods } from './State';
+import { gridSizeState, placeholderAtomForPixelControl, storeAtomsMethods } from './State';
 
 export const RandomPaintButton: FC = () => {
+  const gridSize = useRecoilValue(gridSizeState);
+
   const [randomIndexToPaint, setIndex] = useState(placeholderAtomForPixelControl);
   const paintRandomPixel = useSetRecoilState(randomIndexToPaint);
 
@@ -15,7 +17,7 @@ export const RandomPaintButton: FC = () => {
   }, [paintRandomPixel, randomIndexToPaint]);
 
   function randomPaint() {
-    const randomIndex = Math.floor(Math.random() * SQUARE_SIZE ** 2);
+    const randomIndex = Math.floor(Math.random() * gridSize ** 2);
     setIndex(storeAtomsMethods.get(randomIndex));
   }
 

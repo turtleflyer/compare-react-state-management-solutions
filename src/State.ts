@@ -2,8 +2,9 @@ import type { RecoilState } from 'recoil';
 import { atom } from 'recoil';
 import { getNextAtom } from './getNextAtom';
 
-export const SQUARE_SIZE = 60;
-export const defColor = '#f0f0f0';
+export const DEF_GRID_SIZE = 10;
+export const DEF_COLOR = '#AAAAAA';
+export const INPUT_WAITING_DELAY = 3000;
 
 export const pixelControlPrefix = 'pixel-control' as const;
 export type PixelState = RecoilState<0 | 1>;
@@ -22,17 +23,22 @@ export type OneOfTwoAlternativesControlAtomsSet = [
   OneOfTwoAlternativesState | null
 ];
 export const defOneOfTwoAlternativesControl = oneOfTwoAlternativesControlPrefs.map((p) =>
-  getNextAtom(p, defColor)
+  getNextAtom(p, DEF_COLOR)
 ) as OneOfTwoAlternativesControlAtomsSet;
 
 export const placeholderAtomForAlternativesState: OneOfTwoAlternativesState = atom({
   key: oneOfTwoAlternativesControlPrefs[0],
-  default: defColor,
+  default: DEF_COLOR,
 });
 
 export const alternativesControlAtomsState = atom({
   key: 'alternativesControlAtoms',
   default: defOneOfTwoAlternativesControl,
+});
+
+export const gridSizeState = atom({
+  key: 'gridSize',
+  default: DEF_GRID_SIZE,
 });
 
 // It is not possible to make R extends RecoilState<unknown> because "__cTag" property of

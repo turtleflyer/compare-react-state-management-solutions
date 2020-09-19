@@ -5,7 +5,7 @@ import { Button } from './Button';
 import { getRandomColor } from './randomColor';
 import {
   alternativesControlAtomsState,
-  defColor,
+  DEF_COLOR,
   placeholderAtomForAlternativesState,
 } from './State';
 
@@ -22,7 +22,7 @@ export const RepaintButton: FC<ChoiceStateRecord> = ({ choiceStateRecord }) => {
     colors: { 0: string; 1: string };
   }
   const defInnerState: InnerState = {
-    colors: { 0: defColor, 1: defColor },
+    colors: { 0: DEF_COLOR, 1: DEF_COLOR },
   };
   const innerStateRecord = useRef(defInnerState);
 
