@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import React, { Profiler, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import { ChooseGrid } from './ChooseGrid/ChooseGrid';
 import { DisableEnableButtons } from './DisableEnableButtons';
@@ -80,26 +80,8 @@ const _App: FC = () => {
 };
 
 export const App: FC = () => (
-  <Profiler
-    {...{
-      id: 'App',
-      onRender(id, phase, actualDuration, baseDuration, startTime, commitTime) {
-        // eslint-disable-next-line no-console
-        console.log(
-          'id, phase, actualDuration, baseDuration, startTime, commitTime: ',
-          id,
-          phase,
-          actualDuration,
-          baseDuration,
-          startTime,
-          commitTime
-        );
-      },
-    }}
-  >
-    <RecoilRoot>
-      {/* eslint-disable-next-line react/jsx-pascal-case */}
-      <_App />
-    </RecoilRoot>
-  </Profiler>
+  <RecoilRoot>
+    {/* eslint-disable-next-line react/jsx-pascal-case */}
+    <_App />
+  </RecoilRoot>
 );
