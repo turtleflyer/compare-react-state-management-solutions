@@ -37,6 +37,7 @@ export const DisableEnableButtons: FC<ChoiceStateRecord> = ({ choiceStateRecord 
     }) as OneOfTwoAlternativesControlAtomsSet;
 
     setAlternativesControlKeys(newAtoms);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gridSize]);
 
   function getEvenOrOddRowSwitch(evenOrOdd: 0 | 1): () => void {

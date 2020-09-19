@@ -4,7 +4,7 @@ import type { CSSProperties, FC, ReactElement } from 'react';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { PixelsLine } from './PixelsLine';
-import { gridSizeState } from './State';
+import { gridSizeState, storeAtomsMethods } from './State';
 
 const style: CSSProperties = { flexGrow: 1 };
 
@@ -17,6 +17,8 @@ export const PixelsStage: FC = () => {
     if (!stageHeight) {
       return null;
     }
+
+    storeAtomsMethods.resetIndex();
 
     const pixelSize = `${stageHeight / gridSize}px`;
 

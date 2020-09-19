@@ -58,15 +58,24 @@ export const sendAtomsControlAtoms = oneOfTwoAlternativesControlPrefs.map((pref,
 ) as [SendKeysState, SendKeysState];
 
 const storeAtoms = [] as PixelState[];
+let curIndex = 0;
 interface StoreAtomsMethods {
-  push: (newKey: PixelState) => void;
+  push: (newAtom: PixelState) => void;
   get: (n: number) => PixelState;
+  getNext: () => PixelState;
+  resetIndex: () => void;
 }
 export const storeAtomsMethods: StoreAtomsMethods = {
-  push(newKey) {
-    storeAtoms.push(newKey);
+  push(newAtom) {
+    storeAtoms.push(newAtom);
   },
   get(n) {
     return storeAtoms[n];
+  },
+  getNext() {
+    return storeAtoms[curIndex++];
+  },
+  resetIndex() {
+    curIndex = 0;
   },
 };
