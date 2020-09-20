@@ -1,8 +1,9 @@
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { Button } from './Button';
-import { gridSizeState, placeholderAtomForPixelControl, storeAtomsMethods } from './State';
+import { Button } from '../reusable-components/Button';
+import { gridSizeState, placeholderAtomForPixelControl } from '../State/State';
+import { storeAtomsMethods } from '../State/storeAtomsMethods';
 
 export const RandomPaintButton: FC = () => {
   const gridSize = useRecoilValue(gridSizeState);

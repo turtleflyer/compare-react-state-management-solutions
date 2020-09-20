@@ -1,17 +1,20 @@
 import type { FC } from 'react';
 import React, { useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { Button } from './Button';
-import { getNextAtom } from './getNextAtom';
-import type { ChoiceStateRecord } from './RepaintButton';
-import type { OneOfTwoAlternativesControlAtomsSet, OneOfTwoAlternativesState } from './State';
+import { getNextAtom } from '../helpers/getNextAtom';
+import { Button } from '../reusable-components/Button';
+import type {
+  OneOfTwoAlternativesControlAtomsSet,
+  OneOfTwoAlternativesState,
+} from '../State/State';
 import {
   alternativesControlAtomsState,
   DEF_COLOR,
   gridSizeState,
   oneOfTwoAlternativesControlPrefs,
   sendAtomsControlAtoms,
-} from './State';
+} from '../State/State';
+import type { ChoiceStateRecord } from './ChoiceState';
 
 export const DisableEnableButtons: FC<ChoiceStateRecord> = ({ choiceStateRecord }) => {
   const [alternativesControlAtoms, setAlternativesControlKeys] = useRecoilState(

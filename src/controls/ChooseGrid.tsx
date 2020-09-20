@@ -2,9 +2,9 @@ import { useMultiState } from '@smart-hooks/use-multi-state';
 import type { ChangeEvent, FC } from 'react';
 import React, { useRef } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { DEF_GRID_SIZE, gridSizeState, INPUT_WAITING_DELAY } from '../State';
-import { InputField } from './InputField';
-import { Spinner } from './Spinner';
+import { InputField } from '../reusable-components/InputField';
+import { Spinner } from '../reusable-components/Spinner';
+import { DEF_GRID_SIZE, gridSizeState, INPUT_WAITING_DELAY } from '../State/State';
 
 export const ChooseGrid: FC = () => {
   interface InnerState {

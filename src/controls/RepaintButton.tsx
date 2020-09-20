@@ -1,21 +1,14 @@
 import type { FC } from 'react';
 import React, { useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { Button } from './Button';
-import { getRandomColor } from './randomColor';
+import { getRandomColor } from '../helpers/randomColor';
+import { Button } from '../reusable-components/Button';
 import {
   alternativesControlAtomsState,
   DEF_COLOR,
   placeholderAtomForAlternativesState,
-} from './State';
-
-export interface ChoiceState {
-  choice: 0 | 1;
-}
-
-export interface ChoiceStateRecord {
-  choiceStateRecord: { current: ChoiceState };
-}
+} from '../State/State';
+import type { ChoiceStateRecord } from './ChoiceState';
 
 export const RepaintButton: FC<ChoiceStateRecord> = ({ choiceStateRecord }) => {
   interface InnerState {

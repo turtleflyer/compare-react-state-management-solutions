@@ -1,12 +1,13 @@
 import type { FC } from 'react';
 import React, { useEffect, useRef } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
-import { ChooseGrid } from './ChooseGrid/ChooseGrid';
-import { DisableEnableButtons } from './DisableEnableButtons';
-import { PixelsStage } from './PixelsStage';
-import { RandomPaintButton } from './RandomPaintButton';
-import { ChoiceState, RepaintButton } from './RepaintButton';
-import { gridSizeState } from './State';
+import type { ChoiceState } from './controls/ChoiceState';
+import { ChooseGrid } from './controls/ChooseGrid';
+import { DisableEnableButtons } from './controls/DisableEnableButtons';
+import { RandomPaintButton } from './controls/RandomPaintButton';
+import { RepaintButton } from './controls/RepaintButton';
+import { PixelsStage } from './pixels-components/PixelsStage';
+import { gridSizeState } from './State/State';
 
 // eslint-disable-next-line no-underscore-dangle
 const _App: FC = () => {

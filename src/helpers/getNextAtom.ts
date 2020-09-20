@@ -1,5 +1,5 @@
-import { atom } from 'recoil';
 import type { RecoilState } from 'recoil';
+import { atom } from 'recoil';
 
 const prefCountsRecords = new Map<string, number>();
 export function getNextKey(prefix: string): string {

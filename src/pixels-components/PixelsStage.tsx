@@ -3,8 +3,9 @@ import { useSmartRef } from '@smart-hooks/use-smart-ref';
 import type { CSSProperties, FC, ReactElement } from 'react';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { gridSizeState } from '../State/State';
+import { storeAtomsMethods } from '../State/storeAtomsMethods';
 import { PixelsLine } from './PixelsLine';
-import { gridSizeState, storeAtomsMethods } from './State';
 
 const style: CSSProperties = { flexGrow: 1 };
 

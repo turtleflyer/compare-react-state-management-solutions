@@ -1,9 +1,9 @@
 import type { CSSProperties, FC } from 'react';
 import React, { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import type { PixelState } from '../State/State';
+import { sendAtomsControlAtoms } from '../State/State';
 import { Pixel } from './Pixel';
-import type { PixelState } from './State';
-import { sendAtomsControlAtoms, storeAtomsMethods } from './State';
 
 export const ControlPixel: FC<{
   pixelSize: string;

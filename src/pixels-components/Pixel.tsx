@@ -1,7 +1,7 @@
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import type { OneOfTwoAlternativesState } from './State';
+import type { OneOfTwoAlternativesState } from '../State/State';
 
 const style: CSSProperties = { height: '100%', width: '100%' };
 

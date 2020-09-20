@@ -1,6 +1,6 @@
 import type { RecoilState } from 'recoil';
 import { atom } from 'recoil';
-import { getNextAtom } from './getNextAtom';
+import { getNextAtom } from '../helpers/getNextAtom';
 
 export const DEF_GRID_SIZE = 10;
 export const DEF_COLOR = '#AAAAAA';
@@ -56,26 +56,3 @@ export const sendAtomsControlAtoms = oneOfTwoAlternativesControlPrefs.map((pref,
     default: { atom: defOneOfTwoAlternativesControl[i] },
   })
 ) as [SendKeysState, SendKeysState];
-
-const storeAtoms = [] as PixelState[];
-let curIndex = 0;
-interface StoreAtomsMethods {
-  push: (newAtom: PixelState) => void;
-  get: (n: number) => PixelState;
-  getNext: () => PixelState;
-  resetIndex: () => void;
-}
-export const storeAtomsMethods: StoreAtomsMethods = {
-  push(newAtom) {
-    storeAtoms.push(newAtom);
-  },
-  get(n) {
-    return storeAtoms[n];
-  },
-  getNext() {
-    return storeAtoms[curIndex++];
-  },
-  resetIndex() {
-    curIndex = 0;
-  },
-};

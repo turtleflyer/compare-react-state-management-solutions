@@ -1,9 +1,10 @@
 import type { CSSProperties, FC, ReactElement } from 'react';
 import React from 'react';
+import { getNextAtom, getNextKey } from '../helpers/getNextAtom';
+import type { PixelState } from '../State/State';
+import { pixelControlPrefix } from '../State/State';
+import { storeAtomsMethods } from '../State/storeAtomsMethods';
 import { ControlPixel } from './ControlPixel';
-import { getNextAtom, getNextKey } from './getNextAtom';
-import type { PixelState } from './State';
-import { pixelControlPrefix, storeAtomsMethods } from './State';
 
 const style: CSSProperties = { display: 'flex' };
 
