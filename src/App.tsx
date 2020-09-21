@@ -37,7 +37,6 @@ const _App: FC = () => {
       <div
         {...{
           style: {
-            width: 700,
             display: 'flex',
             marginTop: 10,
           },
@@ -48,6 +47,7 @@ const _App: FC = () => {
             style: {
               flexGrow: 0,
               marginRight: 20,
+              width: 400,
             },
           }}
         >
@@ -67,6 +67,7 @@ const _App: FC = () => {
             {...{
               style: {
                 position: 'absolute',
+                width: 300,
                 top: '50%',
                 transform: 'translateY(-49%)',
               },

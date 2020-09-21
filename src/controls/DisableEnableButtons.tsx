@@ -69,7 +69,6 @@ export const DisableEnableButtons: FC<ChoiceStateRecord> = ({ choiceStateRecord 
           {...{
             callback: getEvenOrOddRowSwitch(i as 0 | 1),
             name,
-            addStyle: { width: '300px' },
           }}
           key={name}
         />

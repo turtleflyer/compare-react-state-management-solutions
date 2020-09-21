@@ -27,7 +27,6 @@ export const RandomPaintButton: FC = () => {
       {...{
         callback: randomPaint,
         name: 'paint random pixel',
-        addStyle: { width: '300px' },
       }}
     />
   );
