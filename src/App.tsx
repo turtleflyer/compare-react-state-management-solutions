@@ -1,12 +1,12 @@
 import type { FC } from 'react';
 import React, { useEffect, useRef } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
-import type { ChoiceState } from './controls/ChoiceState';
 import { ChooseGrid } from './controls/ChooseGrid';
 import { DisableEnableButtons } from './controls/DisableEnableButtons';
 import { RandomPaintButton } from './controls/RandomPaintButton';
 import { RepaintButton } from './controls/RepaintButton';
 import { PixelsStage } from './pixels-components/PixelsStage';
+import type { ChoiceState } from './State/ChoiceState';
 import { gridSizeState } from './State/State';
 
 // eslint-disable-next-line no-underscore-dangle

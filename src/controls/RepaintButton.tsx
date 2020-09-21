@@ -3,12 +3,12 @@ import React, { useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { getRandomColor } from '../helpers/randomColor';
 import { Button } from '../reusable-components/Button';
+import type { ChoiceStateRecord } from '../State/ChoiceState';
 import {
   alternativesControlAtomsState,
   DEF_COLOR,
   placeholderAtomForAlternativesState,
 } from '../State/State';
-import type { ChoiceStateRecord } from './ChoiceState';
 
 export const RepaintButton: FC<ChoiceStateRecord> = ({ choiceStateRecord }) => {
   interface InnerState {
