@@ -4,8 +4,8 @@ const storeAtoms = [] as ChoiceForPixelAtom[];
 let curIndex = 0;
 interface StoreAtomsMethods {
   push: (newAtom: ChoiceForPixelAtom) => void;
-  get: (i: number) => ChoiceForPixelAtom;
-  getNext: () => ChoiceForPixelAtom;
+  get: (i: number) => ChoiceForPixelAtom | undefined;
+  getNext: () => ChoiceForPixelAtom | undefined;
   resetIndex: (i?: number) => void;
 }
 export const storeAtomsMethods: StoreAtomsMethods = {

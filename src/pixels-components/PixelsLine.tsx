@@ -1,9 +1,7 @@
 import type { CSSProperties, FC, ReactElement } from 'react';
-import React from 'react';
-import { getNextAtom, getNextKey } from '../helpers/getNextAtom';
-import type { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
-import { choiceForPixel } from '../State/StateInterface';
-import { storeAtomsMethods } from '../State/storeAtomsMethods';
+import React, { useMemo } from 'react';
+import { getNextKey } from '../helpers/getNextAtom';
+import type { PixelChoice } from '../State/StateInterface';
 import { ControlPixel } from './ControlPixel';
 
 const style: CSSProperties = { display: 'flex' };
@@ -13,22 +11,13 @@ export const PixelsLine: FC<{
   length: number;
   defChoice: PixelChoice;
 }> = ({ children, length, pixelSize, defChoice }) => {
-  const line: ReactElement[] = Array(length)
-    .fill(null)
-    .map(() => {
-      let nextAtom: ChoiceForPixelAtom = storeAtomsMethods.getNext();
-      if (!nextAtom) {
-        nextAtom = getNextAtom(choiceForPixel, defChoice);
-        storeAtomsMethods.push(nextAtom);
-      }
-
-      return (
-        <ControlPixel
-          {...{ pixelSize, pixelChoice: nextAtom, defChoice }}
-          key={getNextKey('c-key')}
-        />
-      );
-    });
+  const line: ReactElement[] = useMemo(
+    () =>
+      Array(length)
+        .fill(null)
+        .map(() => <ControlPixel {...{ pixelSize, defChoice }} key={getNextKey('c-key')} />),
+    [defChoice, length, pixelSize]
+  );
 
   return (
     <div>

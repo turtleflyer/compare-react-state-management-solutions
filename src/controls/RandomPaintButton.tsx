@@ -14,7 +14,11 @@ export const RandomPaintButton: FC = () => {
 
   const randomPaint: () => void = useCallback(() => {
     const randomIndex = Math.floor(Math.random() * gridSize ** 2);
-    setAtomToPaint([storeAtomsMethods.get(randomIndex)]);
+    const atomToSet = storeAtomsMethods.get(randomIndex);
+    if (!atomToSet) {
+      throw Error('It should be defined');
+    }
+    setAtomToPaint([atomToSet]);
   }, [gridSize]);
 
   return (

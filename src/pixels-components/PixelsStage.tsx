@@ -2,13 +2,13 @@ import { useSmartMemo } from '@smart-hooks/use-smart-memo';
 import type { CSSProperties, FC, ReactElement } from 'react';
 import React, { useState } from 'react';
 import { gridSizeAtom, useInterstate } from '../State/State';
+import { PixelChoice } from '../State/StateInterface';
 import { PixelsLine } from './PixelsLine';
 
 const style: CSSProperties = { flexGrow: 1 };
 
 export const PixelsStage: FC = () => {
   const gridSize = useInterstate(...gridSizeAtom).get();
-
   const [stageHeight, setStageHeight] = useState(0);
 
   const lines: ReactElement | null = useSmartMemo(() => {
@@ -24,7 +24,7 @@ export const PixelsStage: FC = () => {
           {...{
             length: gridSize,
             pixelSize,
-            defChoice: ((gridSize + i + 1) % 2) as 0 | 1,
+            defChoice: ((gridSize + i + 1) % 2) as PixelChoice,
           }}
         >
           {currentLine}
