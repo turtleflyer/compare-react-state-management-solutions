@@ -1,30 +1,23 @@
-import type { CSSProperties, FC } from 'react';
-import React, { useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import type { PixelState } from '../State/State';
-import { sendAtomsControlAtoms } from '../State/State';
+import React, { CSSProperties, FC, useEffect } from 'react';
+import { alternativeForChoiceAtoms, useInterstate } from '../State/State';
+import type { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
 import { Pixel } from './Pixel';
 
 export const ControlPixel: FC<{
   pixelSize: string;
-  pixelControlAtom: PixelState;
-  defKeyChoice: 0 | 1;
-}> = ({ pixelSize, pixelControlAtom, defKeyChoice }) => {
+  pixelChoice: ChoiceForPixelAtom;
+  defChoice: PixelChoice;
+}> = ({ pixelSize, pixelChoice, defChoice }) => {
   const style: CSSProperties = { height: pixelSize, width: pixelSize };
-  /**
-   * Trying to use selector cause an error in developing mode: "Warning: Cannot update a component
-   * (`Batcher`) while rendering a different component (`ControlPixel`)."
-   */
-  const [choice, setChoice] = useRecoilState(pixelControlAtom);
-  useEffect(() => {
-    setChoice(defKeyChoice);
-  }, [defKeyChoice, setChoice]);
 
-  const possibleStateAtom = useRecoilValue(sendAtomsControlAtoms[choice]);
+  const [choice, setChoice] = useInterstate(...pixelChoice).both();
+  const possibleStateAtom = useInterstate(...alternativeForChoiceAtoms[choice]).get();
+
+  useEffect(() => setChoice(defChoice), [defChoice, setChoice]);
 
   return (
     <div {...{ style }}>
-      {possibleStateAtom && <Pixel {...{ stateAtom: possibleStateAtom.atom }} />}
+      {possibleStateAtom && <Pixel {...{ altControlAtom: possibleStateAtom }} />}
     </div>
   );
 };

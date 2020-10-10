@@ -1,16 +1,38 @@
 import type { FC } from 'react';
 import React from 'react';
-import { useSetRecoilState } from 'recoil';
 import { DelayedInput } from '../reusable-components/DelayedInput';
-import { DEF_GRID_SIZE, gridSizeState } from '../State/State';
+import {
+  alternativeForChoiceAtoms,
+  DEF_GRID_SIZE,
+  getNextColorForAlternativeAtom,
+  gridSizeAtom,
+  rememberActiveChoiceAtom,
+  useInterstate,
+} from '../State/State';
+import { PixelChoice } from '../State/StateInterface';
+import { storeAtomsMethods } from '../State/storeAtomsMethods';
 
 export const ChooseGrid: FC = () => {
-  const setGridSize = useSetRecoilState(gridSizeState);
+  const setGridSize = useInterstate(...gridSizeAtom).set();
+  const setActiveChoice = useInterstate(...rememberActiveChoiceAtom).set();
+  const setAlternatives = [
+    useInterstate(...alternativeForChoiceAtoms[0]).set(),
+    useInterstate(...alternativeForChoiceAtoms[1]).set(),
+  ] as const;
 
-  function inputCallback(input: string, setInput: (input: string) => void) {
+  function inputCallback(input: string) {
+    storeAtomsMethods.resetIndex();
     const gridSize = parseInt(input, 10);
     setGridSize(gridSize);
-    setInput(`${gridSize}`);
+    setActiveChoice(0);
+    setAlternatives.forEach((set, i) => {
+      set((prevAtom) => {
+        if (!prevAtom) {
+          return getNextColorForAlternativeAtom(i as PixelChoice);
+        }
+        return prevAtom;
+      });
+    });
   }
 
   return (

@@ -1,65 +1,31 @@
 import type { FC } from 'react';
-import React, { useEffect } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { getNextAtom } from '../helpers/getNextAtom';
+import React from 'react';
 import { Button } from '../reusable-components/Button';
-import type { ChoiceStateRecord } from '../State/ChoiceState';
-import type {
-  OneOfTwoAlternativesControlAtomsSet,
-  OneOfTwoAlternativesState,
-} from '../State/State';
 import {
-  alternativesControlAtomsState,
-  DEF_COLOR,
-  gridSizeState,
-  oneOfTwoAlternativesControlPrefs,
-  sendAtomsControlAtoms,
+  alternativeForChoiceAtoms,
+  getNextColorForAlternativeAtom,
+  rememberActiveChoiceAtom,
+  useInterstate,
 } from '../State/State';
+import type { PixelChoice } from '../State/StateInterface';
 
-export const DisableEnableButtons: FC<ChoiceStateRecord> = ({ choiceStateRecord }) => {
-  const [alternativesControlAtoms, setAlternativesControlKeys] = useRecoilState(
-    alternativesControlAtomsState
-  );
-
-  const sendAtoms = [
-    useSetRecoilState(sendAtomsControlAtoms[0]),
-    useSetRecoilState(sendAtomsControlAtoms[1]),
+export const DisableEnableButtons: FC = () => {
+  const setActiveChoice = useInterstate(...rememberActiveChoiceAtom).set();
+  const setAlternatives = [
+    useInterstate(...alternativeForChoiceAtoms[0]).set(),
+    useInterstate(...alternativeForChoiceAtoms[1]).set(),
   ] as const;
 
-  const gridSize = useRecoilValue(gridSizeState);
-
-  useEffect(() => {
-    const newAtoms = alternativesControlAtoms.map((key, i) => {
-      if (key) {
-        return key;
-      }
-
-      const changeAtom = getNextAtom(oneOfTwoAlternativesControlPrefs[i], DEF_COLOR);
-      sendAtoms[i]({ atom: changeAtom });
-      return changeAtom;
-    }) as OneOfTwoAlternativesControlAtomsSet;
-
-    setAlternativesControlKeys(newAtoms);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gridSize]);
-
-  function getEvenOrOddRowSwitch(evenOrOdd: 0 | 1): () => void {
-    return () => {
-      const { current: choiceState } = choiceStateRecord;
-      let changeAtom: OneOfTwoAlternativesState | null;
-      if (!alternativesControlAtoms[evenOrOdd]) {
-        changeAtom = getNextAtom(oneOfTwoAlternativesControlPrefs[evenOrOdd], DEF_COLOR);
-        choiceState.choice = evenOrOdd;
-      } else {
-        changeAtom = null;
-        choiceState.choice = (1 - evenOrOdd) as 0 | 1;
-      }
-
-      const newAtoms: OneOfTwoAlternativesControlAtomsSet = [...alternativesControlAtoms];
-      newAtoms[evenOrOdd] = changeAtom;
-      setAlternativesControlKeys(newAtoms);
-      sendAtoms[evenOrOdd](changeAtom && { atom: changeAtom });
-    };
+  function getEvenOrOddRowSwitch(evenOrOdd: PixelChoice): () => void {
+    return () =>
+      setAlternatives[evenOrOdd]((prevAtom) => {
+        if (!prevAtom) {
+          setActiveChoice(evenOrOdd);
+          return getNextColorForAlternativeAtom(evenOrOdd);
+        }
+        setActiveChoice((1 - evenOrOdd) as PixelChoice);
+        return null;
+      });
   }
 
   return (

@@ -1,8 +1,7 @@
-import type { RecoilState } from 'recoil';
-import { atom } from 'recoil';
+import type { Atom, State } from '../State/StateInterface';
 
 const prefCountsRecords = new Map<string, number>();
-export function getNextKey(prefix: string): string {
+export function getNextKey<K extends string>(prefix: K): K {
   let count = 0;
   if (prefCountsRecords.has(prefix)) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -10,9 +9,12 @@ export function getNextKey(prefix: string): string {
   }
   prefCountsRecords.set(prefix, count);
 
-  return `${prefix}-${count}`;
+  return `${prefix}-${count}` as K;
 }
 
-export function getNextAtom<T>(prefix: string, defaultValue: T): RecoilState<T> {
-  return atom({ key: getNextKey(prefix), default: defaultValue });
+export function getNextAtom<K extends keyof State, D extends State[K] = State[K]>(
+  prefix: K,
+  defaultValue: D
+): Atom<K> {
+  return [getNextKey(prefix), defaultValue];
 }

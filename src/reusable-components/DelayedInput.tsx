@@ -7,14 +7,14 @@ import { Spinner } from './Spinner';
 
 export const DelayedInput: FC<{
   label: string;
-  inputCallback: (input: string, setInput: (i: string) => void) => void;
+  inputCallback: (input: string) => void;
   value?: string;
   width?: number;
 }> = ({ label, inputCallback, value = '', width = 65 }) => {
-  interface InnerState {
+  interface KeepDelayedInputRecords {
     activeTimeoutId?: NodeJS.Timeout;
   }
-  const innerStateRecord = useRef<InnerState>({});
+  const keepDelayedInputRecords = useRef<KeepDelayedInputRecords>({});
 
   interface InputState {
     inputValue: string;
@@ -27,9 +27,9 @@ export const DelayedInput: FC<{
 
   function waitDelay(input: string) {
     const {
-      current: innerState,
+      current: records,
       current: { activeTimeoutId },
-    } = innerStateRecord;
+    } = keepDelayedInputRecords;
 
     setInputState.showSpin(true);
 
@@ -37,11 +37,11 @@ export const DelayedInput: FC<{
       clearTimeout(activeTimeoutId);
     }
 
-    innerState.activeTimeoutId = setTimeout(() => {
+    records.activeTimeoutId = setTimeout(() => {
       setInputState.showSpin(false);
-      innerState.activeTimeoutId = undefined;
+      records.activeTimeoutId = undefined;
 
-      inputCallback(input, setInputState.inputValue);
+      inputCallback(input);
     }, INPUT_WAITING_DELAY);
   }
 

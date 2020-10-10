@@ -1,52 +1,38 @@
-import type { FC } from 'react';
-import React, { useRef } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import React, { FC, useCallback } from 'react';
 import { getRandomColor } from '../helpers/randomColor';
 import { Button } from '../reusable-components/Button';
-import type { ChoiceStateRecord } from '../State/ChoiceState';
 import {
-  alternativesControlAtomsState,
-  DEF_COLOR,
-  placeholderAtomForAlternativesState,
+  alternativeForChoiceAtoms,
+  colorForAlternativePlaceholderAtom,
+  rememberActiveChoiceAtom,
+  useInterstate,
 } from '../State/State';
+import { PixelChoice } from '../State/StateInterface';
 
-export const RepaintButton: FC<ChoiceStateRecord> = ({ choiceStateRecord }) => {
-  interface InnerState {
-    colors: { 0: string; 1: string };
-  }
-  const defInnerState: InnerState = {
-    colors: { 0: DEF_COLOR, 1: DEF_COLOR },
-  };
-  const innerStateRecord = useRef(defInnerState);
-
-  const alternativesControlAtoms = useRecoilValue(alternativesControlAtomsState);
-
-  const setColors = [
-    useSetRecoilState(alternativesControlAtoms[0] || placeholderAtomForAlternativesState),
-    useSetRecoilState(alternativesControlAtoms[1] || placeholderAtomForAlternativesState),
+export const RepaintButton: FC = () => {
+  const alternativesRecord = [
+    useInterstate(...alternativeForChoiceAtoms[0]).get(),
+    useInterstate(...alternativeForChoiceAtoms[1]).get(),
   ] as const;
+  const setColors = [
+    useInterstate(...(alternativesRecord[0] ?? colorForAlternativePlaceholderAtom)).set(),
+    useInterstate(...(alternativesRecord[1] ?? colorForAlternativePlaceholderAtom)).set(),
+  ] as const;
+  const [activeChoice, setActiveChoice] = useInterstate(...rememberActiveChoiceAtom).both();
 
-  function repaintRow() {
-    const {
-      current: currentInnerState,
-      current: { colors: currentColors },
-    } = innerStateRecord;
-    const {
-      current: choiceState,
-      current: { choice: currentChoice },
-    } = choiceStateRecord;
-
-    if (alternativesControlAtoms[currentChoice] !== null) {
-      const newColor = getRandomColor(currentColors[currentChoice]);
-      currentInnerState.colors = { ...currentColors, [currentChoice]: newColor };
-      setColors[currentChoice](newColor);
-    }
-
-    const nextPotentialChoice = (1 - currentChoice) as 0 | 1;
-    if (alternativesControlAtoms[nextPotentialChoice] !== null) {
-      choiceState.choice = nextPotentialChoice;
-    }
-  }
+  const repaintRow: () => void = useCallback(() => {
+    setColors[activeChoice]((prevColor) => {
+      const nextPotentialChoice = (1 - activeChoice) as PixelChoice;
+      if (alternativesRecord[nextPotentialChoice] !== null) {
+        setActiveChoice(nextPotentialChoice);
+      }
+      if (alternativesRecord[activeChoice] !== null) {
+        return getRandomColor(prevColor);
+      }
+      return prevColor;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeChoice, ...alternativesRecord, setActiveChoice, ...setColors]);
 
   return <Button {...{ callback: repaintRow, name: 're-paint' }} />;
 };

@@ -1,24 +1,24 @@
-import type { PixelState } from './State';
+import type { ChoiceForPixelAtom } from './StateInterface';
 
-const storeAtoms = [] as PixelState[];
+const storeAtoms = [] as ChoiceForPixelAtom[];
 let curIndex = 0;
 interface StoreAtomsMethods {
-  push: (newAtom: PixelState) => void;
-  get: (n: number) => PixelState;
-  getNext: () => PixelState;
-  resetIndex: () => void;
+  push: (newAtom: ChoiceForPixelAtom) => void;
+  get: (i: number) => ChoiceForPixelAtom;
+  getNext: () => ChoiceForPixelAtom;
+  resetIndex: (i?: number) => void;
 }
 export const storeAtomsMethods: StoreAtomsMethods = {
   push(newAtom) {
     storeAtoms.push(newAtom);
   },
-  get(n) {
-    return storeAtoms[n];
+  get(i) {
+    return storeAtoms[i];
   },
   getNext() {
     return storeAtoms[curIndex++];
   },
-  resetIndex() {
-    curIndex = 0;
+  resetIndex(i = 0) {
+    curIndex = i;
   },
 };

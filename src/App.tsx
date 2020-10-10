@@ -1,27 +1,12 @@
 import type { FC } from 'react';
-import React, { useEffect, useRef } from 'react';
-import { RecoilRoot, useRecoilValue } from 'recoil';
+import React from 'react';
 import { ChooseGrid } from './controls/ChooseGrid';
 import { DisableEnableButtons } from './controls/DisableEnableButtons';
 import { RandomPaintButton } from './controls/RandomPaintButton';
 import { RepaintButton } from './controls/RepaintButton';
 import { PixelsStage } from './pixels-components/PixelsStage';
-import type { ChoiceState } from './State/ChoiceState';
-import { gridSizeState } from './State/State';
 
-// eslint-disable-next-line no-underscore-dangle
-const _App: FC = () => {
-  const defChoiceState: ChoiceState = {
-    choice: 0,
-  };
-  const choiceStateRecord = useRef(defChoiceState);
-
-  const gridSize = useRecoilValue(gridSizeState);
-
-  useEffect(() => {
-    choiceStateRecord.current.choice = 0;
-  }, [gridSize]);
-
+export const App: FC = () => {
   return (
     <div
       {...{
@@ -51,8 +36,8 @@ const _App: FC = () => {
             },
           }}
         >
-          <RepaintButton {...{ choiceStateRecord }} />
-          <DisableEnableButtons {...{ choiceStateRecord }} />
+          <RepaintButton />
+          <DisableEnableButtons />
           <RandomPaintButton />
         </div>
         <div
@@ -80,10 +65,3 @@ const _App: FC = () => {
     </div>
   );
 };
-
-export const App: FC = () => (
-  <RecoilRoot>
-    {/* eslint-disable-next-line react/jsx-pascal-case */}
-    <_App />
-  </RecoilRoot>
-);
