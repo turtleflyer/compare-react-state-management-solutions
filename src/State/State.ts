@@ -1,5 +1,6 @@
 import { getUseInterstate } from '@smart-hooks/use-interstate';
 import { getNextAtom } from '../helpers/getNextAtom';
+import { getRandomColor } from '../helpers/randomColor';
 import type {
   AlternativeForChoiceAtom,
   ChoiceForPixelAtom,
@@ -29,7 +30,10 @@ export const colorForAlternativePlaceholderAtom = [
 ] as ColorForAlternativeAtom;
 
 export function getNextColorForAlternativeAtom(choice: PixelChoice): ColorForAlternativeAtom {
-  return getNextAtom(`${colorForAlternative}-${choice}` as ColorForAlternative, DEF_COLOR);
+  return getNextAtom(
+    `${colorForAlternative}-${choice}` as ColorForAlternative,
+    getRandomColor(DEF_COLOR)
+  );
 }
 export const alternativeForChoiceAtoms = [0, 1].map(
   (c) => [`${alternativeForChoice}-${c}`, getNextColorForAlternativeAtom(c as PixelChoice)] as const
