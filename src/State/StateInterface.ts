@@ -1,3 +1,5 @@
+import type { RecoilState } from 'recoil';
+
 export const choiceForPixel = 'choice-for-pixel' as const;
 export type ChoiceForPixel = typeof choiceForPixel;
 export type PixelChoice = 0 | 1;
@@ -10,8 +12,11 @@ type ColorForAlternativeState = { [P in ColorForAlternative]: ColorValue };
 
 export const alternativeForChoice = 'alternative-for-choice';
 export type AlternativeForChoice = typeof alternativeForChoice;
+export interface CarryAtom<K extends keyof State> {
+  atom: Atom<K>;
+}
 type AlternativeForChoiceState = {
-  [P in AlternativeForChoice]: ColorForAlternativeAtom | null;
+  [P in AlternativeForChoice]: CarryAtom<ColorForAlternative> | null;
 };
 
 export const gridSize = 'grid-size';
@@ -30,7 +35,7 @@ export type State = ChoiceForPixelState &
   GridSizeState &
   RememberActiveChoiceState;
 
-export type Atom<K extends keyof State> = readonly [K, State[K]];
+export type Atom<K extends keyof State> = RecoilState<State[K]> & { key: K };
 
 export type ChoiceForPixelAtom = Atom<ChoiceForPixel>;
 export type ColorForAlternativeAtom = Atom<ColorForAlternative>;

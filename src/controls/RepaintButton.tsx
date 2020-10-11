@@ -1,38 +1,38 @@
 import React, { FC, useCallback } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { getRandomColor } from '../helpers/randomColor';
 import { Button } from '../reusable-components/Button';
 import {
   alternativeForChoiceAtoms,
   colorForAlternativePlaceholderAtom,
   rememberActiveChoiceAtom,
-  useInterstate,
 } from '../State/State';
 import { PixelChoice } from '../State/StateInterface';
 
 export const RepaintButton: FC = () => {
-  const alternativesRecord = [
-    useInterstate(...alternativeForChoiceAtoms[0]).get(),
-    useInterstate(...alternativeForChoiceAtoms[1]).get(),
+  const alternatives = [
+    useRecoilValue(alternativeForChoiceAtoms[0]),
+    useRecoilValue(alternativeForChoiceAtoms[1]),
   ] as const;
   const setColors = [
-    useInterstate(...(alternativesRecord[0] ?? colorForAlternativePlaceholderAtom)).set(),
-    useInterstate(...(alternativesRecord[1] ?? colorForAlternativePlaceholderAtom)).set(),
+    useSetRecoilState(alternatives[0]?.atom ?? colorForAlternativePlaceholderAtom),
+    useSetRecoilState(alternatives[1]?.atom ?? colorForAlternativePlaceholderAtom),
   ] as const;
-  const [activeChoice, setActiveChoice] = useInterstate(...rememberActiveChoiceAtom).both();
+  const [activeChoice, setActiveChoice] = useRecoilState(rememberActiveChoiceAtom);
 
   const repaintRow: () => void = useCallback(() => {
     setColors[activeChoice]((prevColor) => {
       const nextPotentialChoice = (1 - activeChoice) as PixelChoice;
-      if (alternativesRecord[nextPotentialChoice] !== null) {
+      if (alternatives[nextPotentialChoice] !== null) {
         setActiveChoice(nextPotentialChoice);
       }
-      if (alternativesRecord[activeChoice] !== null) {
+      if (alternatives[activeChoice] !== null) {
         return getRandomColor(prevColor);
       }
       return prevColor;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeChoice, ...alternativesRecord, setActiveChoice, ...setColors]);
+  }, [activeChoice, ...alternatives, setActiveChoice, ...setColors]);
 
   return <Button {...{ callback: repaintRow, name: 're-paint' }} />;
 };

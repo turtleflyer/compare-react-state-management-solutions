@@ -1,12 +1,12 @@
-import { getUseInterstate } from '@smart-hooks/use-interstate';
+import { atom, RecoilState } from 'recoil';
 import { getNextAtom } from '../helpers/getNextAtom';
 import type {
   AlternativeForChoiceAtom,
   ChoiceForPixelAtom,
   ColorForAlternative,
   ColorForAlternativeAtom,
+  ColorValue,
   PixelChoice,
-  State,
 } from './StateInterface';
 import {
   alternativeForChoice,
@@ -20,22 +20,30 @@ export const DEF_GRID_SIZE = 2;
 export const DEF_COLOR = '#AAAAAA';
 export const INPUT_WAITING_DELAY = 3000;
 
-export const choiceForPixelPlaceholderAtom = [choiceForPixel, 0] as ChoiceForPixelAtom;
+export const choiceForPixelPlaceholderAtom = atom({
+  key: choiceForPixel,
+  default: 0,
+}) as ChoiceForPixelAtom;
 
-export const colorForAlternativePlaceholderAtom = [
-  colorForAlternative,
-  DEF_COLOR,
-] as ColorForAlternativeAtom;
+export const colorForAlternativePlaceholderAtom = atom({
+  key: colorForAlternative,
+  default: DEF_COLOR,
+}) as ColorForAlternativeAtom;
 
-export function getNextColorForAlternativeAtom(choice: PixelChoice): ColorForAlternativeAtom {
-  return getNextAtom(`${colorForAlternative}-${choice}` as ColorForAlternative, DEF_COLOR);
+export function getNextColorForAlternativeAtom(choice: PixelChoice): RecoilState<ColorValue> {
+  return getNextAtom(
+    `${colorForAlternative}-${choice}` as ColorForAlternative,
+    DEF_COLOR as ColorValue
+  );
 }
-export const alternativeForChoiceAtoms = [0, 1].map(
-  (c) => [`${alternativeForChoice}-${c}`, getNextColorForAlternativeAtom(c as PixelChoice)] as const
+export const alternativeForChoiceAtoms = ([0, 1] as const).map(
+  (c) =>
+    atom({
+      key: `${alternativeForChoice}-${c}`,
+      default: { atom: getNextColorForAlternativeAtom(c) },
+    }) as AlternativeForChoiceAtom
 ) as [AlternativeForChoiceAtom, AlternativeForChoiceAtom];
 
-export const gridSizeAtom = [gridSize, DEF_GRID_SIZE] as const;
+export const gridSizeAtom = atom({ key: gridSize, default: DEF_GRID_SIZE });
 
-export const rememberActiveChoiceAtom = [rememberActiveChoice, 0] as const;
-
-export const { useInterstate } = getUseInterstate<State>();
+export const rememberActiveChoiceAtom = atom({ key: rememberActiveChoice, default: 0 });

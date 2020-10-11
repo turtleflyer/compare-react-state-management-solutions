@@ -1,11 +1,8 @@
 import type { CSSProperties, FC } from 'react';
 import React, { useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { getNextAtom } from '../helpers/getNextAtom';
-import {
-  alternativeForChoiceAtoms,
-  choiceForPixelPlaceholderAtom,
-  useInterstate,
-} from '../State/State';
+import { alternativeForChoiceAtoms, choiceForPixelPlaceholderAtom } from '../State/State';
 import { choiceForPixel, ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
 import { Pixel } from './Pixel';
@@ -17,14 +14,14 @@ export const ControlPixel: FC<{
   const style: CSSProperties = { height: pixelSize, width: pixelSize };
 
   const [pixelChoice, setPixelChoice] = useState<ChoiceForPixelAtom>(choiceForPixelPlaceholderAtom);
-  const [choice, setChoice] = useInterstate(...pixelChoice).both();
-  const possibleStateAtom = useInterstate(...alternativeForChoiceAtoms[choice]).get();
+  const [choice, setChoice] = useRecoilState(pixelChoice);
+  const possibleStateAtom = useRecoilValue(alternativeForChoiceAtoms[choice]);
 
   useEffect(() => {
     if (pixelChoice === choiceForPixelPlaceholderAtom) {
       let nextAtom = storeAtomsMethods.getNext();
       if (!nextAtom) {
-        nextAtom = getNextAtom(choiceForPixel, defChoice);
+        nextAtom = getNextAtom(choiceForPixel, defChoice) as ChoiceForPixelAtom;
         storeAtomsMethods.push(nextAtom);
       }
       setPixelChoice(nextAtom);
@@ -36,7 +33,7 @@ export const ControlPixel: FC<{
   return (
     <div {...{ style }}>
       {possibleStateAtom && pixelChoice !== choiceForPixelPlaceholderAtom && (
-        <Pixel {...{ altControlAtom: possibleStateAtom }} />
+        <Pixel {...{ altControlAtom: possibleStateAtom.atom }} />
       )}
     </div>
   );

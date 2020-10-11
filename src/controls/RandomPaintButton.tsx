@@ -1,14 +1,15 @@
 import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Button } from '../reusable-components/Button';
-import { choiceForPixelPlaceholderAtom, gridSizeAtom, useInterstate } from '../State/State';
+import { choiceForPixelPlaceholderAtom, gridSizeAtom } from '../State/State';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
 
 export const RandomPaintButton: FC = () => {
-  const gridSize = useInterstate(...gridSizeAtom).get();
+  const gridSize = useRecoilValue(gridSizeAtom);
 
   const [atomToPaint, setAtomToPaint] = useState([choiceForPixelPlaceholderAtom] as const);
-  const paintRandomPixel = useInterstate(...atomToPaint[0]).set();
+  const paintRandomPixel = useSetRecoilState(atomToPaint[0]);
 
   useEffect(() => paintRandomPixel((prev) => (1 - prev) as 0 | 1), [paintRandomPixel, atomToPaint]);
 

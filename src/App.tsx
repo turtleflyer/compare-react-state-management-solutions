@@ -1,13 +1,14 @@
 import type { FC } from 'react';
 import React from 'react';
+import { RecoilRoot } from 'recoil';
 import { ChooseGrid } from './controls/ChooseGrid';
 import { DisableEnableButtons } from './controls/DisableEnableButtons';
 import { RandomPaintButton } from './controls/RandomPaintButton';
 import { RepaintButton } from './controls/RepaintButton';
 import { PixelsStage } from './pixels-components/PixelsStage';
 
-export const App: FC = () => {
-  return (
+export const App: FC = () => (
+  <RecoilRoot>
     <div
       {...{
         style: {
@@ -63,5 +64,5 @@ export const App: FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  </RecoilRoot>
+);

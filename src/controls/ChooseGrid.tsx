@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import React from 'react';
+import { useSetRecoilState } from 'recoil';
 import { DelayedInput } from '../reusable-components/DelayedInput';
 import {
   alternativeForChoiceAtoms,
@@ -7,17 +8,16 @@ import {
   getNextColorForAlternativeAtom,
   gridSizeAtom,
   rememberActiveChoiceAtom,
-  useInterstate,
 } from '../State/State';
-import { PixelChoice } from '../State/StateInterface';
+import type { CarryAtom, ColorForAlternative, PixelChoice } from '../State/StateInterface';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
 
 export const ChooseGrid: FC = () => {
-  const setGridSize = useInterstate(...gridSizeAtom).set();
-  const setActiveChoice = useInterstate(...rememberActiveChoiceAtom).set();
+  const setGridSize = useSetRecoilState(gridSizeAtom);
+  const setActiveChoice = useSetRecoilState(rememberActiveChoiceAtom);
   const setAlternatives = [
-    useInterstate(...alternativeForChoiceAtoms[0]).set(),
-    useInterstate(...alternativeForChoiceAtoms[1]).set(),
+    useSetRecoilState(alternativeForChoiceAtoms[0]),
+    useSetRecoilState(alternativeForChoiceAtoms[1]),
   ] as const;
 
   function inputCallback(input: string) {
@@ -26,11 +26,13 @@ export const ChooseGrid: FC = () => {
     setGridSize(gridSize);
     setActiveChoice(0);
     setAlternatives.forEach((set, i) => {
-      set((prevAtom) => {
-        if (!prevAtom) {
-          return getNextColorForAlternativeAtom(i as PixelChoice);
+      set((prevState) => {
+        if (!prevState) {
+          return { atom: getNextColorForAlternativeAtom(i as PixelChoice) } as CarryAtom<
+            ColorForAlternative
+          >;
         }
-        return prevAtom;
+        return prevState;
       });
     });
   }

@@ -1,14 +1,15 @@
 import { useSmartMemo } from '@smart-hooks/use-smart-memo';
 import type { CSSProperties, FC, ReactElement } from 'react';
 import React, { useState } from 'react';
-import { gridSizeAtom, useInterstate } from '../State/State';
+import { useRecoilValue } from 'recoil';
+import { gridSizeAtom } from '../State/State';
 import { PixelChoice } from '../State/StateInterface';
 import { PixelsLine } from './PixelsLine';
 
 const style: CSSProperties = { flexGrow: 1 };
 
 export const PixelsStage: FC = () => {
-  const gridSize = useInterstate(...gridSizeAtom).get();
+  const gridSize = useRecoilValue(gridSizeAtom);
   const [stageHeight, setStageHeight] = useState(0);
 
   const lines: ReactElement | null = useSmartMemo(() => {

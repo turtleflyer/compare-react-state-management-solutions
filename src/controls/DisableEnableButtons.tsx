@@ -1,19 +1,19 @@
 import type { FC } from 'react';
 import React from 'react';
+import { useSetRecoilState } from 'recoil';
 import { Button } from '../reusable-components/Button';
 import {
   alternativeForChoiceAtoms,
   getNextColorForAlternativeAtom,
   rememberActiveChoiceAtom,
-  useInterstate,
 } from '../State/State';
-import type { PixelChoice } from '../State/StateInterface';
+import type { CarryAtom, ColorForAlternative, PixelChoice } from '../State/StateInterface';
 
 export const DisableEnableButtons: FC = () => {
-  const setActiveChoice = useInterstate(...rememberActiveChoiceAtom).set();
+  const setActiveChoice = useSetRecoilState(rememberActiveChoiceAtom);
   const setAlternatives = [
-    useInterstate(...alternativeForChoiceAtoms[0]).set(),
-    useInterstate(...alternativeForChoiceAtoms[1]).set(),
+    useSetRecoilState(alternativeForChoiceAtoms[0]),
+    useSetRecoilState(alternativeForChoiceAtoms[1]),
   ] as const;
 
   function getEvenOrOddRowSwitch(evenOrOdd: PixelChoice): () => void {
@@ -21,7 +21,9 @@ export const DisableEnableButtons: FC = () => {
       setAlternatives[evenOrOdd]((prevAtom) => {
         if (!prevAtom) {
           setActiveChoice(evenOrOdd);
-          return getNextColorForAlternativeAtom(evenOrOdd);
+          return { atom: getNextColorForAlternativeAtom(evenOrOdd) } as CarryAtom<
+            ColorForAlternative
+          >;
         }
         setActiveChoice((1 - evenOrOdd) as PixelChoice);
         return null;
