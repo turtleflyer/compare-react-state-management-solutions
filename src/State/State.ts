@@ -16,7 +16,7 @@ import {
   rememberActiveChoice,
 } from './StateInterface';
 
-export const DEF_GRID_SIZE = 2;
+export const DEF_GRID_SIZE = 32;
 export const DEF_COLOR = '#AAAAAA';
 export const INPUT_WAITING_DELAY = 3000;
 
