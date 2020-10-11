@@ -3,6 +3,7 @@ import React from 'react';
 import { RecoilRoot } from 'recoil';
 import { ChooseGrid } from './controls/ChooseGrid';
 import { DisableEnableButtons } from './controls/DisableEnableButtons';
+import { MassivePaintButton } from './controls/MassivePaintButton';
 import { RandomPaintButton } from './controls/RandomPaintButton';
 import { RepaintButton } from './controls/RepaintButton';
 import { PixelsStage } from './pixels-components/PixelsStage';
@@ -40,6 +41,7 @@ export const App: FC = () => (
           <RepaintButton />
           <DisableEnableButtons />
           <RandomPaintButton />
+          <MassivePaintButton />
         </div>
         <div
           {...{

@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
 import { choiceForPixelPlaceholderAtom, gridSizeAtom } from '../State/State';
-import { storeAtomsMethods } from '../State/storeAtomsMethods';
 
 export const RandomPaintButton: FC = () => {
   const gridSize = useRecoilValue(gridSizeAtom);
@@ -13,14 +13,10 @@ export const RandomPaintButton: FC = () => {
 
   useEffect(() => paintRandomPixel((prev) => (1 - prev) as 0 | 1), [paintRandomPixel, atomToPaint]);
 
-  const randomPaint: () => void = useCallback(() => {
-    const randomIndex = Math.floor(Math.random() * gridSize ** 2);
-    const atomToSet = storeAtomsMethods.get(randomIndex);
-    if (!atomToSet) {
-      throw Error('It should be defined');
-    }
-    setAtomToPaint([atomToSet]);
-  }, [gridSize]);
+  const randomPaint: () => void = useCallback(
+    () => setAtomToPaint([drawPixelToPaint(gridSize ** 2)]),
+    [gridSize]
+  );
 
   return (
     <Button
