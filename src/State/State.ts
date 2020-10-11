@@ -1,5 +1,6 @@
 import { atom, RecoilState } from 'recoil';
 import { getNextAtom } from '../helpers/getNextAtom';
+import { getRandomColor } from '../helpers/randomColor';
 import type {
   AlternativeForChoiceAtom,
   ChoiceForPixelAtom,
@@ -34,7 +35,7 @@ export const colorForAlternativePlaceholderAtom = atom({
 export function getNextColorForAlternativeAtom(choice: PixelChoice): RecoilState<ColorValue> {
   return getNextAtom(
     `${colorForAlternative}-${choice}` as ColorForAlternative,
-    DEF_COLOR as ColorValue
+    getRandomColor(DEF_COLOR)
   );
 }
 export const alternativeForChoiceAtoms = ([0, 1] as const).map(
