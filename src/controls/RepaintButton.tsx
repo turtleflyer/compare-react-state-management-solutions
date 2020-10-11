@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { getRandomColor } from '../helpers/randomColor';
 import { Button } from '../reusable-components/Button';
 import {
@@ -14,25 +14,23 @@ export const RepaintButton: FC = () => {
     useRecoilValue(alternativeForChoiceAtoms[0]),
     useRecoilValue(alternativeForChoiceAtoms[1]),
   ] as const;
-  const setColors = [
-    useSetRecoilState(alternatives[0]?.atom ?? colorForAlternativePlaceholderAtom),
-    useSetRecoilState(alternatives[1]?.atom ?? colorForAlternativePlaceholderAtom),
+  const colorsState = [
+    useRecoilState(alternatives[0]?.atom ?? colorForAlternativePlaceholderAtom),
+    useRecoilState(alternatives[1]?.atom ?? colorForAlternativePlaceholderAtom),
   ] as const;
   const [activeChoice, setActiveChoice] = useRecoilState(rememberActiveChoiceAtom);
 
   const repaintRow: () => void = useCallback(() => {
-    setColors[activeChoice]((prevColor) => {
-      const nextPotentialChoice = (1 - activeChoice) as PixelChoice;
-      if (alternatives[nextPotentialChoice] !== null) {
-        setActiveChoice(nextPotentialChoice);
-      }
-      if (alternatives[activeChoice] !== null) {
-        return getRandomColor(prevColor);
-      }
-      return prevColor;
-    });
+    const prevColor = colorsState[activeChoice][0];
+    const nextPotentialChoice = (1 - activeChoice) as PixelChoice;
+    if (alternatives[nextPotentialChoice] !== null) {
+      setActiveChoice(nextPotentialChoice);
+    }
+    if (alternatives[activeChoice] !== null) {
+      colorsState[activeChoice][1](getRandomColor(prevColor));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeChoice, ...alternatives, setActiveChoice, ...setColors]);
+  }, [activeChoice, ...alternatives, setActiveChoice, ...colorsState]);
 
   return <Button {...{ callback: repaintRow, name: 're-paint' }} />;
 };

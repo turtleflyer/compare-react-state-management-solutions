@@ -1,6 +1,6 @@
 import type { FC } from 'react';
-import React from 'react';
-import { useSetRecoilState } from 'recoil';
+import React, { useCallback, useMemo } from 'react';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { Button } from '../reusable-components/Button';
 import {
   alternativeForChoiceAtoms,
@@ -11,28 +11,33 @@ import type { CarryAtom, ColorForAlternative, PixelChoice } from '../State/State
 
 export const DisableEnableButtons: FC = () => {
   const setActiveChoice = useSetRecoilState(rememberActiveChoiceAtom);
-  const setAlternatives = [
-    useSetRecoilState(alternativeForChoiceAtoms[0]),
-    useSetRecoilState(alternativeForChoiceAtoms[1]),
+  const alternativesState = [
+    useRecoilState(alternativeForChoiceAtoms[0]),
+    useRecoilState(alternativeForChoiceAtoms[1]),
   ] as const;
 
-  function getEvenOrOddRowSwitch(evenOrOdd: PixelChoice): () => void {
-    return () =>
-      setAlternatives[evenOrOdd]((prevAtom) => {
+  const getEvenOrOddRowSwitch: (evenOrOdd: PixelChoice) => () => void = useCallback(
+    (evenOrOdd) => {
+      return () => {
+        const prevAtom = alternativesState[evenOrOdd][0];
         if (!prevAtom) {
           setActiveChoice(evenOrOdd);
-          return { atom: getNextColorForAlternativeAtom(evenOrOdd) } as CarryAtom<
-            ColorForAlternative
-          >;
+          alternativesState[evenOrOdd][1]({
+            atom: getNextColorForAlternativeAtom(evenOrOdd),
+          } as CarryAtom<ColorForAlternative>);
+        } else {
+          setActiveChoice((1 - evenOrOdd) as PixelChoice);
+          alternativesState[evenOrOdd][1](null);
         }
-        setActiveChoice((1 - evenOrOdd) as PixelChoice);
-        return null;
-      });
-  }
+      };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [...alternativesState, setActiveChoice]
+  );
 
-  return (
-    <>
-      {['enable/disable even rows', 'enable/disable odd rows'].map((name, i) => (
+  const buttons = useMemo(
+    () =>
+      ['enable/disable even rows', 'enable/disable odd rows'].map((name, i) => (
         <Button
           {...{
             callback: getEvenOrOddRowSwitch(i as 0 | 1),
@@ -40,7 +45,9 @@ export const DisableEnableButtons: FC = () => {
           }}
           key={name}
         />
-      ))}
-    </>
+      )),
+    [getEvenOrOddRowSwitch]
   );
+
+  return <>{buttons}</>;
 };
