@@ -19,6 +19,7 @@ import {
 export const DEF_GRID_SIZE = 32;
 export const DEF_COLOR = '#AAAAAA';
 export const INPUT_WAITING_DELAY = 3000;
+export const DEF_PIXELS_PERCENT_TO_PAINT = 30;
 
 export const choiceForPixelPlaceholderAtom = [choiceForPixel, 0] as ChoiceForPixelAtom;
 
