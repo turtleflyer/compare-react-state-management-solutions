@@ -5,6 +5,7 @@ import { DisableEnableButtons } from './controls/DisableEnableButtons';
 import { MassivePaintButton } from './controls/MassivePaintButton';
 import { RandomPaintButton } from './controls/RandomPaintButton';
 import { RepaintButton } from './controls/RepaintButton';
+import { useMeasurePerformance } from './perf-measure/useMeasurePerformance';
 import { PixelsStage } from './pixels-components/PixelsStage';
 
 export const App: FC = () => {
@@ -50,18 +51,7 @@ export const App: FC = () => {
             },
           }}
         >
-          <div
-            {...{
-              style: {
-                position: 'absolute',
-                width: 300,
-                top: '50%',
-                transform: 'translateY(-49%)',
-              },
-            }}
-          >
-            <ChooseGrid />
-          </div>
+          <ChooseGrid />
         </div>
       </div>
     </div>

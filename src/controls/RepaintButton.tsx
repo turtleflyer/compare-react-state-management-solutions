@@ -1,6 +1,9 @@
-import React, { FC, useCallback } from 'react';
+import type { FC } from 'react';
+import React, { useState } from 'react';
 import { getRandomColor } from '../helpers/randomColor';
+import { useMeasurePerformance } from '../perf-measure/useMeasurePerformance';
 import { Button } from '../reusable-components/Button';
+import { RenderInfo } from '../reusable-components/RenderInfo';
 import {
   alternativeForChoiceAtoms,
   colorForAlternativePlaceholderAtom,
@@ -8,19 +11,25 @@ import {
   useInterstate,
 } from '../State/State';
 import { PixelChoice } from '../State/StateInterface';
+import { buttonContainerStyle } from './styles';
 
 export const RepaintButton: FC = () => {
   const alternativesRecord = [
     useInterstate(...alternativeForChoiceAtoms[0]).get(),
     useInterstate(...alternativeForChoiceAtoms[1]).get(),
   ] as const;
+
   const setColors = [
     useInterstate(...(alternativesRecord[0] ?? colorForAlternativePlaceholderAtom)).set(),
     useInterstate(...(alternativesRecord[1] ?? colorForAlternativePlaceholderAtom)).set(),
-  ] as const;
+  ];
   const [activeChoice, setActiveChoice] = useInterstate(...rememberActiveChoiceAtom).both();
 
-  const repaintRow: () => void = useCallback(() => {
+  const [recalculateDuration, triggerRecalculation] = useState(true);
+  const duration = useMeasurePerformance({ dependencies: [recalculateDuration] });
+
+  function repaintRow() {
+    triggerRecalculation((v) => !v);
     setColors[activeChoice]((prevColor) => {
       const nextPotentialChoice = (1 - activeChoice) as PixelChoice;
       if (alternativesRecord[nextPotentialChoice] !== null) {
@@ -31,8 +40,12 @@ export const RepaintButton: FC = () => {
       }
       return prevColor;
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeChoice, ...alternativesRecord, setActiveChoice, ...setColors]);
+  }
 
-  return <Button {...{ callback: repaintRow, name: 're-paint' }} />;
+  return (
+    <div {...{ style: buttonContainerStyle }}>
+      <Button {...{ callback: repaintRow, name: 're-paint' }} />
+      <RenderInfo {...{ duration }} />
+    </div>
+  );
 };
