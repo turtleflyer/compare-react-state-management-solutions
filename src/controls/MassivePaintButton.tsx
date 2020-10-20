@@ -1,14 +1,16 @@
 import type { ChangeEvent, CSSProperties, FC, ReactElement } from 'react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
+import { useMeasurePerformance } from '../perf-measure/useMeasurePerformance';
 import { Button } from '../reusable-components/Button';
 import { InputField } from '../reusable-components/InputField';
+import { RenderInfo } from '../reusable-components/RenderInfo';
 import { DEF_PIXELS_PERCENT_TO_PAINT, gridSizeAtom } from '../State/State';
 import { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
+import { buttonContainerStyle } from './styles';
 
-const containerStyle: CSSProperties = { display: 'flex', margin: '5px' };
-const buttonStyle: CSSProperties = { margin: '0 5px 0 0' };
+const renderInfoContainerStyle: CSSProperties = { margin: '-5px 0 0 5px', height: 20 };
 
 export const PixelToPaint: FC<{ pixelChoiceAtom: ChoiceForPixelAtom }> = ({ pixelChoiceAtom }) => {
   const setChoice = useSetRecoilState(pixelChoiceAtom);
@@ -22,26 +24,22 @@ export const PixelToPaint: FC<{ pixelChoiceAtom: ChoiceForPixelAtom }> = ({ pixe
 };
 
 export const MassivePaintButton: FC = () => {
-  const percentRecord = useRef({ percent: DEF_PIXELS_PERCENT_TO_PAINT });
-
   const gridSize = useRecoilValue(gridSizeAtom);
-  const [percentInput, setPercentInput] = useState(`${percentRecord.current.percent}`);
+  const [percentInput, setPercentInput] = useState(`${DEF_PIXELS_PERCENT_TO_PAINT}`);
   const [pixelsToPaint, setPixelsToPaint] = useState<ReactElement[]>([]);
+  const duration = useMeasurePerformance({ dependencies: [pixelsToPaint] });
 
   useEffect(() => setPixelsToPaint((prevPixels) => (prevPixels.length > 0 ? [] : prevPixels)), [
     pixelsToPaint,
   ]);
 
-  const randomPaint: () => void = useCallback(() => {
+  function randomPaint() {
     const checkPercent = parseInt(percentInput, 10);
-    if (checkPercent > 0 && checkPercent <= 100) {
-      percentRecord.current.percent = checkPercent;
-    } else {
-      setPercentInput(`${percentRecord.current.percent}`);
-    }
+    const percent = checkPercent >= 0 && checkPercent <= 100 ? checkPercent : 0;
+    setPercentInput(`${percent}`);
 
     const allPixelsNumber = gridSize ** 2;
-    const pixelsNumberToPaint = (allPixelsNumber * percentRecord.current.percent) / 100;
+    const pixelsNumberToPaint = (allPixelsNumber * percent) / 100;
     const pixelsAtoms: ChoiceForPixelAtom[] = [];
     for (let i = 0; i < pixelsNumberToPaint; i++) {
       let atom: ChoiceForPixelAtom;
@@ -52,26 +50,30 @@ export const MassivePaintButton: FC = () => {
     }
     // eslint-disable-next-line react/jsx-key
     setPixelsToPaint(pixelsAtoms.map((a) => <PixelToPaint {...{ pixelChoiceAtom: a }} />));
-  }, [gridSize, percentInput]);
+  }
 
-  const percentCallback = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  function percentCallback(e: ChangeEvent<HTMLInputElement>) {
     const {
       target: { value: input },
     } = e;
     setPercentInput(input);
-  }, []);
+  }
 
   return (
     <>
-      <div {...{ style: containerStyle }}>
-        <Button
-          {...{
-            callback: randomPaint,
-            name: 'paint n% random pixels',
-            addStyle: buttonStyle,
-          }}
-        />
-        <InputField {...{ label: 'n: ', value: percentInput, onChange: percentCallback }} />
+      <div>
+        <div {...{ style: buttonContainerStyle }}>
+          <Button
+            {...{
+              callback: randomPaint,
+              name: 'paint n% random pixels',
+            }}
+          />
+          <InputField {...{ label: 'n: ', value: percentInput, onChange: percentCallback }} />
+        </div>
+        <div {...{ style: renderInfoContainerStyle }}>
+          <RenderInfo {...{ duration }} />
+        </div>
       </div>
       {pixelsToPaint}
     </>

@@ -51,18 +51,7 @@ export const App: FC = () => (
             },
           }}
         >
-          <div
-            {...{
-              style: {
-                position: 'absolute',
-                width: 300,
-                top: '50%',
-                transform: 'translateY(-49%)',
-              },
-            }}
-          >
-            <ChooseGrid />
-          </div>
+          <ChooseGrid />
         </div>
       </div>
     </div>
