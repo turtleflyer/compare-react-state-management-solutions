@@ -5,7 +5,6 @@ import { DisableEnableButtons } from './controls/DisableEnableButtons';
 import { MassivePaintButton } from './controls/MassivePaintButton';
 import { RandomPaintButton } from './controls/RandomPaintButton';
 import { RepaintButton } from './controls/RepaintButton';
-import { useMeasurePerformance } from './perf-measure/useMeasurePerformance';
 import { PixelsStage } from './pixels-components/PixelsStage';
 
 export const App: FC = () => {
