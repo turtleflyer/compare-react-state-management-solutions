@@ -16,42 +16,27 @@ import { buttonContainerStyle } from './styles';
 export const DisableEnableButtons: FC = () => {
   const setActiveChoice = useSetRecoilState(rememberActiveChoiceAtom);
 
-  type AlternativesState = readonly [
-    readonly [CarryAtom<ColorForAlternative> | null, CarryAtom<ColorForAlternative> | null],
-    readonly [
-      SetInterstate<CarryAtom<ColorForAlternative> | null>,
-      SetInterstate<CarryAtom<ColorForAlternative> | null>
-    ]
-  ];
   const alternativesState = [
     useRecoilState(alternativeForChoiceAtoms[0]),
     useRecoilState(alternativeForChoiceAtoms[1]),
-  ].reduce(
-    (acc, [v, setV]) => {
-      return ([
-        [...acc[0], v],
-        [...acc[1], setV],
-      ] as unknown) as AlternativesState;
-    },
-    ([[], []] as unknown) as AlternativesState
-  );
+  ];
   const durations = [
     useMeasurePerformance({ dependencies: [alternativesState[0][0]] }),
-    useMeasurePerformance({ dependencies: [alternativesState[0][1]] }),
+    useMeasurePerformance({ dependencies: [alternativesState[1][0]] }),
   ] as const;
 
   function getEvenOrOddRowSwitch(evenOrOdd: PixelChoice): () => void {
     return () => {
-      const prevAtom = alternativesState[0][evenOrOdd];
+      const prevAtom = alternativesState[evenOrOdd][0];
 
       if (!prevAtom) {
         setActiveChoice(evenOrOdd);
-        alternativesState[1][evenOrOdd]({
+        alternativesState[evenOrOdd][1]({
           atom: getNextColorForAlternativeAtom(evenOrOdd),
         } as CarryAtom<ColorForAlternative>);
       } else {
         setActiveChoice((1 - evenOrOdd) as PixelChoice);
-        alternativesState[1][evenOrOdd](null);
+        alternativesState[evenOrOdd][1](null);
       }
     };
   }
