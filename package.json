@@ -3,9 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@smart-hooks/use-interstate": "^4.1.1",
-    "@smart-hooks/use-multi-state": "^2.0.3",
-    "@smart-hooks/use-smart-memo": "^3.0.3",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.8",
