@@ -23,8 +23,6 @@ export const PixelToPaint: FC<{ pixelChoiceAtom: ChoiceForPixelAtom }> = ({ pixe
 };
 
 export const MassivePaintButton: FC = () => {
-  // const percentRecord = useRef({ percent: DEF_PIXELS_PERCENT_TO_PAINT });
-
   const gridSize = useInterstate(...gridSizeAtom).get();
   const [percentInput, setPercentInput] = useState(`${DEF_PIXELS_PERCENT_TO_PAINT}`);
   const [pixelsToPaint, setPixelsToPaint] = useState<ReactElement[]>([]);
