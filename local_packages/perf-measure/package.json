@@ -1,0 +1,9 @@
+{
+  "name": "use-measure-perf",
+  "private": "true",
+  "main": "useMeasurePerformance.js",
+  "types": "useMeasurePerformance.d.ts",
+  "peerDependencies": {
+    "react": "^17.0.0"
+  }
+}
