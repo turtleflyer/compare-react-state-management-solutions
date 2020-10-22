@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import React from 'react';
-import { useMeasurePerformance } from '../perf-measure/useMeasurePerformance';
+import { useMeasurePerformance } from 'use-measure-perf';
 import { Button } from '../reusable-components/Button';
 import { RenderInfo } from '../reusable-components/RenderInfo';
 import {

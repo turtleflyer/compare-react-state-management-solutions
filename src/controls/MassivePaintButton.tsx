@@ -1,7 +1,7 @@
 import type { ChangeEvent, CSSProperties, FC, ReactElement } from 'react';
 import React, { useEffect, useState } from 'react';
+import { useMeasurePerformance } from 'use-measure-perf';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
-import { useMeasurePerformance } from '../perf-measure/useMeasurePerformance';
 import { Button } from '../reusable-components/Button';
 import { InputField } from '../reusable-components/InputField';
 import { RenderInfo } from '../reusable-components/RenderInfo';

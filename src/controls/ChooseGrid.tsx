@@ -1,6 +1,6 @@
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
-import { useMeasurePerformance } from '../perf-measure/useMeasurePerformance';
+import { useMeasurePerformance } from 'use-measure-perf';
 import { DelayedInput } from '../reusable-components/DelayedInput';
 import { RenderInfo } from '../reusable-components/RenderInfo';
 import {

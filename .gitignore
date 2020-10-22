@@ -24,3 +24,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .vscode
+
+/local_packages/**/*.js
+/local_packages/**/*.ts
+/recoil-component
+/use-interstate-component
