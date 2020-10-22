@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import React, { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useMeasurePerformance } from 'use-measure-perf';
 import { getRandomColor } from '../helpers/randomColor';
-import { useMeasurePerformance } from '../perf-measure/useMeasurePerformance';
 import { Button } from '../reusable-components/Button';
 import { RenderInfo } from '../reusable-components/RenderInfo';
 import {

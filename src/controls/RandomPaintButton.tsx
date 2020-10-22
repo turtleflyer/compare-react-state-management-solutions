@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useMeasurePerformance } from 'use-measure-perf';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
-import { useMeasurePerformance } from '../perf-measure/useMeasurePerformance';
 import { Button } from '../reusable-components/Button';
 import { RenderInfo } from '../reusable-components/RenderInfo';
 import { choiceForPixelPlaceholderAtom, gridSizeAtom } from '../State/State';

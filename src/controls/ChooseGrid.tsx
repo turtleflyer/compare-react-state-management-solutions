@@ -1,7 +1,7 @@
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { useMeasurePerformance } from '../perf-measure/useMeasurePerformance';
+import { useMeasurePerformance } from 'use-measure-perf';
 import { DelayedInput } from '../reusable-components/DelayedInput';
 import { RenderInfo } from '../reusable-components/RenderInfo';
 import {
@@ -9,7 +9,7 @@ import {
   DEF_GRID_SIZE,
   getNextColorForAlternativeAtom,
   gridSizeAtom,
-  rememberActiveChoiceAtom,
+  rememberActiveChoiceAtom
 } from '../State/State';
 import type { CarryAtom, ColorForAlternative, PixelChoice } from '../State/StateInterface';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
