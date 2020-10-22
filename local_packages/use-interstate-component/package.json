@@ -1,0 +1,10 @@
+{
+  "name": "use-interstate-component",
+  "private": "true",
+  "main": "App.js",
+  "types": "App.d.ts",
+  "peerDependencies": {
+    "react": "^17.0.0",
+    "use-measure-perf": "file:../perf-measure"
+  }
+}
