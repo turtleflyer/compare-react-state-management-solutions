@@ -15,16 +15,13 @@
     "recoil": "0.0.13",
     "use-measure-perf": "file:local_packages/perf-measure"
   },
-  "optionalDependencies": {
-    "use-measure-perf": "file:local_packages/perf-measure"
-  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "bundle-perf-measure": "tsc -p src/perf-measure/tsconfig.bundle.json",
-    "build-as-component": "rollup -c"
+    "build-as-component": "rollup -c && tsc -p ./tsconfig.component-bundle.json"
   },
   "eslintConfig": {
     "extends": "react-app"
