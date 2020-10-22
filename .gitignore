@@ -27,4 +27,4 @@ yarn-error.log*
 
 /local_packages/**/*.js
 /local_packages/**/*.ts
-/**/use-interstate*
+/**/use-interstate*/
