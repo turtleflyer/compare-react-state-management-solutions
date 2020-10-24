@@ -9,9 +9,7 @@
 /coverage
 
 # production
-/build
-/build-use-interstate
-/build-recoil
+/build*
 
 # misc
 .DS_Store
@@ -25,5 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 .vscode
 
-/local_packages/**/*.js
-/local_packages/**/*.ts
+/compiled_bundles/**/*.js
+/compiled_bundles/**/*.ts
