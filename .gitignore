@@ -25,6 +25,6 @@ yarn-debug.log*
 yarn-error.log*
 .vscode
 
-/local_packages/**/*.js
-/local_packages/**/*.ts
-/**/recoil*/
+/compiled_bundles/**/*.js
+/compiled_bundles/**/*.ts
+/**/recoil/

@@ -4,7 +4,7 @@
     "noEmit": false,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "outDir": "./local_packages/use-interstate-component"
+    "outDir": "./compiled_bundles/use-interstate"
   },
   "include": ["src/App.tsx"]
 }
