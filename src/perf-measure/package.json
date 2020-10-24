@@ -1,0 +1,12 @@
+{
+  "name": "use-measure-perf",
+  "version": "0.0.0",
+  "private": "true",
+  "main": "useMeasurePerformance.ts",
+  "devDependencies": {
+    "@testing-library/react": "^11.1.0"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0"
+  }
+}

@@ -25,6 +25,6 @@ yarn-debug.log*
 yarn-error.log*
 .vscode
 
-/local_packages/**/*.js
-/local_packages/**/*.ts
-/**/use-interstate*/
+/compiled_bundles/**/*.js
+/compiled_bundles/**/*.ts
+/**/use-interstate/
