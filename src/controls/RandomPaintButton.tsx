@@ -6,6 +6,7 @@ import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
 import { RenderInfo } from '../reusable-components/RenderInfo';
 import { choiceForPixelPlaceholderAtom, gridSizeAtom } from '../State/State';
+import { PixelChoice } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
 export const RandomPaintButton: FC = () => {
@@ -15,7 +16,9 @@ export const RandomPaintButton: FC = () => {
   const paintRandomPixel = useSetRecoilState(atomToPaint[0]);
   const duration = useMeasurePerformance({ dependencies: [atomToPaint] });
 
-  useEffect(() => paintRandomPixel((prev) => (1 - prev) as 0 | 1), [paintRandomPixel, atomToPaint]);
+  useEffect(() => {
+    paintRandomPixel((prev) => (1 - prev) as PixelChoice);
+  }, [paintRandomPixel, atomToPaint]);
 
   function randomPaint() {
     setAtomToPaint([drawPixelToPaint(gridSize ** 2)]);
