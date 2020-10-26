@@ -6,10 +6,11 @@ export const InputField: FC<{
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   value?: string | number;
   width?: number;
-}> = ({ label, onChange, value = '', width = 65 }) => {
+  addStyle?: CSSProperties;
+}> = ({ label, onChange, value = '', width = 65, addStyle = {} }) => {
   const style: CSSProperties = { width };
   return (
-    <form>
+    <form {...{ style: { display: 'block', ...addStyle } }}>
       <label>
         {label}
         <input {...{ type: 'text', onChange, value, style }} />

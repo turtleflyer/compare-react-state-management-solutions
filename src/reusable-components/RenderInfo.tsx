@@ -2,13 +2,15 @@ import type { CSSProperties, FC } from 'react';
 import React from 'react';
 
 const style: CSSProperties = {
-  display: 'inline-flex',
+  display: 'flex',
+  width: 170,
   height: 20,
-  fontSize: '0.8rem',
+  fontSize: '12px',
   color: 'white',
   padding: '1px 3px',
   backgroundColor: 'gray',
   borderRadius: 5,
+  justifyContent: 'center',
 };
 
 export const RenderInfo: FC<{ duration: number | null }> = ({ duration }) =>

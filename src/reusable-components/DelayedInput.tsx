@@ -1,5 +1,5 @@
 import { useMultiState } from '@smart-hooks/use-multi-state';
-import type { ChangeEvent, FC } from 'react';
+import type { ChangeEvent, CSSProperties, FC } from 'react';
 import React, { useRef } from 'react';
 import { INPUT_WAITING_DELAY } from '../State/State';
 import { InputField } from './InputField';
@@ -10,7 +10,8 @@ export const DelayedInput: FC<{
   inputCallback: (input: string) => void;
   value?: string;
   width?: number;
-}> = ({ label, inputCallback, value = '', width = 65 }) => {
+  addStyle?: CSSProperties;
+}> = ({ label, inputCallback, value = '', width = 65, addStyle = {} }) => {
   interface KeepDelayedInputRecords {
     activeTimeoutId?: NodeJS.Timeout;
   }
@@ -52,30 +53,17 @@ export const DelayedInput: FC<{
   }
 
   return (
-    <div {...{ style: { display: 'flex', flexDirection: 'row' } }}>
-      <div {...{ style: { marginRight: 10 } }}>
-        <InputField
-          {...{
-            label,
-            onChange,
-            value: inputState.inputValue,
-            width,
-          }}
-        />
-      </div>
-      <div {...{ style: { position: 'relative' } }}>
-        <div
-          {...{
-            style: {
-              position: 'absolute',
-              top: '50%',
-              transform: 'translateY(-50%)',
-            },
-          }}
-        >
-          {inputState.showSpin && <Spinner />}
-        </div>
-      </div>
+    <div {...{ style: { display: 'flex', alignItems: 'center', ...addStyle } }}>
+      <InputField
+        {...{
+          label,
+          onChange,
+          value: inputState.inputValue,
+          width,
+          addStyle: { marginRight: 10 },
+        }}
+      />
+      <Spinner {...{ toShow: inputState.showSpin }} />
     </div>
   );
 };
