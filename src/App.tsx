@@ -24,16 +24,15 @@ export const App: FC = () => {
         {...{
           style: {
             display: 'flex',
-            marginTop: 10,
+            margin: '10px auto 0 0',
+            alignItems: 'center',
           },
         }}
       >
         <div
           {...{
             style: {
-              flexGrow: 0,
               marginRight: 20,
-              width: 400,
             },
           }}
         >
@@ -42,16 +41,7 @@ export const App: FC = () => {
           <RandomPaintButton />
           <MassivePaintButton />
         </div>
-        <div
-          {...{
-            style: {
-              flexGrow: 1,
-              position: 'relative',
-            },
-          }}
-        >
-          <ChooseGrid />
-        </div>
+        <ChooseGrid />
       </div>
     </div>
   );

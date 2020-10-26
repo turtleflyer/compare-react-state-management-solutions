@@ -1,4 +1,4 @@
-import type { CSSProperties, FC } from 'react';
+import type { FC } from 'react';
 import React from 'react';
 import { useMeasurePerformance } from 'use-measure-perf';
 import { DelayedInput } from '../reusable-components/DelayedInput';
@@ -13,13 +13,6 @@ import {
 } from '../State/State';
 import { PixelChoice } from '../State/StateInterface';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
-
-const containerStyle: CSSProperties = {
-  position: 'absolute',
-  width: 300,
-  top: '50%',
-  transform: 'translateY(-49%)',
-};
 
 export const ChooseGrid: FC = () => {
   const [gridSize, setGridSize] = useInterstate(...gridSizeAtom).both();
@@ -45,8 +38,15 @@ export const ChooseGrid: FC = () => {
   }
 
   return (
-    <div {...{ style: containerStyle }}>
-      <DelayedInput {...{ label: 'input grid size: ', inputCallback, value: `${DEF_GRID_SIZE}` }} />
+    <div>
+      <DelayedInput
+        {...{
+          label: 'input grid size: ',
+          inputCallback,
+          value: `${DEF_GRID_SIZE}`,
+          addStyle: { marginBottom: '2px' },
+        }}
+      />
       <RenderInfo {...{ duration }} />
     </div>
   );

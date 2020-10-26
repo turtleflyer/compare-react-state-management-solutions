@@ -11,10 +11,14 @@ const baseStyle: CSSProperties = {
   animationDuration: '0.5s',
   animationIterationCount: 'infinite',
 };
-export const Spinner: FC = () => (
-  <div {...{ style: { display: 'flex' } }}>
-    <div {...{ style: { ...baseStyle, animationDelay: '0s' } }} />
-    <div {...{ style: { ...baseStyle, animationDelay: '0.1s' } }} />
-    <div {...{ style: { ...baseStyle, animationDelay: '0.2s' } }} />
+export const Spinner: FC<{ toShow: boolean }> = ({ toShow }) => (
+  <div {...{ style: { display: 'flex', width: 30 } }}>
+    {toShow ? (
+      <>
+        <div {...{ style: { ...baseStyle, animationDelay: '0s' } }} />
+        <div {...{ style: { ...baseStyle, animationDelay: '0.1s' } }} />
+        <div {...{ style: { ...baseStyle, animationDelay: '0.2s' } }} />
+      </>
+    ) : null}
   </div>
 );
