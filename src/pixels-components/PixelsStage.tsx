@@ -37,7 +37,7 @@ export const PixelsStage: FC = () => {
   }, [gridSize, stageHeight]);
 
   const ref = (e: HTMLDivElement | null) => {
-    if (e) {
+    if (e && !stageHeight) {
       const { height } = e.getBoundingClientRect();
       setStageHeight(height);
     }
