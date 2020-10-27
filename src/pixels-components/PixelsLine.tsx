@@ -20,9 +20,9 @@ export const PixelsLine: FC<{
   );
 
   return (
-    <div>
+    <>
       <div {...{ style }}>{line}</div>
-      {children}
-    </div>
+      {children && <div>{children}</div>}
+    </>
   );
 };
