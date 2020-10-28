@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useMeasurePerformance } from 'use-measure-perf';
@@ -9,12 +9,12 @@ import {
   DEF_GRID_SIZE,
   getNextColorForAlternativeAtom,
   gridSizeAtom,
-  rememberActiveChoiceAtom
+  rememberActiveChoiceAtom,
 } from '../State/State';
 import type { CarryAtom, ColorForAlternative, PixelChoice } from '../State/StateInterface';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
 
-export const ChooseGrid: FC = () => {
+export const ChooseGrid: FC<{ addStyle?: CSSProperties }> = ({ addStyle = {} }) => {
   const [gridSize, setGridSize] = useRecoilState(gridSizeAtom);
   const setActiveChoice = useSetRecoilState(rememberActiveChoiceAtom);
   const setAlternatives = [
@@ -40,7 +40,7 @@ export const ChooseGrid: FC = () => {
   }
 
   return (
-    <div>
+    <div {...{ style: addStyle }}>
       <DelayedInput
         {...{
           label: 'input grid size: ',
