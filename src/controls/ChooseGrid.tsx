@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import { useMeasurePerformance } from 'use-measure-perf';
 import { DelayedInput } from '../reusable-components/DelayedInput';
@@ -14,7 +14,7 @@ import {
 import { PixelChoice } from '../State/StateInterface';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
 
-export const ChooseGrid: FC = () => {
+export const ChooseGrid: FC<{ addStyle?: CSSProperties }> = ({ addStyle = {} }) => {
   const [gridSize, setGridSize] = useInterstate(...gridSizeAtom).both();
   const setActiveChoice = useInterstate(...rememberActiveChoiceAtom).set();
   const setAlternatives = [
@@ -38,7 +38,7 @@ export const ChooseGrid: FC = () => {
   }
 
   return (
-    <div>
+    <div {...{ style: addStyle }}>
       <DelayedInput
         {...{
           label: 'input grid size: ',
