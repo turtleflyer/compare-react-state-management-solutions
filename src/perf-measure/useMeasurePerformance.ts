@@ -6,7 +6,7 @@ interface Settings {
 }
 
 const REQUEST_INTERVAL = 1;
-let settings: Settings = { thresholdToEndorseInterval: 30, gapIntervalMultiFactor: 10 };
+let settings: Settings = { thresholdToEndorseInterval: 50, gapIntervalMultiFactor: 100 };
 let isMeasureStarted = false;
 
 export function defineSettings(s: Partial<Settings>): void {
