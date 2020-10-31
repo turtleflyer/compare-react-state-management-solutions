@@ -1,6 +1,7 @@
 {
   "name": "use-measure-perf",
   "private": "true",
+  "version": "0.1.0",
   "main": "useMeasurePerformance.ts",
   "devDependencies": {
     "@testing-library/react": "^11.1.0"
