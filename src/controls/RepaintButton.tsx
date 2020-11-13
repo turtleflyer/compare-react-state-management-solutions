@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type { FC } from 'react';
-import React, { useState } from 'react';
-import { useMeasurePerformance } from 'use-measure-perf';
+import React from 'react';
 import { usePerfObserver } from 'use-perf-observer';
 import { getRandomColor } from '../helpers/randomColor';
 import { Button } from '../reusable-components/Button';
 import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
-import { RenderInfo } from '../reusable-components/RenderInfo';
 import {
   alternativeForChoiceAtoms,
   colorForAlternativePlaceholderAtom,
@@ -26,13 +24,10 @@ export const RepaintButton: FC = () => {
   );
   const [activeChoice, setActiveChoice] = useInterstate(...rememberActiveChoiceAtom).both();
 
-  const [recalculateDuration, triggerRecalculation] = useState(true);
-  const duration = useMeasurePerformance({ dependencies: [recalculateDuration] });
   const [WrapDisplay, startMeasure] = usePerfObserver();
 
   function repaintRow() {
     startMeasure();
-    triggerRecalculation((v) => !v);
     setColors[activeChoice]((prevColor) => {
       const nextPotentialChoice = (1 - activeChoice) as PixelChoice;
       if (alternativesRecord[nextPotentialChoice] !== null) {
@@ -48,7 +43,6 @@ export const RepaintButton: FC = () => {
   return (
     <div {...{ style: buttonContainerStyle }}>
       <Button {...{ callback: repaintRow, name: 're-paint' }} />
-      <RenderInfo {...{ duration }} />
       <WrapDisplay>
         <PerformanceInfo {...{ data: null }} />
       </WrapDisplay>

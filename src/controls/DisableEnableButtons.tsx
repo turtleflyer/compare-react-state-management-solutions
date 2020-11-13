@@ -1,11 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type { FC } from 'react';
 import React from 'react';
-import { useMeasurePerformance } from 'use-measure-perf';
 import { usePerfObserver } from 'use-perf-observer';
 import { Button } from '../reusable-components/Button';
 import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
-import { RenderInfo } from '../reusable-components/RenderInfo';
 import {
   alternativeForChoiceAtoms,
   getNextColorForAlternativeAtom,
@@ -20,9 +18,6 @@ export const DisableEnableButtons: FC = () => {
 
   const alternativesState = [0, 1].map((i) =>
     useInterstate(...alternativeForChoiceAtoms[i]).both()
-  );
-  const durations = [0, 1].map((i) =>
-    useMeasurePerformance({ dependencies: [alternativesState[i][0]] })
   );
   const perfMeasureAssets = [0, 1].map(() => usePerfObserver());
 
@@ -52,7 +47,6 @@ export const DisableEnableButtons: FC = () => {
                 name,
               }}
             />
-            <RenderInfo {...{ duration: durations[i] }} />
             <WrapDisplay>
               <PerformanceInfo {...{ data: null }} />
             </WrapDisplay>
