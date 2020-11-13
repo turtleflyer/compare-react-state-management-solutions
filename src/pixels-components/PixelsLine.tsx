@@ -1,6 +1,6 @@
+import { getNextKey } from 'get-next-key';
 import type { CSSProperties, FC, ReactElement } from 'react';
 import React, { useMemo } from 'react';
-import { getNextKey } from '../helpers/getNextAtom';
 import type { PixelChoice } from '../State/StateInterface';
 import { ControlPixel } from './ControlPixel';
 

@@ -1,8 +1,11 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import type { FC } from 'react';
 import React, { useState } from 'react';
 import { useMeasurePerformance } from 'use-measure-perf';
+import { usePerfObserver } from 'use-perf-observer';
 import { getRandomColor } from '../helpers/randomColor';
 import { Button } from '../reusable-components/Button';
+import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
 import { RenderInfo } from '../reusable-components/RenderInfo';
 import {
   alternativeForChoiceAtoms,
@@ -14,21 +17,21 @@ import { PixelChoice } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
 export const RepaintButton: FC = () => {
-  const alternativesRecord = [
-    useInterstate(...alternativeForChoiceAtoms[0]).get(),
-    useInterstate(...alternativeForChoiceAtoms[1]).get(),
-  ] as const;
+  const alternativesRecord = [0, 1].map((i) =>
+    useInterstate(...alternativeForChoiceAtoms[i]).get()
+  );
 
-  const setColors = [
-    useInterstate(...(alternativesRecord[0] ?? colorForAlternativePlaceholderAtom)).set(),
-    useInterstate(...(alternativesRecord[1] ?? colorForAlternativePlaceholderAtom)).set(),
-  ];
+  const setColors = [0, 1].map((i) =>
+    useInterstate(...(alternativesRecord[i] ?? colorForAlternativePlaceholderAtom)).set()
+  );
   const [activeChoice, setActiveChoice] = useInterstate(...rememberActiveChoiceAtom).both();
 
   const [recalculateDuration, triggerRecalculation] = useState(true);
   const duration = useMeasurePerformance({ dependencies: [recalculateDuration] });
+  const [WrapDisplay, startMeasure] = usePerfObserver();
 
   function repaintRow() {
+    startMeasure();
     triggerRecalculation((v) => !v);
     setColors[activeChoice]((prevColor) => {
       const nextPotentialChoice = (1 - activeChoice) as PixelChoice;
@@ -46,6 +49,9 @@ export const RepaintButton: FC = () => {
     <div {...{ style: buttonContainerStyle }}>
       <Button {...{ callback: repaintRow, name: 're-paint' }} />
       <RenderInfo {...{ duration }} />
+      <WrapDisplay>
+        <PerformanceInfo {...{ data: null }} />
+      </WrapDisplay>
     </div>
   );
 };

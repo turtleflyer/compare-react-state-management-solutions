@@ -1,7 +1,9 @@
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import { useMeasurePerformance } from 'use-measure-perf';
+import { usePerfObserver } from 'use-perf-observer';
 import { DelayedInput } from '../reusable-components/DelayedInput';
+import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
 import { RenderInfo } from '../reusable-components/RenderInfo';
 import {
   alternativeForChoiceAtoms,
@@ -17,13 +19,13 @@ import { storeAtomsMethods } from '../State/storeAtomsMethods';
 export const ChooseGrid: FC<{ addStyle?: CSSProperties }> = ({ addStyle = {} }) => {
   const [gridSize, setGridSize] = useInterstate(...gridSizeAtom).both();
   const setActiveChoice = useInterstate(...rememberActiveChoiceAtom).set();
-  const setAlternatives = [
-    useInterstate(...alternativeForChoiceAtoms[0]).set(),
-    useInterstate(...alternativeForChoiceAtoms[1]).set(),
-  ] as const;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const setAlternatives = [0, 1].map((i) => useInterstate(...alternativeForChoiceAtoms[i]).set());
   const duration = useMeasurePerformance({ dependencies: [gridSize] });
+  const [WrapDisplay, startMeasure] = usePerfObserver({ measureFromCreating: true });
 
   function inputCallback(input: string) {
+    startMeasure();
     storeAtomsMethods.resetIndex();
     setGridSize(parseInt(input, 10));
     setActiveChoice(0);
@@ -48,6 +50,9 @@ export const ChooseGrid: FC<{ addStyle?: CSSProperties }> = ({ addStyle = {} }) 
         }}
       />
       <RenderInfo {...{ duration }} />
+      <WrapDisplay>
+        <PerformanceInfo {...{ data: null }} />
+      </WrapDisplay>
     </div>
   );
 };

@@ -1,9 +1,11 @@
 import type { ChangeEvent, CSSProperties, FC, ReactElement } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useMeasurePerformance } from 'use-measure-perf';
+import { usePerfObserver } from 'use-perf-observer';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
 import { InputField } from '../reusable-components/InputField';
+import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
 import { RenderInfo } from '../reusable-components/RenderInfo';
 import { DEF_PIXELS_PERCENT_TO_PAINT, gridSizeAtom, useInterstate } from '../State/State';
 import { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
@@ -27,12 +29,14 @@ export const MassivePaintButton: FC = () => {
   const [percentInput, setPercentInput] = useState(`${DEF_PIXELS_PERCENT_TO_PAINT}`);
   const [pixelsToPaint, setPixelsToPaint] = useState<ReactElement[]>([]);
   const duration = useMeasurePerformance({ dependencies: [pixelsToPaint] });
+  const [WrapDisplay, startMeasure] = usePerfObserver();
 
   useEffect(() => setPixelsToPaint((prevPixels) => (prevPixels.length > 0 ? [] : prevPixels)), [
     pixelsToPaint,
   ]);
 
   function randomPaint() {
+    startMeasure();
     const checkPercent = parseInt(percentInput, 10);
     const percent = checkPercent >= 0 && checkPercent <= 100 ? checkPercent : 0;
     setPercentInput(`${percent}`);
@@ -72,6 +76,9 @@ export const MassivePaintButton: FC = () => {
         </div>
         <div {...{ style: renderInfoContainerStyle }}>
           <RenderInfo {...{ duration }} />
+          <WrapDisplay>
+            <PerformanceInfo {...{ data: null }} />
+          </WrapDisplay>
         </div>
       </div>
       {pixelsToPaint}
