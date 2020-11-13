@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "workspaces": [
-    "src/perf-measure"
+    "src/perf-measure",
+    "src/perf-observer",
+    "src/get-next-key"
   ],
   "dependencies": {
     "@babel/core": "^7.12.3",
@@ -32,6 +34,7 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "get-next-key": "*",
     "prettier": "^2.1.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -41,6 +44,7 @@
     "tslib": "^2.0.3",
     "typescript": "^4.0.5",
     "use-measure-perf": "*",
+    "use-perf-observer": "*",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

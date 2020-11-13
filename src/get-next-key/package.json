@@ -1,0 +1,6 @@
+{
+  "name": "get-next-key",
+  "private": "true",
+  "version": "0.1.0",
+  "main": "getNextKey.ts"
+}
