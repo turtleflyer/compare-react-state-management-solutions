@@ -1,11 +1,9 @@
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { useMeasurePerformance } from 'use-measure-perf';
+import { useSetRecoilState } from 'recoil';
 import { usePerfObserver } from 'use-perf-observer';
 import { DelayedInput } from '../reusable-components/DelayedInput';
 import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
-import { RenderInfo } from '../reusable-components/RenderInfo';
 import {
   alternativeForChoiceAtoms,
   DEF_GRID_SIZE,
@@ -17,11 +15,10 @@ import type { CarryAtom, ColorForAlternative, PixelChoice } from '../State/State
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
 
 export const ChooseGrid: FC<{ addStyle?: CSSProperties }> = ({ addStyle = {} }) => {
-  const [gridSize, setGridSize] = useRecoilState(gridSizeAtom);
+  const setGridSize = useSetRecoilState(gridSizeAtom);
   const setActiveChoice = useSetRecoilState(rememberActiveChoiceAtom);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const setAlternatives = [0, 1].map((i) => useSetRecoilState(alternativeForChoiceAtoms[i]));
-  const duration = useMeasurePerformance({ dependencies: [gridSize] });
   const [WrapDisplay, startMeasure] = usePerfObserver({ measureFromCreating: true });
 
   function inputCallback(input: string) {
@@ -51,7 +48,6 @@ export const ChooseGrid: FC<{ addStyle?: CSSProperties }> = ({ addStyle = {} }) 
           addStyle: { marginBottom: '2px' },
         }}
       />
-      <RenderInfo {...{ duration }} />
       <WrapDisplay>
         <PerformanceInfo {...{ data: null }} />
       </WrapDisplay>

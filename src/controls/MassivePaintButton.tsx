@@ -1,13 +1,11 @@
 import type { ChangeEvent, CSSProperties, FC, ReactElement } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useMeasurePerformance } from 'use-measure-perf';
 import { usePerfObserver } from 'use-perf-observer';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
 import { InputField } from '../reusable-components/InputField';
 import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
-import { RenderInfo } from '../reusable-components/RenderInfo';
 import { DEF_PIXELS_PERCENT_TO_PAINT, gridSizeAtom } from '../State/State';
 import { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
@@ -29,7 +27,6 @@ export const MassivePaintButton: FC = () => {
   const gridSize = useRecoilValue(gridSizeAtom);
   const [percentInput, setPercentInput] = useState(`${DEF_PIXELS_PERCENT_TO_PAINT}`);
   const [pixelsToPaint, setPixelsToPaint] = useState<ReactElement[]>([]);
-  const duration = useMeasurePerformance({ dependencies: [pixelsToPaint] });
   const [WrapDisplay, startMeasure] = usePerfObserver();
 
   useEffect(() => setPixelsToPaint((prevPixels) => (prevPixels.length > 0 ? [] : prevPixels)), [
@@ -76,7 +73,6 @@ export const MassivePaintButton: FC = () => {
           <InputField {...{ label: 'n: ', value: percentInput, onChange: percentCallback }} />
         </div>
         <div {...{ style: renderInfoContainerStyle }}>
-          <RenderInfo {...{ duration }} />
           <WrapDisplay>
             <PerformanceInfo {...{ data: null }} />
           </WrapDisplay>
