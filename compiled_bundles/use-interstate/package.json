@@ -6,6 +6,6 @@
   "types": "App.d.ts",
   "peerDependencies": {
     "react": "^17.0.0",
-    "use-measure-perf": "file:../perf-measure"
+    "use-perf-observer": "*"
   }
 }
