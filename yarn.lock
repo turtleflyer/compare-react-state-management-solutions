@@ -1542,9 +1542,9 @@
     "pretty-format" "^26.6.2"
 
 "@testing-library/jest-dom@^5.11.5":
-  "integrity" "sha512-XI+ClHR864i6p2kRCEyhvpVejuer+ObVUF4cjCvRSF88eOMIfqw7RoS9+qoRhyigGswMfT64L6Nt0Ufotxbwtg=="
-  "resolved" "https://registry.npmjs.org/@testing-library/jest-dom/-/jest-dom-5.11.5.tgz"
-  "version" "5.11.5"
+  "integrity" "sha512-cVZyUNRWwUKI0++yepYpYX7uhrP398I+tGz4zOlLVlUYnZS+Svuxv4fwLeCIy7TnBYKXUaOlQr3vopxL8ZfEnA=="
+  "resolved" "https://registry.npmjs.org/@testing-library/jest-dom/-/jest-dom-5.11.6.tgz"
+  "version" "5.11.6"
   dependencies:
     "@babel/runtime" "^7.9.2"
     "@types/testing-library__jest-dom" "^5.9.1"
@@ -4653,9 +4653,9 @@
   "version" "2.0.0"
 
 "eslint-webpack-plugin@^2.1.0":
-  "integrity" "sha512-1TezAlOgzDlIwMeCdfWGf/1Blf0SytfBvJ9Sy3HIFsxBlM1aL86otGRuvL1MaktnTBKe5QsMEOAArAmVEkpPZw=="
-  "resolved" "https://registry.npmjs.org/eslint-webpack-plugin/-/eslint-webpack-plugin-2.2.1.tgz"
-  "version" "2.2.1"
+  "integrity" "sha512-PChgcT7U0p4exEgaWts+1sdybBgrluWOfpzmZOsDR6L0nPtvEkykxY7KUEv8RFNwCyjga8hneqsnJvTfhPCX3Q=="
+  "resolved" "https://registry.npmjs.org/eslint-webpack-plugin/-/eslint-webpack-plugin-2.3.0.tgz"
+  "version" "2.3.0"
   dependencies:
     "@types/eslint" "^7.2.4"
     "arrify" "^2.0.1"
@@ -9858,7 +9858,7 @@
   dependencies:
     "estree-walker" "^0.6.1"
 
-"rollup@^1.20.0 || ^2.0.0", "rollup@^1.20.0||^2.0.0", "rollup@^2.14.0", "rollup@^2.30.0", "rollup@^2.32.1", "rollup@>=0.60.0 <3", "rollup@>=0.66.0 <3":
+"rollup@^1.20.0 || ^2.0.0", "rollup@^1.20.0||^2.0.0", "rollup@^2.14.0", "rollup@^2.30.0", "rollup@^2.33.1", "rollup@>=0.60.0 <3", "rollup@>=0.66.0 <3":
   "integrity" "sha512-uY4O/IoL9oNW8MMcbA5hcOaz6tZTMIh7qJHx/tzIJm+n1wLoY38BLn6fuy7DhR57oNFLMbDQtDeJoFURt5933w=="
   "resolved" "https://registry.npmjs.org/rollup/-/rollup-2.33.1.tgz"
   "version" "2.33.1"
@@ -10483,9 +10483,9 @@
   "version" "0.1.8"
 
 "stack-utils@^2.0.2":
-  "integrity" "sha512-0H7QK2ECz3fyZMzQ8rH0j2ykpfbnd20BFtfg/SqVC2+sCTtcw0aDTGB7dk+de4U4uUeuz6nOtJcrkFFLG1B0Rg=="
-  "resolved" "https://registry.npmjs.org/stack-utils/-/stack-utils-2.0.2.tgz"
-  "version" "2.0.2"
+  "integrity" "sha512-gL//fkxfWUsIlFL2Tl42Cl6+HFALEaB1FU76I/Fy+oZjRreP7OPMXFlGbxM7NQsI0ZpUfw76sHnv0WNYuTb7Iw=="
+  "resolved" "https://registry.npmjs.org/stack-utils/-/stack-utils-2.0.3.tgz"
+  "version" "2.0.3"
   dependencies:
     "escape-string-regexp" "^2.0.0"
 
