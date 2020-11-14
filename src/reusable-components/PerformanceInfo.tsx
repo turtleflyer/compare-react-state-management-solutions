@@ -15,7 +15,6 @@ const style: CSSProperties = {
 };
 
 export const PerformanceInfo: FC<MetricsComponentProps> = ({ data, status }) => {
-  console.log('data: ', data);
   if (status === 'done' && data) {
     const { TTI, TBT } = data;
     return <div {...{ style }}>{`TTI: ${Math.round(TTI)}ms - TBT: ${Math.round(TBT)}ms`}</div>;
