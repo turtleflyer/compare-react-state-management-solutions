@@ -9457,6 +9457,12 @@
 "recoil-component@file:C:\\@turtlefly\\Code\\__lab__\\recoil-vs-use-interstate\\compiled_bundles\\recoil":
   "resolved" "file:compiled_bundles/recoil"
   "version" "0.0.0"
+  dependencies:
+    "@babel/runtime" "^7.12.1"
+    "get-next-key" "*"
+    "react" "^17.0.0"
+    "react-dom" "^17.0.0"
+    "use-perf-observer" "*"
 
 "recursive-readdir@2.2.2":
   "integrity" "sha512-nRCcW9Sj7NuZwa2XvH9co8NPeXUBhZP7CRKJtU+cS6PW9FpCIFoI5ib0NT1ZrbNuPoRy0ylyCaUL8Gih4LSyFg=="
@@ -11240,6 +11246,11 @@
 "use-interstate-component@file:C:\\@turtlefly\\Code\\__lab__\\recoil-vs-use-interstate\\compiled_bundles\\use-interstate":
   "resolved" "file:compiled_bundles/use-interstate"
   "version" "0.0.0"
+  dependencies:
+    "@babel/runtime" "^7.12.1"
+    "get-next-key" "*"
+    "react" "^17.0.0"
+    "use-perf-observer" "*"
 
 "use-perf-observer@*", "use-perf-observer@file:C:\\@turtlefly\\Code\\__lab__\\recoil-vs-use-interstate\\src\\perf-observer":
   "resolved" "file:src/perf-observer"
