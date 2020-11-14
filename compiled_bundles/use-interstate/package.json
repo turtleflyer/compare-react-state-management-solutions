@@ -4,8 +4,10 @@
   "private": "true",
   "main": "App.js",
   "types": "App.d.ts",
-  "peerDependencies": {
+  "dependencies": {
+    "@babel/runtime": "^7.12.1",
+    "get-next-key": "*",
     "react": "^17.0.0",
-    "use-measure-perf": "*"
+    "use-perf-observer": "*"
   }
 }
