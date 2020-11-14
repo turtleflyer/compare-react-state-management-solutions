@@ -12,7 +12,7 @@ export default {
     dir: outDir,
     format: 'es',
   },
-  external: ['react', 'use-perf-observer', /^@babel\/runtime/],
+  external: ['react', 'use-perf-observer', 'get-next-key', /^@babel\/runtime/],
   plugins: [
     babel({ babelHelpers: 'runtime', presets: ['react-app'] }),
     typescript({ target: 'es6' }),
