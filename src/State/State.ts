@@ -1,6 +1,6 @@
 import { getUseInterstate } from '@smart-hooks/use-interstate';
+import { getRandomColor } from 'random-color';
 import { getNextAtom } from '../helpers/getNextAtom';
-import { getRandomColor } from '../helpers/randomColor';
 import type {
   AlternativeForChoiceAtom,
   ChoiceForPixelAtom,
