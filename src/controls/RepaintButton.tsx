@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { getRandomColor } from 'random-color';
 import type { FC } from 'react';
 import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { usePerfObserver } from 'use-perf-observer';
-import { getRandomColor } from '../helpers/randomColor';
 import { Button } from '../reusable-components/Button';
 import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
 import {

@@ -1,6 +1,6 @@
+import { getRandomColor } from 'random-color';
 import { atom, RecoilState } from 'recoil';
 import { getNextAtom } from '../helpers/getNextAtom';
-import { getRandomColor } from '../helpers/randomColor';
 import type {
   AlternativeForChoiceAtom,
   ChoiceForPixelAtom,

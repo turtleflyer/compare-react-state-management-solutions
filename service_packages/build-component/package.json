@@ -1,0 +1,13 @@
+{
+  "name": "build-component",
+  "private": "true",
+  "version": "0.1.0",
+  "bin": {
+    "build-component": "build-component.js"
+  },
+  "dependencies": {
+    "@types/fs-extra": "^9.0.4",
+    "@types/node": "^14.14.6",
+    "fs-extra": "^9.0.1"
+  }
+}

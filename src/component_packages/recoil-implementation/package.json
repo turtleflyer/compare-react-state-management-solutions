@@ -1,0 +1,14 @@
+{
+  "name": "recoil-component",
+  "version": "0.0.0",
+  "private": "true",
+  "main": "App.tsx",
+  "dependencies": {
+    "@types/react": "^16.9.56",
+    "get-next-key": "*",
+    "random-color": "*",
+    "react": "^17.0.0",
+    "recoil": "^0.1.2",
+    "use-perf-observer": "*"
+  }
+}

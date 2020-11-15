@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "workspaces": [
-    "src/perf-observer",
-    "src/get-next-key"
+    "src/internal_packages/*",
+    "src/component_packages/*",
+    "service_packages/*"
   ],
   "dependencies": {
     "@babel/core": "^7.12.3",
@@ -21,11 +22,12 @@
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
-    "@types/react": "^16.9.55",
+    "@types/react": "^16.9.56",
     "@types/react-dom": "^16.9.9",
     "@typescript-eslint/eslint-plugin": "^4.6.0",
     "@typescript-eslint/parser": "^4.6.0",
     "babel-preset-react-app": "^10.0.0",
+    "build-component": "*",
     "eslint": "^7.12.1",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.15.0",
@@ -35,10 +37,12 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "get-next-key": "*",
     "prettier": "^2.1.2",
+    "random-color": "*",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.0",
     "recoil": "^0.1.2",
+    "recoil-component": "*",
     "rollup": "^2.33.1",
     "tslib": "^2.0.3",
     "typescript": "^4.0.5",
@@ -50,7 +54,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build-as-component": "rollup -c && tsc -p ./tsconfig.component-bundle.json"
+    "compile-packages": "tsc -p service_packages/tsconfig.json",
+    "build-component": "build-component ./config/bcfiles.json"
   },
   "eslintConfig": {
     "extends": [
