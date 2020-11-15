@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "workspaces": [
-    "src/perf-observer",
-    "src/get-next-key"
+    "src/internal_packages/*"
   ],
   "dependencies": {
     "@babel/core": "^7.12.3",

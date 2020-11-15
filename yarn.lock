@@ -5320,8 +5320,8 @@
     "has" "^1.0.3"
     "has-symbols" "^1.0.1"
 
-"get-next-key@*", "get-next-key@file:C:\\@turtlefly\\Code\\__lab__\\recoil-vs-use-interstate\\src\\get-next-key":
-  "resolved" "file:src/get-next-key"
+"get-next-key@*", "get-next-key@file:C:\\@turtlefly\\Code\\__lab__\\recoil-vs-use-interstate\\src\\internal_packages\\get-next-key":
+  "resolved" "file:src/internal_packages/get-next-key"
   "version" "0.1.0"
 
 "get-own-enumerable-property-symbols@^3.0.0":
@@ -11289,8 +11289,8 @@
     "punycode" "1.3.2"
     "querystring" "0.2.0"
 
-"use-perf-observer@file:C:\\@turtlefly\\Code\\__lab__\\recoil-vs-use-interstate\\src\\perf-observer":
-  "resolved" "file:src/perf-observer"
+"use-perf-observer@file:C:\\@turtlefly\\Code\\__lab__\\recoil-vs-use-interstate\\src\\internal_packages\\use-perf-observer":
+  "resolved" "file:src/internal_packages/use-perf-observer"
   "version" "0.1.0"
   dependencies:
     "get-next-key" "*"
