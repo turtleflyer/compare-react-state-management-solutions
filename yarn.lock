@@ -1400,16 +1400,6 @@
     "@babel/runtime" "^7.12.1"
     "@types/react" "^16.9.51"
 
-"@smart-hooks/use-interstate@^5.1.0":
-  "integrity" "sha512-uxsgKpW8OEMQuLgn4hBnmL06TZ995dtiYY/WxCPjDATGZacsBVAggYs6qY02pJR2s0c9h5B1psOH4KoeJIYccA=="
-  "resolved" "https://registry.npmjs.org/@smart-hooks/use-interstate/-/use-interstate-5.1.0.tgz"
-  "version" "5.1.0"
-  dependencies:
-    "@babel/runtime" "^7.12.1"
-    "@smart-hooks/helper-traverse-scheme-keys" "^5.1.0"
-    "@smart-hooks/use-smart-memo" "^4.0.0"
-    "@types/react" "^16.9.51"
-
 "@smart-hooks/use-multi-state@^3.1.0":
   "integrity" "sha512-eH1MJp43RO7oFPjgNdNS8VuuNI+haYPHZAxRiHdLdwqwQKJEKHxHRFEEVZGcZBZofvcfLXwrbD3c4ELPySXSGA=="
   "resolved" "https://registry.npmjs.org/@smart-hooks/use-multi-state/-/use-multi-state-3.1.0.tgz"
@@ -5353,7 +5343,7 @@
     "has" "^1.0.3"
     "has-symbols" "^1.0.1"
 
-"get-next-key@*":
+"get-next-key@*", "get-next-key@file:C:\\@turtlefly\\Code\\__lab__\\recoil-vs-use-interstate\\src\\internal_packages\\get-next-key":
   "resolved" "file:src/get-next-key"
   "version" "0.1.0"
 
@@ -11348,17 +11338,6 @@
   dependencies:
     "punycode" "1.3.2"
     "querystring" "0.2.0"
-
-"use-interstate-component@file:C:\\@turtlefly\\Code\\__lab__\\recoil-vs-use-interstate\\src\\component_packages\\use-interstate-implementation":
-  "resolved" "file:src/component_packages/use-interstate-implementation"
-  "version" "0.0.0"
-  dependencies:
-    "@smart-hooks/use-interstate" "^5.1.0"
-    "@types/react" "^16.9.56"
-    "get-next-key" "*"
-    "random-color" "*"
-    "react" "^17.0.0"
-    "use-perf-observer" "*"
 
 "use-perf-observer@*", "use-perf-observer@file:C:\\@turtlefly\\Code\\__lab__\\recoil-vs-use-interstate\\src\\internal_packages\\perf-observer":
   "resolved" "file:src/internal_packages/perf-observer"
