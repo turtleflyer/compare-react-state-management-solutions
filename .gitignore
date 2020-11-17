@@ -27,5 +27,4 @@ yarn-error.log*
 /src/component_packages/**/*.ts
 /src/component_packages/**/*.tsx
 
-/compiled_bundles/**/*.js
-/compiled_bundles/**/*.ts
+/compiled_bundles
