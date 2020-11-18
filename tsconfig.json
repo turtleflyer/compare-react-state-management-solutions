@@ -17,5 +17,6 @@
     "jsx": "react",
     "downlevelIteration": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/component_packages"]
 }
