@@ -4,7 +4,7 @@ import type { FC } from 'react';
 import React, { StrictMode, useEffect, useState } from 'react';
 import { Measures, MetricsComponentProps, usePerfObserver } from '../usePerfObserver';
 
-describe('Test useMeasurePerformance', () => {
+describe('Test usePerfObserver', () => {
   test('working properly', () => {
     const supportedTypesCommonBase = ['measure', 'navigation', 'resource'];
     let currentSupportedTypes: string[];
@@ -138,8 +138,6 @@ describe('Test useMeasurePerformance', () => {
     let retrieveStartMeasure!: () => void;
 
     const Display: FC<MetricsComponentProps> = ({ data, status = 'never' }) => {
-      console.log('data: ', data);
-      console.log('status: ', status);
       retrieveData = data;
       retrieveStatus = status;
       return <></>;
