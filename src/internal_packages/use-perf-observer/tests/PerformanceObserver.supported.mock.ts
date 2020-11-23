@@ -17,8 +17,11 @@ function fireObserver() {
   perfEntriesSequence = [];
 }
 
-export function addPerfEntries(entries: PerformanceEntrySimplified[], toFire = false): void {
-  let fireImmediately = toFire;
+export function addPerfEntries(
+  entries: PerformanceEntrySimplified[],
+  settings: { toFireImmediately: boolean } = { toFireImmediately: false }
+): void {
+  let { toFireImmediately } = settings;
 
   perfEntriesSequence = [...perfEntriesSequence, ...entries];
   freshlyAddedTypes = (['mark', 'longtask'] as SelectedEntriesTypes[]).filter(
@@ -27,10 +30,10 @@ export function addPerfEntries(entries: PerformanceEntrySimplified[], toFire = f
 
   if (requestsOnPerfMarkFlag && freshlyAddedTypes.includes('mark')) {
     requestsOnPerfMarkFlag = false;
-    fireImmediately = true;
+    toFireImmediately = true;
   }
 
-  if (fireImmediately) {
+  if (toFireImmediately) {
     fireObserver();
   }
 }
@@ -72,6 +75,8 @@ class MockedPerformanceObserver {
 
   private entryTypeSubscribe = { mark: false, longtask: false };
 
+  private chosenInterface: 'entryTypes' | 'types' | undefined;
+
   constructor(
     callback: (list: PerformanceObserverEntryList, obs: MockedPerformanceObserver) => void
   ) {
@@ -99,16 +104,35 @@ class MockedPerformanceObserver {
     'resource',
   ];
 
-  observe({ entryTypes }: { entryTypes: string[] }) {
-    this.disconnect();
-    entryTypes.forEach((type) => {
-      if (type === 'mark' || type === 'longtask') {
-        this.entryTypeSubscribe[type] = true;
-        return;
-      }
+  observe(
+    settings:
+      | { entryTypes: SelectedEntriesTypes[] }
+      | { entryTypes?: undefined; type: SelectedEntriesTypes; buffered?: boolean }
+  ) {
+    if (
+      (settings.entryTypes && this.chosenInterface === 'types') ||
+      (!settings.entryTypes && this.chosenInterface === 'entryTypes')
+    ) {
+      throw Error('(Error in test case) Observer call interface may not be changed');
+    }
 
-      throw Error('(Error in test case) Types must be "mark" or "longtask"');
-    });
+    if (settings.entryTypes) {
+      const { entryTypes } = settings;
+
+      this.chosenInterface = 'entryTypes';
+      this.disconnect();
+      entryTypes.forEach((type) => {
+        if (type === 'mark' || type === 'longtask') {
+          this.entryTypeSubscribe[type] = true;
+          return;
+        }
+
+        throw Error('(Error in test case) Types must be "mark" or "longtask"');
+      });
+    } else {
+      this.chosenInterface = 'types';
+      this.entryTypeSubscribe[settings.type] = true;
+    }
   }
 
   disconnect() {
