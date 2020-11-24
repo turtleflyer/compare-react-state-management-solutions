@@ -1,7 +1,6 @@
 import type { FC } from 'react';
 import React, { StrictMode, useEffect, useState } from 'react';
-import { Measures, Status } from '../PerfMetricsTypes';
-import type { MetricsComponentProps } from '../usePerfObserver';
+import type { Measures, MetricsComponentProps, Status } from '../usePerfObserver';
 import { usePerfObserver } from '../usePerfObserver';
 
 export interface Retrieve {

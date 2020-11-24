@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import type { ReactElement, RefObject } from 'react';
 
 export type EventTimingType =
   | 'auxclick'
@@ -59,5 +59,7 @@ export interface MetricsComponentProps {
 export interface UsePerfObserverSettings {
   measureFromCreating: boolean;
 }
+
+export type CreateObserverResult = readonly [PerformanceObserver, () => () => void];
 
 export type WrapMetricsComponentChildren = { children: ReactElement<MetricsComponentProps> };

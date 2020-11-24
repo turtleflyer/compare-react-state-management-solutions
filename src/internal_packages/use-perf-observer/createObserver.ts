@@ -1,7 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { MIN_LONG_TASK_DURATION, MIN_QUIET_WINDOW_DURATION } from './constParameters';
-import { Measures } from './PerfMetricsTypes';
-import type { MetricsComponentProps } from './usePerfObserver';
+import type { CreateObserverResult, Measures, MetricsComponentProps } from './PerfMetricsTypes';
 
 function clearScheduledTimeout(
   tID: NodeJS.Timeout | undefined,
@@ -27,9 +26,12 @@ function calculateResult(
   evalTBT: number,
   start: number,
   end: number,
-  firstLongTaskEntry: PerformanceEntry
+  firstLongTaskEntry: PerformanceEntry | undefined
 ): Measures {
-  const { startTime: startLongTask, duration } = firstLongTaskEntry;
+  const { startTime: startLongTask, duration } = firstLongTaskEntry ?? {
+    startTime: start,
+    duration: 0,
+  };
   const delta = start - startLongTask;
   const isZero = -delta >= MIN_QUIET_WINDOW_DURATION;
 
@@ -49,7 +51,7 @@ export function createObserver(
   perfMarkName: string,
   updateChildrenProps: Dispatch<SetStateAction<Required<MetricsComponentProps>>>,
   updateStartMeasureCallback: (startMeasure: () => void) => void
-): [PerformanceObserver, () => () => void] {
+): CreateObserverResult {
   let initRun = true;
   let evalTBT = 0;
   let lastEndTime: number;
@@ -60,7 +62,7 @@ export function createObserver(
 
   function finish() {
     updateChildrenProps({
-      data: calculateResult(evalTBT, markEntry!.startTime, lastEndTime, firstLongTaskEntry!),
+      data: calculateResult(evalTBT, markEntry!.startTime, lastEndTime, firstLongTaskEntry),
       status: 'done',
     });
   }
