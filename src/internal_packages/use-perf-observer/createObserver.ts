@@ -6,9 +6,7 @@ function clearScheduledTimeout(
   tID: NodeJS.Timeout | undefined,
   observer: PerformanceObserver,
   stateFlags: { useEffectRegistered: boolean },
-  settings:
-    | { scheduleNext: true; finish: () => void }
-    | { scheduleNext: false; finish?: () => void }
+  settings: { scheduleNext: true; finish: () => void } | { scheduleNext: false; finish?: undefined }
 ): NodeJS.Timeout | undefined {
   tID === undefined || clearTimeout(tID);
 
@@ -19,7 +17,7 @@ function clearScheduledTimeout(
           settings.finish();
         }
       }, MIN_QUIET_WINDOW_DURATION)
-    : (observer.disconnect() as undefined) || (settings.finish?.() as undefined);
+    : (observer.disconnect() as undefined);
 }
 
 function calculateResult(
@@ -50,7 +48,7 @@ function calculateResult(
 export function createObserver(
   perfMarkName: string,
   updateChildrenProps: Dispatch<SetStateAction<Required<MetricsComponentProps>>>,
-  updateStartMeasureCallback: (startMeasure: () => void) => void
+  updateStartMeasureCallback: (startMeasureCallback: () => void) => void
 ): CreateObserverResult {
   let initRun = true;
   let evalTBT = 0;
@@ -62,6 +60,7 @@ export function createObserver(
 
   function finish() {
     updateChildrenProps({
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       data: calculateResult(evalTBT, markEntry!.startTime, lastEndTime, firstLongTaskEntry),
       status: 'done',
     });
@@ -80,6 +79,7 @@ export function createObserver(
 
       if (!markEntry) {
         const markList = list.getEntriesByName(perfMarkName);
+
         if (markList.length > 0) {
           [markEntry] = markList;
           observer.observe({ entryTypes: ['longtask'] });
@@ -93,17 +93,19 @@ export function createObserver(
       }
 
       const longTasksList = list.getEntriesByType('longtask');
+
       if (longTasksList.length > 0) {
         longTasksList.every((task) => {
           const { startTime, duration } = task;
+
           if (!firstLongTaskEntry) {
             firstLongTaskEntry = task;
           } else {
             if (startTime - lastEndTime >= MIN_QUIET_WINDOW_DURATION) {
               timeoutID = clearScheduledTimeout(timeoutID, observer, stateFlags, {
                 scheduleNext: false,
-                finish,
               });
+              finish();
 
               return false;
             }
@@ -117,7 +119,7 @@ export function createObserver(
         });
       }
     } else {
-      clearScheduledTimeout(timeoutID, observer, stateFlags, { scheduleNext: false, finish });
+      clearScheduledTimeout(timeoutID, observer, stateFlags, { scheduleNext: false });
     }
   });
 
@@ -132,6 +134,7 @@ export function createObserver(
 
   return [
     createdObserver,
+
     () => {
       stateFlags.useEffectRegistered = true;
 

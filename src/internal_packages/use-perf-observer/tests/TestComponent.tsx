@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import React, { StrictMode, useEffect, useState } from 'react';
+import type { UsePerfMetricsSettings } from '../PerfMetricsTypes';
 import type { Measures, MetricsComponentProps, Status } from '../usePerfObserver';
 import { usePerfObserver } from '../usePerfObserver';
 
@@ -19,11 +20,11 @@ const Display: FC<MetricsComponentProps & { retrieve: Retrieve }> = ({
   return <></>;
 };
 
-const Inner: FC<{ measureFromCreating: boolean; retrieve: Retrieve }> = ({
-  measureFromCreating,
+const Inner: FC<{ settings: UsePerfMetricsSettings; retrieve: Retrieve }> = ({
+  settings,
   retrieve,
 }) => {
-  const [Wrap, startMeasure] = usePerfObserver({ measureFromCreating });
+  const [Wrap, startMeasure] = usePerfObserver(settings);
   Object.assign(retrieve, { startMeasure });
 
   return (
@@ -33,10 +34,11 @@ const Inner: FC<{ measureFromCreating: boolean; retrieve: Retrieve }> = ({
   );
 };
 
-export const TestComponent: FC<{ measureFromCreating?: boolean; retrieve: Retrieve }> = ({
-  measureFromCreating = false,
-  retrieve,
-}) => {
+export const TestComponent: FC<{
+  measureFromCreating?: boolean;
+  name?: string;
+  retrieve: Retrieve;
+}> = ({ measureFromCreating = false, name, retrieve }) => {
   const [start, getStarted] = useState(true);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,5 +54,9 @@ export const TestComponent: FC<{ measureFromCreating?: boolean; retrieve: Retrie
     };
   });
 
-  return <StrictMode>{start ? <Inner {...{ measureFromCreating, retrieve }} /> : null}</StrictMode>;
+  return (
+    <StrictMode>
+      {start ? <Inner {...{ settings: { measureFromCreating, name }, retrieve }} /> : null}
+    </StrictMode>
+  );
 };
