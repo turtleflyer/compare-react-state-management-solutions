@@ -2,6 +2,7 @@ import { getUseInterstate } from '@smart-hooks/use-interstate';
 import { getRandomColor } from 'random-color';
 import { getNextAtom } from '../helpers/getNextAtom';
 import type {
+  AlternativeForChoice,
   AlternativeForChoiceAtom,
   ChoiceForPixelAtom,
   ColorForAlternative,
@@ -35,9 +36,13 @@ export function getNextColorForAlternativeAtom(choice: PixelChoice): ColorForAlt
     getRandomColor(DEF_COLOR)
   );
 }
-export const alternativeForChoiceAtoms = [0, 1].map(
-  (c) => [`${alternativeForChoice}-${c}`, getNextColorForAlternativeAtom(c as PixelChoice)] as const
-) as [AlternativeForChoiceAtom, AlternativeForChoiceAtom];
+export const alternativeForChoiceAtoms = (([0, 1] as const).map((c) => [
+  `${alternativeForChoice}-${c}` as AlternativeForChoice,
+  getNextColorForAlternativeAtom(c),
+]) as readonly AlternativeForChoiceAtom[]) as readonly [
+  AlternativeForChoiceAtom,
+  AlternativeForChoiceAtom
+];
 
 export const gridSizeAtom = [gridSize, DEF_GRID_SIZE] as const;
 
