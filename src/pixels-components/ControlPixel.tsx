@@ -6,7 +6,8 @@ import {
   choiceForPixelPlaceholderAtom,
   useInterstate,
 } from '../State/State';
-import { choiceForPixel, ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
+import type { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
+import { choiceForPixel } from '../State/StateInterface';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
 import { Pixel } from './Pixel';
 
