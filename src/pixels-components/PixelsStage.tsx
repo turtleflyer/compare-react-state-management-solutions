@@ -2,7 +2,7 @@ import { useSmartMemo } from '@smart-hooks/use-smart-memo';
 import type { FC, ReactElement } from 'react';
 import React, { useState } from 'react';
 import { gridSizeAtom, useInterstate } from '../State/State';
-import { PixelChoice } from '../State/StateInterface';
+import type { PixelChoice } from '../State/StateInterface';
 import { PixelsLine } from './PixelsLine';
 
 export const PixelsStage: FC = () => {
