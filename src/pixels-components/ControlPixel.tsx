@@ -7,7 +7,7 @@ import {
   useInterstate,
 } from '../State/State';
 import type { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
-import { choiceForPixel } from '../State/StateInterface';
+import { choiceForPixel as choiceForPixelPref } from '../State/StateInterface';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
 import { Pixel } from './Pixel';
 
@@ -17,26 +17,28 @@ export const ControlPixel: FC<{
 }> = ({ pixelSize, defChoice }) => {
   const style: CSSProperties = { height: pixelSize, width: pixelSize };
 
-  const [pixelChoice, setPixelChoice] = useState<ChoiceForPixelAtom>(choiceForPixelPlaceholderAtom);
-  const [choice, setChoice] = useInterstate(...pixelChoice).both();
+  const [choiceForPixel, setChoiceForPixel] = useState<ChoiceForPixelAtom>(
+    choiceForPixelPlaceholderAtom
+  );
+  const [choice, setChoice] = useInterstate(...choiceForPixel).both();
   const possibleStateAtom = useInterstate(...alternativeForChoiceAtoms[choice]).get();
 
   useEffect(() => {
-    if (pixelChoice === choiceForPixelPlaceholderAtom) {
+    if (choiceForPixel === choiceForPixelPlaceholderAtom) {
       let nextAtom = storeAtomsMethods.getNext();
       if (!nextAtom) {
-        nextAtom = getNextAtom(choiceForPixel, defChoice);
+        nextAtom = getNextAtom(choiceForPixelPref, defChoice);
         storeAtomsMethods.push(nextAtom);
       }
-      setPixelChoice(nextAtom);
+      setChoiceForPixel(nextAtom);
     } else {
       setChoice(defChoice);
     }
-  }, [defChoice, pixelChoice, setChoice]);
+  }, [defChoice, choiceForPixel, setChoice]);
 
   return (
     <div {...{ style }}>
-      {possibleStateAtom && pixelChoice !== choiceForPixelPlaceholderAtom && (
+      {possibleStateAtom && choiceForPixel !== choiceForPixelPlaceholderAtom && (
         <Pixel {...{ altControlAtom: possibleStateAtom }} />
       )}
     </div>
