@@ -11,7 +11,7 @@ import {
   rememberActiveChoiceAtom,
   useInterstate,
 } from '../State/State';
-import { PixelChoice } from '../State/StateInterface';
+import type { PixelChoice } from '../State/StateInterface';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
 
 export const ChooseGrid: FC<{ addStyle?: CSSProperties }> = ({ addStyle = {} }) => {
