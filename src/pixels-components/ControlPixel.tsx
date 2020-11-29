@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { getNextAtom } from '../helpers/getNextAtom';
 import { alternativeForChoiceAtoms, choiceForPixelPlaceholderAtom } from '../State/State';
-import { choiceForPixel, ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
+import type { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
+import { choiceForPixel } from '../State/StateInterface';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
 import { Pixel } from './Pixel';
 
