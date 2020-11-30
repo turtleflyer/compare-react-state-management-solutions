@@ -16,15 +16,13 @@ import { buttonContainerStyle } from './styles';
 export const DisableEnableButtons: FC = () => {
   const setActiveChoice = useInterstate(...rememberActiveChoiceAtom).set();
 
-  const alternativesState = [0, 1].map((i) =>
-    useInterstate(...alternativeForChoiceAtoms[i]).both()
-  );
+  const alternativesState = [0, 1].map((i) => useInterstate(...alternativeForChoiceAtoms[i]).set());
   const perfMeasureAssets = [0, 1].map(() => usePerfObserver());
 
   function getEvenOrOddRowSwitch(evenOrOdd: PixelChoice): () => void {
     return () => {
       perfMeasureAssets[evenOrOdd][1]();
-      alternativesState[evenOrOdd][1]((prevAtom) => {
+      alternativesState[evenOrOdd]((prevAtom) => {
         if (!prevAtom) {
           setActiveChoice(evenOrOdd);
           return getNextColorForAlternativeAtom(evenOrOdd);
