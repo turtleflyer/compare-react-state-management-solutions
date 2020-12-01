@@ -12,7 +12,7 @@ import { buttonContainerStyle } from './styles';
 
 const renderInfoContainerStyle: CSSProperties = { margin: '-5px 0 0 5px', height: 20 };
 
-export const PixelToPaint: FC<{ pixelChoiceAtom: ChoiceForPixelAtom }> = ({ pixelChoiceAtom }) => {
+const PixelToPaint: FC<{ pixelChoiceAtom: ChoiceForPixelAtom }> = ({ pixelChoiceAtom }) => {
   const setChoice = useSetRecoilState(pixelChoiceAtom);
 
   useEffect(() => {
