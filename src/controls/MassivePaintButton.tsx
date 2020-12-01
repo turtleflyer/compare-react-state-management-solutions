@@ -7,7 +7,7 @@ import { Button } from '../reusable-components/Button';
 import { InputField } from '../reusable-components/InputField';
 import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
 import { DEF_PIXELS_PERCENT_TO_PAINT, gridSizeAtom } from '../State/State';
-import { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
+import type { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
 const renderInfoContainerStyle: CSSProperties = { margin: '-5px 0 0 5px', height: 20 };
