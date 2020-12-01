@@ -6,7 +6,7 @@ import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
 import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
 import { choiceForPixelPlaceholderAtom, gridSizeAtom } from '../State/State';
-import { PixelChoice } from '../State/StateInterface';
+import type { PixelChoice } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
 export const RandomPaintButton: FC = () => {
