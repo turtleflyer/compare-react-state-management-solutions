@@ -36,7 +36,7 @@ export const ControlPixel: FC<{
   return (
     <div {...{ style }}>
       {possibleStateAtom && choiceForPixel !== choiceForPixelPlaceholderAtom && (
-        <Pixel {...{ altControlAtom: possibleStateAtom }} />
+        <Pixel {...{ altControlAtom: possibleStateAtom.atom }} />
       )}
     </div>
   );
