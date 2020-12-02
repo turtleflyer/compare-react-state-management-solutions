@@ -27,6 +27,7 @@ yarn-error.log*
 /src/component_packages/**/*.ts
 /src/component_packages/**/*.tsx
 /**/use-interstate*/
+/**/redux*/
 
 /compiled_bundles/**/*.js
 /compiled_bundles/**/*.ts
