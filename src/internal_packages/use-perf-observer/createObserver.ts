@@ -52,7 +52,7 @@ export function createObserver(
 ): CreateObserverResult {
   let initRun = true;
   let evalTBT = 0;
-  let lastEndTime: number;
+  let lastEndTime = 0;
   let timeoutID: NodeJS.Timeout | undefined;
   let markEntry: PerformanceEntry | undefined;
   let firstLongTaskEntry: PerformanceEntry | undefined;
@@ -125,6 +125,7 @@ export function createObserver(
 
   updateStartMeasureCallback(() => {
     evalTBT = 0;
+    lastEndTime = 0;
     markEntry = undefined;
     firstLongTaskEntry = undefined;
     updateChildrenProps((info) => ({ ...info, status: 'pending' }));
