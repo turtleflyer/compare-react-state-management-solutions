@@ -27,6 +27,7 @@ yarn-error.log*
 /src/component_packages/**/*.ts
 /src/component_packages/**/*.tsx
 /**/recoil*/
+/**/use-interstate*/
 
 /compiled_bundles/**/*.js
 /compiled_bundles/**/*.ts

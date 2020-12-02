@@ -1,27 +1,22 @@
-import type { FC } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { FC } from 'react';
+import { connect } from 'react-redux';
 import { usePerfObserver } from 'use-perf-observer';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
 import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
-import { choiceForPixelPlaceholderAtom, gridSizeAtom, useInterstate } from '../State/State';
-import { PixelChoice } from '../State/StateInterface';
+import { switchPixelChoiceAction } from '../State/actions';
+import { getGridSize } from '../State/selectors';
+import type { ChoiceForPixel, State } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
-export const RandomPaintButton: FC = () => {
-  const gridSize = useInterstate(...gridSizeAtom).get();
-
-  const [atomToPaint, setAtomToPaint] = useState([choiceForPixelPlaceholderAtom] as const);
-  const paintRandomPixel = useInterstate(...atomToPaint[0]).set();
+export const RandomPaintButton = connect((state: State) => ({ gridSize: getGridSize(state) }), {
+  switchPixelChoice: switchPixelChoiceAction,
+})(function RandomPaintButton({ gridSize, switchPixelChoice }) {
   const [WrapDisplay, startMeasure] = usePerfObserver();
-
-  useEffect(() => {
-    paintRandomPixel((prev) => (1 - prev) as PixelChoice);
-  }, [paintRandomPixel, atomToPaint]);
 
   function randomPaint() {
     startMeasure();
-    setAtomToPaint([drawPixelToPaint(gridSize ** 2)]);
+    switchPixelChoice(drawPixelToPaint(gridSize ** 2));
   }
 
   return (
@@ -37,4 +32,4 @@ export const RandomPaintButton: FC = () => {
       </WrapDisplay>
     </div>
   );
-};
+} as FC<{ gridSize: number; switchPixelChoice: (pixel: ChoiceForPixel) => void }>);

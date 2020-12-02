@@ -1,12 +1,12 @@
-import type { ChoiceForPixelAtom } from '../State/StateInterface';
-import { storeAtomsMethods } from '../State/storeAtomsMethods';
+import type { ChoiceForPixel } from '../State/StateInterface';
+import { storeKeysMethods } from '../State/storeKeysMethods';
 
-export function drawPixelToPaint(totalNumber: number): ChoiceForPixelAtom {
+export function drawPixelToPaint(totalNumber: number): ChoiceForPixel {
   const randomIndex = Math.floor(Math.random() * totalNumber);
-  const atomToSet = storeAtomsMethods.get(randomIndex);
-  if (!atomToSet) {
+  const pixel = storeKeysMethods.get(randomIndex);
+  if (!pixel) {
     throw Error('It should be defined');
   }
 
-  return atomToSet;
+  return pixel;
 }

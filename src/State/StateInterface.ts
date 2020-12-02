@@ -11,17 +11,15 @@ type ColorForAlternativeState = { [P in ColorForAlternative]: ColorValue };
 export const alternativeForChoice = 'alternative-for-choice';
 export type AlternativeForChoice = typeof alternativeForChoice;
 type AlternativeForChoiceState = {
-  [P in AlternativeForChoice]: ColorForAlternativeAtom | null;
+  [P in AlternativeForChoice]: ColorForAlternative | null;
 };
 
-export const gridSize = 'grid-size';
 interface GridSizeState {
-  [gridSize]: number;
+  gridSize: number;
 }
 
-export const rememberActiveChoice = 'remember-active-choice';
 interface RememberActiveChoiceState {
-  [rememberActiveChoice]: PixelChoice;
+  rememberActiveChoice: PixelChoice;
 }
 
 export type State = ChoiceForPixelState &
@@ -32,6 +30,4 @@ export type State = ChoiceForPixelState &
 
 export type Atom<K extends keyof State> = readonly [K, State[K]];
 
-export type ChoiceForPixelAtom = Atom<ChoiceForPixel>;
 export type ColorForAlternativeAtom = Atom<ColorForAlternative>;
-export type AlternativeForChoiceAtom = Atom<AlternativeForChoice>;

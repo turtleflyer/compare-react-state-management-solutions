@@ -1,36 +1,30 @@
-import type { ChangeEvent, CSSProperties, FC, ReactElement } from 'react';
+import type { ChangeEvent, CSSProperties, FC } from 'react';
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { usePerfObserver } from 'use-perf-observer';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
 import { InputField } from '../reusable-components/InputField';
 import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
-import { DEF_PIXELS_PERCENT_TO_PAINT, gridSizeAtom, useInterstate } from '../State/State';
-import { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
+import { switchPixelChoiceAction } from '../State/actions';
+import { getGridSize } from '../State/selectors';
+import { DEF_PIXELS_PERCENT_TO_PAINT } from '../State/State';
+import type { ChoiceForPixel, State } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
 const renderInfoContainerStyle: CSSProperties = { margin: '-5px 0 0 5px', height: 20 };
 
-export const PixelToPaint: FC<{ pixelChoiceAtom: ChoiceForPixelAtom }> = ({ pixelChoiceAtom }) => {
-  const setChoice = useInterstate(...pixelChoiceAtom).set();
-
-  useEffect(() => {
-    setChoice((prevChoice) => (1 - prevChoice) as PixelChoice);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return <></>;
-};
-
-export const MassivePaintButton: FC = () => {
-  const gridSize = useInterstate(...gridSizeAtom).get();
+export const MassivePaintButton = connect((state: State) => ({ gridSize: getGridSize(state) }), {
+  switchPixelChoice: switchPixelChoiceAction,
+})(function MassivePaintButton({ gridSize, switchPixelChoice }) {
   const [percentInput, setPercentInput] = useState(`${DEF_PIXELS_PERCENT_TO_PAINT}`);
-  const [pixelsToPaint, setPixelsToPaint] = useState<ReactElement[]>([]);
+  const [pixelsToPaint, setPixelsToPaint] = useState<ChoiceForPixel[]>([]);
   const [WrapDisplay, startMeasure] = usePerfObserver();
 
-  useEffect(() => setPixelsToPaint((prevPixels) => (prevPixels.length > 0 ? [] : prevPixels)), [
-    pixelsToPaint,
-  ]);
+  useEffect(() => {
+    pixelsToPaint.forEach((p) => switchPixelChoice(p));
+    setPixelsToPaint((prevPixels) => (prevPixels.length > 0 ? [] : prevPixels));
+  }, [pixelsToPaint, switchPixelChoice]);
 
   function randomPaint() {
     startMeasure();
@@ -40,16 +34,17 @@ export const MassivePaintButton: FC = () => {
 
     const allPixelsNumber = gridSize ** 2;
     const pixelsNumberToPaint = (allPixelsNumber * percent) / 100;
-    const pixelsAtoms: ChoiceForPixelAtom[] = [];
+    const pixels: ChoiceForPixel[] = [];
+
     for (let i = 0; i < pixelsNumberToPaint; i++) {
-      let atom: ChoiceForPixelAtom;
+      let pixel: ChoiceForPixel;
       do {
-        atom = drawPixelToPaint(allPixelsNumber);
-      } while (pixelsAtoms.includes(atom));
-      pixelsAtoms.push(atom);
+        pixel = drawPixelToPaint(allPixelsNumber);
+      } while (pixels.includes(pixel));
+      pixels.push(pixel);
     }
-    // eslint-disable-next-line react/jsx-key
-    setPixelsToPaint(pixelsAtoms.map((a) => <PixelToPaint {...{ pixelChoiceAtom: a }} />));
+
+    setPixelsToPaint(pixels);
   }
 
   function percentCallback(e: ChangeEvent<HTMLInputElement>) {
@@ -60,24 +55,21 @@ export const MassivePaintButton: FC = () => {
   }
 
   return (
-    <>
-      <div>
-        <div {...{ style: buttonContainerStyle }}>
-          <Button
-            {...{
-              callback: randomPaint,
-              name: 'paint n% random pixels',
-            }}
-          />
-          <InputField {...{ label: 'n: ', value: percentInput, onChange: percentCallback }} />
-        </div>
-        <div {...{ style: renderInfoContainerStyle }}>
-          <WrapDisplay>
-            <PerformanceInfo {...{ data: null }} />
-          </WrapDisplay>
-        </div>
+    <div>
+      <div {...{ style: buttonContainerStyle }}>
+        <Button
+          {...{
+            callback: randomPaint,
+            name: 'paint n% random pixels',
+          }}
+        />
+        <InputField {...{ label: 'n: ', value: percentInput, onChange: percentCallback }} />
       </div>
-      {pixelsToPaint}
-    </>
+      <div {...{ style: renderInfoContainerStyle }}>
+        <WrapDisplay>
+          <PerformanceInfo {...{ data: null }} />
+        </WrapDisplay>
+      </div>
+    </div>
   );
-};
+} as FC<{ gridSize: number; switchPixelChoice: (pixel: ChoiceForPixel) => void }>);

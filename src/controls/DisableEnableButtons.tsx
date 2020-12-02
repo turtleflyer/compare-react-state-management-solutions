@@ -1,37 +1,23 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type { FC } from 'react';
 import React from 'react';
+import { connect } from 'react-redux';
 import { usePerfObserver } from 'use-perf-observer';
 import { Button } from '../reusable-components/Button';
 import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
-import {
-  alternativeForChoiceAtoms,
-  getNextColorForAlternativeAtom,
-  rememberActiveChoiceAtom,
-  useInterstate,
-} from '../State/State';
+import { switchAlternativeAction } from '../State/actions';
 import type { PixelChoice } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
-export const DisableEnableButtons: FC = () => {
-  const setActiveChoice = useInterstate(...rememberActiveChoiceAtom).set();
-
-  const alternativesState = [0, 1].map((i) =>
-    useInterstate(...alternativeForChoiceAtoms[i]).both()
-  );
+export const DisableEnableButtons = connect(null, {
+  switchAlternatives: switchAlternativeAction,
+})(function DisableEnableButtons({ switchAlternatives }) {
   const perfMeasureAssets = [0, 1].map(() => usePerfObserver());
 
   function getEvenOrOddRowSwitch(evenOrOdd: PixelChoice): () => void {
     return () => {
       perfMeasureAssets[evenOrOdd][1]();
-      alternativesState[evenOrOdd][1]((prevAtom) => {
-        if (!prevAtom) {
-          setActiveChoice(evenOrOdd);
-          return getNextColorForAlternativeAtom(evenOrOdd);
-        }
-        setActiveChoice((1 - evenOrOdd) as PixelChoice);
-        return null;
-      });
+      switchAlternatives(evenOrOdd);
     };
   }
 
@@ -55,4 +41,6 @@ export const DisableEnableButtons: FC = () => {
       })}
     </>
   );
-};
+} as FC<{
+  switchAlternatives: (activeChoice: PixelChoice) => void;
+}>);

@@ -1,0 +1,19 @@
+{
+  "name": "redux-connect-component",
+  "version": "0.1.2",
+  "private": "true",
+  "main": "App.tsx",
+  "dependencies": {
+    "@smart-hooks/use-multi-state": "^3.1.0",
+    "@smart-hooks/use-smart-memo": "^4.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-redux": "^7.1.11",
+    "@types/redux": "^3.6.0",
+    "get-next-key": "*",
+    "random-color": "*",
+    "react": "^17.0.0",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5",
+    "use-perf-observer": "*"
+  }
+}

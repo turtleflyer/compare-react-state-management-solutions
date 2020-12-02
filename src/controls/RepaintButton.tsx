@@ -1,51 +1,28 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import { getRandomColor } from 'random-color';
 import type { FC } from 'react';
 import React from 'react';
+import { connect } from 'react-redux';
 import { usePerfObserver } from 'use-perf-observer';
 import { Button } from '../reusable-components/Button';
 import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
-import {
-  alternativeForChoiceAtoms,
-  colorForAlternativePlaceholderAtom,
-  rememberActiveChoiceAtom,
-  useInterstate,
-} from '../State/State';
-import { PixelChoice } from '../State/StateInterface';
+import { repaintRowAction } from '../State/actions';
 import { buttonContainerStyle } from './styles';
 
-export const RepaintButton: FC = () => {
-  const alternativesRecord = [0, 1].map((i) =>
-    useInterstate(...alternativeForChoiceAtoms[i]).get()
-  );
+export const RepaintButton = connect(null, { repaintRow: repaintRowAction })(
+  function RepaintButton({ repaintRow }) {
+    const [WrapDisplay, startMeasure] = usePerfObserver();
 
-  const setColors = [0, 1].map((i) =>
-    useInterstate(...(alternativesRecord[i] ?? colorForAlternativePlaceholderAtom)).set()
-  );
-  const [activeChoice, setActiveChoice] = useInterstate(...rememberActiveChoiceAtom).both();
+    function repaintCallback() {
+      startMeasure();
+      repaintRow();
+    }
 
-  const [WrapDisplay, startMeasure] = usePerfObserver();
-
-  function repaintRow() {
-    startMeasure();
-    setColors[activeChoice]((prevColor) => {
-      const nextPotentialChoice = (1 - activeChoice) as PixelChoice;
-      if (alternativesRecord[nextPotentialChoice] !== null) {
-        setActiveChoice(nextPotentialChoice);
-      }
-      if (alternativesRecord[activeChoice] !== null) {
-        return getRandomColor(prevColor);
-      }
-      return prevColor;
-    });
-  }
-
-  return (
-    <div {...{ style: buttonContainerStyle }}>
-      <Button {...{ callback: repaintRow, name: 're-paint' }} />
-      <WrapDisplay>
-        <PerformanceInfo {...{ data: null }} />
-      </WrapDisplay>
-    </div>
-  );
-};
+    return (
+      <div {...{ style: buttonContainerStyle }}>
+        <Button {...{ callback: repaintCallback, name: 're-paint' }} />
+        <WrapDisplay>
+          <PerformanceInfo {...{ data: null }} />
+        </WrapDisplay>
+      </div>
+    );
+  } as FC<{ repaintRow: () => void }>
+);
