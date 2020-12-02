@@ -190,6 +190,25 @@ describe('Test usePerfObserver', () => {
     expect(retrieve.status).toBe('done');
     expect(retrieve.data).toEqual({ TTI: 4150, TBT: 200 });
 
+    rerender(<TestComponent {...{ retrieve, name: 'fancy-name' }} />);
+
+    expect(retrieve.status).toBe('never');
+
+    act(retrieve.startMeasure!);
+
+    expect(retrieve.status).toBe('pending');
+
+    act(() => addPerfEntries([{ entryType: 'mark', name: 'fancy-name-1', startTime: 200000 }]));
+
+    expect(retrieve.status).toBe('pending');
+
+    act(() => {
+      jest.advanceTimersByTime(5000);
+    });
+
+    expect(retrieve.status).toBe('done');
+    expect(retrieve.data).toEqual({ TTI: 0, TBT: 0 });
+
     unmount();
   });
 });
