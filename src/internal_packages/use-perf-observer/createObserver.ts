@@ -82,8 +82,7 @@ export function createObserver(
         const markList = list.getEntriesByName(perfMarkName);
         if (markList.length > 0) {
           [markEntry] = markList;
-          observer.disconnect();
-          observer.observe({ type: 'longtask' });
+          observer.observe({ entryTypes: ['longtask'] });
         } else {
           updateChildrenProps((props) => ({ ...props, status: 'error' }));
           timeoutID = clearScheduledTimeout(timeoutID, observer, stateFlags, {
@@ -127,8 +126,7 @@ export function createObserver(
     markEntry = undefined;
     firstLongTaskEntry = undefined;
     updateChildrenProps((info) => ({ ...info, status: 'pending' }));
-    createdObserver.observe({ type: 'mark' });
-    createdObserver.observe({ type: 'longtask' });
+    createdObserver.observe({ entryTypes: ['mark', 'longtask'] });
     performance.mark(perfMarkName);
   });
 

@@ -43,8 +43,7 @@ export const MeasureComponent: FC<
     measureFromCreating
   ) {
     const [observer] = conditionalObserverResult;
-    observer.observe({ type: 'mark' });
-    observer.observe({ type: 'longtask' });
+    observer.observe({ entryTypes: ['mark', 'longtask'] });
     performance.mark(perfMarkName);
   }
 
