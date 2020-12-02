@@ -2,14 +2,21 @@ import { getNextKey } from 'get-next-key';
 import type { FC, ReactElement } from 'react';
 import { cloneElement, useEffect, useMemo, useRef, useState } from 'react';
 import { createObserver } from './createObserver';
-import { WrapMetricsComponentChildren } from './PerfMetricsTypes';
-import { MetricsComponentProps } from './usePerfObserver';
+import type {
+  CreateObserverResult,
+  MetricsComponentProps,
+  WrapMetricsComponentChildren,
+} from './PerfMetricsTypes';
 
 const { supportedEntryTypes } = PerformanceObserver;
 const isSupported =
   supportedEntryTypes &&
   supportedEntryTypes.includes('mark') &&
   supportedEntryTypes.includes('longtask');
+
+function isCreateObserverResultValid(r: CreateObserverResult | null): r is CreateObserverResult {
+  return isSupported;
+}
 
 export const MeasureComponent: FC<
   WrapMetricsComponentChildren & {
@@ -26,21 +33,24 @@ export const MeasureComponent: FC<
     return { data: null, status: 'error' };
   });
   const firstTimeRunRec = useRef(true);
-
   const [conditionalObserverResult] = useState(() =>
     isSupported ? createObserver(perfMarkName, setChildrenProps, updateStartMeasureCallback) : null
   );
 
-  if (isSupported && firstTimeRunRec.current && measureFromCreating) {
-    const [observer] = conditionalObserverResult!;
+  if (
+    isCreateObserverResultValid(conditionalObserverResult) &&
+    firstTimeRunRec.current &&
+    measureFromCreating
+  ) {
+    const [observer] = conditionalObserverResult;
     observer.observe({ type: 'mark' });
     observer.observe({ type: 'longtask' });
     performance.mark(perfMarkName);
   }
 
   useEffect(() => {
-    if (isSupported) {
-      const [, callback] = conditionalObserverResult!;
+    if (isCreateObserverResultValid(conditionalObserverResult)) {
+      const [, callback] = conditionalObserverResult;
       firstTimeRunRec.current = false;
       if (measureFromCreating) {
         setChildrenProps((info) => ({ ...info, status: 'pending' }));

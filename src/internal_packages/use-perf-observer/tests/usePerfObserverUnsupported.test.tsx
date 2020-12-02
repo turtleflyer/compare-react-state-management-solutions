@@ -2,7 +2,8 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 import './PerformanceObserver.unsupported.mock';
-import { Retrieve, TestComponent } from './TestComponent';
+import type { Retrieve } from './TestComponent';
+import { TestComponent } from './TestComponent';
 
 describe('Test usePerfObserver', () => {
   test('unsupported browser throw an error', () => {

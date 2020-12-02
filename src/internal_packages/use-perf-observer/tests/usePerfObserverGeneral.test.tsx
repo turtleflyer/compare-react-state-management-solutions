@@ -2,7 +2,8 @@
 import { act, render } from '@testing-library/react';
 import React from 'react';
 import { addPerfEntries, mockPerformanceMark } from './PerformanceObserver.supported.mock';
-import { Retrieve, TestComponent } from './TestComponent';
+import type { Retrieve } from './TestComponent';
+import { TestComponent } from './TestComponent';
 
 describe('Test usePerfObserver', () => {
   beforeAll(() => {
@@ -151,6 +152,21 @@ describe('Test usePerfObserver', () => {
 
     expect(retrieve.status).toBe('done');
     expect(retrieve.data).toEqual({ TTI: 5051, TBT: 501 });
+
+    act(retrieve.startMeasure!);
+
+    expect(retrieve.status).toBe('pending');
+
+    addPerfEntries([{ entryType: 'mark', name: 'start-1', startTime: 100000 }]);
+
+    expect(retrieve.status).toBe('pending');
+
+    act(() => {
+      jest.advanceTimersByTime(5000);
+    });
+
+    expect(retrieve.status).toBe('done');
+    expect(retrieve.data).toEqual({ TTI: 0, TBT: 0 });
 
     rerender(<TestComponent {...{ retrieve }} />);
 
