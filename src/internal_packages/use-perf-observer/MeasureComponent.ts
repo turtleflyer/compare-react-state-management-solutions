@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { getNextKey } from 'get-next-key';
 import type { FC, ReactElement } from 'react';
 import { cloneElement, useEffect, useMemo, useRef, useState } from 'react';
@@ -5,6 +6,7 @@ import { createObserver } from './createObserver';
 import type {
   CreateObserverResult,
   MetricsComponentProps,
+  UsePerfMetricsSettings,
   WrapMetricsComponentChildren,
 } from './PerfMetricsTypes';
 
@@ -20,11 +22,13 @@ function isCreateObserverResultValid(r: CreateObserverResult | null): r is Creat
 
 export const MeasureComponent: FC<
   WrapMetricsComponentChildren & {
-    measureFromCreating: boolean;
-    updateStartMeasureCallback: (startMeasure: () => void) => void;
+    settings: UsePerfMetricsSettings;
+    updateStartMeasureCallback: (startMeasureCallback: () => void) => void;
   }
-> = ({ children: nestedComponent, measureFromCreating, updateStartMeasureCallback }) => {
-  const [perfMarkName] = useState(() => getNextKey('start'));
+> = ({ children: nestedComponent, settings, updateStartMeasureCallback }) => {
+  const { measureFromCreating, name } = settings;
+
+  const [perfMarkName] = useState(() => getNextKey(name ?? 'start-use-perf-metrics'));
   const [childrenProps, setChildrenProps] = useState<Required<MetricsComponentProps>>(() => {
     if (isSupported) {
       return { data: null, status: 'never' };
@@ -51,6 +55,7 @@ export const MeasureComponent: FC<
     if (isCreateObserverResultValid(conditionalObserverResult)) {
       const [, callback] = conditionalObserverResult;
       firstTimeRunRec.current = false;
+
       if (measureFromCreating) {
         setChildrenProps((info) => ({ ...info, status: 'pending' }));
       }

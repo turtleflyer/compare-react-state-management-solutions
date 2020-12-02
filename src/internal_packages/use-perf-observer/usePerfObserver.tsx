@@ -1,32 +1,33 @@
-import type { FC } from 'react';
 import React, { useRef, useState } from 'react';
 import { MeasureComponent } from './MeasureComponent';
 import type {
+  EventTimingType,
   Measures,
   MetricsComponentProps,
   Status,
-  UsePerfObserverSettings,
+  UsePerfMetricsReturn,
+  UsePerfMetricsSettings,
   WrapMetricsComponentChildren,
 } from './PerfMetricsTypes';
 
-const defSettings: UsePerfObserverSettings = {
+const defSettings: UsePerfMetricsSettings = {
   measureFromCreating: false,
 };
 
 export function usePerfObserver(
-  settings: Partial<UsePerfObserverSettings> = {}
-): [FC<WrapMetricsComponentChildren>, () => void] {
-  const { measureFromCreating } = { ...defSettings, ...settings };
-  const startMeasureRec = useRef(() => {});
+  settings: Partial<UsePerfMetricsSettings> = {}
+): UsePerfMetricsReturn {
+  const actualSettings = { ...defSettings, ...settings };
+  const startMeasureRec = useRef<(event?: EventTimingType) => void>(() => {});
 
-  const [usePerfObserverReturn] = useState<[FC<WrapMetricsComponentChildren>, () => void]>([
+  const [usePerfObserverReturn] = useState<UsePerfMetricsReturn>([
     function WrapMetrics({ children }: WrapMetricsComponentChildren) {
       return (
         <MeasureComponent
           {...{
-            measureFromCreating,
-            updateStartMeasureCallback: (sm) => {
-              startMeasureRec.current = sm;
+            settings: actualSettings,
+            updateStartMeasureCallback: (startMeasureCallback) => {
+              startMeasureRec.current = startMeasureCallback;
             },
           }}
         >

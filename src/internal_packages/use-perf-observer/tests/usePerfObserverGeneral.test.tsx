@@ -19,7 +19,9 @@ describe('Test usePerfObserver', () => {
 
     jest.useFakeTimers();
 
-    const { unmount, rerender } = render(<TestComponent measureFromCreating {...{ retrieve }} />);
+    const { unmount, rerender } = render(
+      <TestComponent measureFromCreating {...{ retrieve, name: 'start' }} />
+    );
 
     expect(retrieve.status).toBe('pending');
     expect(retrieve.data).toBe(null);
@@ -178,7 +180,7 @@ describe('Test usePerfObserver', () => {
 
     act(() =>
       addPerfEntries([
-        { entryType: 'mark', name: 'start-3', startTime: 150000 },
+        { entryType: 'mark', name: 'start-use-perf-metrics-1', startTime: 150000 },
         { entryType: 'longtask', startTime: 150000, duration: 150 },
         { entryType: 'longtask', startTime: 154000, duration: 150 },
         { entryType: 'longtask', startTime: 159150, duration: 150 },
