@@ -3,13 +3,11 @@
   "private": "true",
   "version": "0.1.0",
   "main": "usePerfObserver.tsx",
-  "devDependencies": {
-    "@testing-library/react": "^11.1.0"
-  },
   "peerDependencies": {
     "react": "^17.0.0"
   },
   "dependencies": {
+    "@testing-library/react": "^11.1.0",
     "get-next-key": "*"
   }
 }
