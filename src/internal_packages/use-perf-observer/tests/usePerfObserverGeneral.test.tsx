@@ -60,7 +60,7 @@ describe('Test usePerfObserver', () => {
           { entryType: 'mark', name: 'nonsense', startTime: 1200 },
           { entryType: 'longtask', startTime: 5977, duration: 122 },
         ],
-        true
+        { toFireImmediately: true }
       )
     );
 
@@ -125,7 +125,9 @@ describe('Test usePerfObserver', () => {
 
     jest.advanceTimersByTime(4900);
 
-    addPerfEntries([{ entryType: 'longtask', startTime: 45200, duration: 150 }], true);
+    addPerfEntries([{ entryType: 'longtask', startTime: 45200, duration: 150 }], {
+      toFireImmediately: true,
+    });
 
     act(() => {
       jest.advanceTimersByTime(5000);
