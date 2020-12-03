@@ -44,12 +44,12 @@ export const ControlPixel = connect(null, {
         nextKey = getNextKey(choiceForPixelPlaceholderKey);
         createPixel(nextKey, defChoice);
         storeKeysMethods.push(nextKey);
+      } else {
+        setChoice(nextKey, defChoice);
       }
       setChoiceForPixel(nextKey);
-    } else {
-      setChoice(choiceForPixel, defChoice);
     }
-  }, [createPixel, defChoice, choiceForPixel, setChoice]);
+  }, [choiceForPixel, createPixel, defChoice, setChoice]);
 
   return (
     <div {...{ style }}>
