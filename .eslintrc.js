@@ -1,6 +1,7 @@
 const defRules = {
   'no-nested-ternary': 'off',
   'no-plusplus': 'off',
+  'no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
   'import/extensions': 'off',
   'import/prefer-default-export': 'off',
   'jsx-a11y/label-has-associated-control': ['error', { assert: 'either', depth: 2 }],
