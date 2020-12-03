@@ -1,24 +1,21 @@
 import { ChoiceForPixel } from './StateInterface';
 
-const storeKeys = [] as ChoiceForPixel[];
-let curIndex = 0;
+let storeKeys = [] as ChoiceForPixel[];
 interface StoreKeysMethods {
   push: (newKey: ChoiceForPixel) => void;
   get: (i: number) => ChoiceForPixel | undefined;
-  getNext: () => ChoiceForPixel | undefined;
-  resetIndex: (i?: number) => void;
+  reset: () => void;
 }
 export const storeKeysMethods: StoreKeysMethods = {
   push(newKey) {
     storeKeys.push(newKey);
   },
+
   get(i) {
     return storeKeys[i];
   },
-  getNext() {
-    return storeKeys[curIndex++];
-  },
-  resetIndex(i = 0) {
-    curIndex = i;
+
+  reset() {
+    storeKeys = [];
   },
 };

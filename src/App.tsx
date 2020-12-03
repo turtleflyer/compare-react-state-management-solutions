@@ -7,9 +7,11 @@ import { MassivePaintButton } from './controls/MassivePaintButton';
 import { RandomPaintButton } from './controls/RandomPaintButton';
 import { RepaintButton } from './controls/RepaintButton';
 import { PixelsStage } from './pixels-components/PixelsStage';
-import { store } from './State/store';
+import { useCreateStore } from './State/store';
 
 export const App: FC = () => {
+  const [store, commandToCreateFreshStore] = useCreateStore();
+
   return (
     <Provider {...{ store }}>
       <div {...{ style: { display: 'inline-block' } }}>
@@ -35,7 +37,7 @@ export const App: FC = () => {
             <RandomPaintButton />
             <MassivePaintButton />
             <div {...{ style: { borderTop: '0.5px solid gray', margin: '15px 0' } }} />
-            <ChooseGrid />
+            <ChooseGrid {...{ commandToCreateFreshStore }} />
           </div>
         </div>
       </div>

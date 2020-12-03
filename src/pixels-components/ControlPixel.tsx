@@ -39,14 +39,9 @@ export const ControlPixel = connect(null, {
 
   useEffect(() => {
     if (choiceForPixel === choiceForPixelPlaceholderKey) {
-      let nextKey = storeKeysMethods.getNext();
-      if (!nextKey) {
-        nextKey = getNextKey(choiceForPixelPlaceholderKey);
-        createPixel(nextKey, defChoice);
-        storeKeysMethods.push(nextKey);
-      } else {
-        setChoice(nextKey, defChoice);
-      }
+      const nextKey = getNextKey(choiceForPixelPlaceholderKey);
+      createPixel(nextKey, defChoice);
+      storeKeysMethods.push(nextKey);
       setChoiceForPixel(nextKey);
     }
   }, [choiceForPixel, createPixel, defChoice, setChoice]);

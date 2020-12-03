@@ -1,8 +1,18 @@
 import { getRandomColor } from 'random-color';
 import type { ActionReturn } from './actionTypes';
 import { ActionType } from './actionTypes';
-import { alternativeForChoiceKeys, getNextColorForAlternativeAtom, initialState } from './State';
+import {
+  alternativeForChoiceKeys,
+  getNextColorForAlternativeAtom,
+  initialState as defInitState,
+} from './State';
 import { PixelChoice, State } from './StateInterface';
+
+let initialState = defInitState;
+
+export function resetInitState(gridSize: number): void {
+  initialState = { ...defInitState, gridSize };
+}
 
 export function appReducer(state = initialState as State, action: ActionReturn): State {
   switch (action.type) {
