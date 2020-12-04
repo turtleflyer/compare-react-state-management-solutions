@@ -1,9 +1,9 @@
+import { PerformanceInfo } from 'performance-info';
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { usePerfObserver } from 'use-perf-observer';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
-import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
 import { switchPixelChoiceAction } from '../State/actions';
 import { getGridSize } from '../State/selectors';
 import type { ChoiceForPixel, State } from '../State/StateInterface';

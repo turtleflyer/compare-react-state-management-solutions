@@ -1,9 +1,9 @@
+import { PerformanceInfo } from 'performance-info';
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import { connect } from 'react-redux';
 import { usePerfObserver } from 'use-perf-observer';
 import { DelayedInput } from '../reusable-components/DelayedInput';
-import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
 import { rememberActiveChoiceAction, turnOnAlternativeAction } from '../State/actions';
 import { DEF_GRID_SIZE } from '../State/State';
 import type { PixelChoice } from '../State/StateInterface';
