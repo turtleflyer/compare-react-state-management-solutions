@@ -1,29 +1,29 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import type { SetInterstate } from '@smart-hooks/use-interstate';
 import { getRandomColor } from 'random-color';
 import type { FC } from 'react';
 import React from 'react';
 import { usePerfObserver } from 'use-perf-observer';
 import { Button } from '../reusable-components/Button';
 import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
+import { alternativeForChoiceKeys, getAtom, useInterstate } from '../State/State';
 import {
-  alternativeForChoiceAtoms,
-  colorForAlternativePlaceholderAtom,
-  rememberActiveChoiceAtom,
-  useInterstate,
-} from '../State/State';
-import type { PixelChoice } from '../State/StateInterface';
+  ColorForAlternativeAtom,
+  colorForAlternativePlaceholderKey,
+  ColorValue,
+  PixelChoice,
+  rememberActiveChoiceKey,
+} from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
 export const RepaintButton: FC = () => {
   const alternativesRecord = [0, 1].map((i) =>
-    useInterstate(...alternativeForChoiceAtoms[i]).get()
-  );
-
+    useInterstate(...getAtom(alternativeForChoiceKeys[i])).get()
+  ) as [ColorForAlternativeAtom | null, ColorForAlternativeAtom | null];
   const setColors = [0, 1].map((i) =>
-    useInterstate(...(alternativesRecord[i] ?? colorForAlternativePlaceholderAtom)).set()
-  );
-  const [activeChoice, setActiveChoice] = useInterstate(...rememberActiveChoiceAtom).both();
-
+    useInterstate(...(alternativesRecord[i] ?? getAtom(colorForAlternativePlaceholderKey))).set()
+  ) as [SetInterstate<ColorValue>, SetInterstate<ColorValue>];
+  const [activeChoice, setActiveChoice] = useInterstate(...getAtom(rememberActiveChoiceKey)).both();
   const [WrapDisplay, startMeasure] = usePerfObserver();
 
   function repaintRow() {

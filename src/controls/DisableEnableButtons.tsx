@@ -1,33 +1,48 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import type { SetInterstate } from '@smart-hooks/use-interstate';
 import type { FC } from 'react';
 import React from 'react';
 import { usePerfObserver } from 'use-perf-observer';
+import { UsePerfMetricsReturn } from 'use-perf-observer/PerfMetricsTypes';
 import { Button } from '../reusable-components/Button';
 import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
 import {
-  alternativeForChoiceAtoms,
-  getNextColorForAlternativeAtom,
-  rememberActiveChoiceAtom,
+  alternativeForChoiceKeys,
+  createColorForAlternativeAtom,
+  getAtom,
   useInterstate,
 } from '../State/State';
-import type { PixelChoice } from '../State/StateInterface';
+import {
+  ColorForAlternativeAtom,
+  PixelChoice,
+  rememberActiveChoiceKey,
+} from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
 export const DisableEnableButtons: FC = () => {
-  const setActiveChoice = useInterstate(...rememberActiveChoiceAtom).set();
-
-  const alternativesState = [0, 1].map((i) => useInterstate(...alternativeForChoiceAtoms[i]).set());
-  const perfMeasureAssets = [0, 1].map(() => usePerfObserver());
+  const setActiveChoice = useInterstate(...getAtom(rememberActiveChoiceKey)).set();
+  const setAlternatives = [0, 1].map((i) =>
+    useInterstate(...getAtom(alternativeForChoiceKeys[i])).set()
+  ) as [
+    SetInterstate<ColorForAlternativeAtom | null>,
+    SetInterstate<ColorForAlternativeAtom | null>
+  ];
+  const perfMeasureAssets = [0, 1].map(() => usePerfObserver()) as [
+    UsePerfMetricsReturn,
+    UsePerfMetricsReturn
+  ];
 
   function getEvenOrOddRowSwitch(evenOrOdd: PixelChoice): () => void {
     return () => {
       perfMeasureAssets[evenOrOdd][1]();
-      alternativesState[evenOrOdd]((prevAtom) => {
+      setAlternatives[evenOrOdd]((prevAtom) => {
         if (!prevAtom) {
           setActiveChoice(evenOrOdd);
-          return getNextColorForAlternativeAtom(evenOrOdd);
+          return createColorForAlternativeAtom(evenOrOdd);
         }
+
         setActiveChoice((1 - evenOrOdd) as PixelChoice);
+
         return null;
       });
     };

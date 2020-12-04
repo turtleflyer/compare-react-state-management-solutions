@@ -1,21 +1,23 @@
 import { getUseInterstate } from '@smart-hooks/use-interstate';
+import { getNextKey } from 'get-next-key';
 import { getRandomColor } from 'random-color';
+import { useState } from 'react';
 import { getNextAtom } from '../helpers/getNextAtom';
 import type {
   AlternativeForChoice,
   AlternativeForChoiceAtom,
-  ChoiceForPixelAtom,
+  Atom,
   ColorForAlternative,
   ColorForAlternativeAtom,
   PixelChoice,
   State,
 } from './StateInterface';
 import {
-  alternativeForChoice,
-  choiceForPixel,
-  colorForAlternative,
-  gridSize,
-  rememberActiveChoice,
+  alternativeForChoiceKey,
+  choiceForPixelPlaceholderKey,
+  colorForAlternativePlaceholderKey,
+  gridSizeKey,
+  rememberActiveChoiceKey,
 } from './StateInterface';
 
 export const DEF_GRID_SIZE = 32;
@@ -23,29 +25,57 @@ export const DEF_COLOR = '#AAAAAA';
 export const INPUT_WAITING_DELAY = 3000;
 export const DEF_PIXELS_PERCENT_TO_PAINT = 30;
 
-export const choiceForPixelPlaceholderAtom = [choiceForPixel, 0] as ChoiceForPixelAtom;
+export const alternativeForChoiceKeys = [0, 1].map(
+  (c) => `${alternativeForChoiceKey}-${c}` as AlternativeForChoice
+) as [AlternativeForChoice, AlternativeForChoice];
 
-export const colorForAlternativePlaceholderAtom = [
-  colorForAlternative,
-  DEF_COLOR,
-] as ColorForAlternativeAtom;
-
-export function getNextColorForAlternativeAtom(choice: PixelChoice): ColorForAlternativeAtom {
+export function createColorForAlternativeAtom(choice: PixelChoice): ColorForAlternativeAtom {
   return getNextAtom(
-    `${colorForAlternative}-${choice}` as ColorForAlternative,
+    `${colorForAlternativePlaceholderKey}-${choice}` as ColorForAlternative,
     getRandomColor(DEF_COLOR)
   );
 }
-export const alternativeForChoiceAtoms = (([0, 1] as const).map((c) => [
-  `${alternativeForChoice}-${c}` as AlternativeForChoice,
-  getNextColorForAlternativeAtom(c),
-]) as readonly AlternativeForChoiceAtom[]) as readonly [
-  AlternativeForChoiceAtom,
-  AlternativeForChoiceAtom
-];
 
-export const gridSizeAtom = [gridSize, DEF_GRID_SIZE] as const;
+function createAlternativeForChoiceAtoms() {
+  return alternativeForChoiceKeys.map(
+    (k, i) => [k, createColorForAlternativeAtom(i as PixelChoice)] as AlternativeForChoiceAtom
+  );
+}
 
-export const rememberActiveChoiceAtom = [rememberActiveChoice, 0] as const;
+const initialState = {
+  [choiceForPixelPlaceholderKey]: 0,
+  [colorForAlternativePlaceholderKey]: DEF_COLOR,
+  [gridSizeKey]: DEF_GRID_SIZE,
+  [rememberActiveChoiceKey]: 0,
+} as State;
 
-export const { useInterstate } = getUseInterstate<State>();
+let storedAtoms: State = { ...initialState };
+
+function addAtoms<K extends keyof State>(...atoms: Atom<K>[]): void {
+  atoms.forEach(([key, record]) => {
+    storedAtoms = { ...storedAtoms, [key]: record };
+  });
+}
+
+addAtoms(...createAlternativeForChoiceAtoms());
+
+export function getAtom<K extends keyof State>(key: K): Atom<K> {
+  return [key, storedAtoms[key]] as [K, State[K]];
+}
+
+export const { useInterstate, Scope } = getUseInterstate<State>();
+
+function createFreshKey(): string {
+  return getNextKey('scope');
+}
+
+export function useRefreshScope(): [string, ({ gridSize }: { gridSize: number }) => void] {
+  const [key, createKey] = useState(createFreshKey);
+
+  function commandToCreateFreshKeyForScope({ gridSize }: { gridSize: number }): void {
+    addAtoms([gridSizeKey, gridSize], ...createAlternativeForChoiceAtoms());
+    createKey(createFreshKey);
+  }
+
+  return [key, commandToCreateFreshKeyForScope];
+}

@@ -1,12 +1,13 @@
 import { useSmartMemo } from '@smart-hooks/use-smart-memo';
 import type { FC, ReactElement } from 'react';
 import React, { useState } from 'react';
-import { gridSizeAtom, useInterstate } from '../State/State';
+import { getAtom, useInterstate } from '../State/State';
 import type { PixelChoice } from '../State/StateInterface';
+import { gridSizeKey } from '../State/StateInterface';
 import { PixelsLine } from './PixelsLine';
 
 export const PixelsStage: FC = () => {
-  const gridSize = useInterstate(...gridSizeAtom).get();
+  const gridSize = useInterstate(...getAtom(gridSizeKey)).get();
   const [stageHeight, setStageHeight] = useState(0);
 
   const lines: ReactElement | null = useSmartMemo(() => {

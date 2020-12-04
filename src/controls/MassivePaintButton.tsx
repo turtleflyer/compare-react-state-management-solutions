@@ -5,8 +5,9 @@ import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
 import { InputField } from '../reusable-components/InputField';
 import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
-import { DEF_PIXELS_PERCENT_TO_PAINT, gridSizeAtom, useInterstate } from '../State/State';
+import { DEF_PIXELS_PERCENT_TO_PAINT, getAtom, useInterstate } from '../State/State';
 import type { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
+import { gridSizeKey } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
 const renderInfoContainerStyle: CSSProperties = { margin: '-5px 0 0 5px', height: 20 };
@@ -16,14 +17,13 @@ const PixelToPaint: FC<{ pixelChoiceAtom: ChoiceForPixelAtom }> = ({ pixelChoice
 
   useEffect(() => {
     setChoice((prevChoice) => (1 - prevChoice) as PixelChoice);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setChoice]);
 
   return <></>;
 };
 
 export const MassivePaintButton: FC = () => {
-  const gridSize = useInterstate(...gridSizeAtom).get();
+  const gridSize = useInterstate(...getAtom(gridSizeKey)).get();
   const [percentInput, setPercentInput] = useState(`${DEF_PIXELS_PERCENT_TO_PAINT}`);
   const [pixelsToPaint, setPixelsToPaint] = useState<ReactElement[]>([]);
   const [WrapDisplay, startMeasure] = usePerfObserver();

@@ -1,27 +1,28 @@
-export const choiceForPixel = 'choice-for-pixel' as const;
-export type ChoiceForPixel = typeof choiceForPixel;
+export const choiceForPixelPlaceholderKey = 'choice-for-pixel' as const;
+export type ChoiceForPixel = typeof choiceForPixelPlaceholderKey;
 export type PixelChoice = 0 | 1;
 type ChoiceForPixelState = { [P in ChoiceForPixel]: PixelChoice };
 
-export const colorForAlternative = 'color-for-alternative';
-export type ColorForAlternative = typeof colorForAlternative;
+export const colorForAlternativePlaceholderKey = 'color-for-alternative';
+export type ColorForAlternative = typeof colorForAlternativePlaceholderKey;
 export type ColorValue = string;
 type ColorForAlternativeState = { [P in ColorForAlternative]: ColorValue };
 
-export const alternativeForChoice = 'alternative-for-choice';
-export type AlternativeForChoice = typeof alternativeForChoice;
+export const alternativeForChoiceKey = 'alternative-for-choice';
+export type AlternativeForChoice = typeof alternativeForChoiceKey;
 type AlternativeForChoiceState = {
   [P in AlternativeForChoice]: ColorForAlternativeAtom | null;
 };
 
-export const gridSize = 'grid-size';
+export const gridSizeKey = 'grid-size';
+export type GridSize = typeof gridSizeKey;
 interface GridSizeState {
-  [gridSize]: number;
+  [gridSizeKey]: number;
 }
 
-export const rememberActiveChoice = 'remember-active-choice';
+export const rememberActiveChoiceKey = 'remember-active-choice';
 interface RememberActiveChoiceState {
-  [rememberActiveChoice]: PixelChoice;
+  [rememberActiveChoiceKey]: PixelChoice;
 }
 
 export type State = ChoiceForPixelState &
