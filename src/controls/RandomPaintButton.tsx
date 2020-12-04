@@ -1,9 +1,9 @@
+import { PerformanceInfo } from 'performance-info';
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { usePerfObserver } from 'use-perf-observer';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
-import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
 import { getAtom, useInterstate } from '../State/State';
 import type { PixelChoice } from '../State/StateInterface';
 import { choiceForPixelPlaceholderKey, gridSizeKey } from '../State/StateInterface';

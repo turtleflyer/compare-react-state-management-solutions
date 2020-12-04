@@ -1,10 +1,10 @@
+import { PerformanceInfo } from 'performance-info';
 import type { ChangeEvent, CSSProperties, FC, ReactElement } from 'react';
 import React, { useEffect, useState } from 'react';
 import { usePerfObserver } from 'use-perf-observer';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
 import { InputField } from '../reusable-components/InputField';
-import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
 import { DEF_PIXELS_PERCENT_TO_PAINT, getAtom, useInterstate } from '../State/State';
 import type { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
 import { gridSizeKey } from '../State/StateInterface';

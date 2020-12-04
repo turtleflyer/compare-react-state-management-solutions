@@ -1,22 +1,19 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type { SetInterstate } from '@smart-hooks/use-interstate';
+import { PerformanceInfo } from 'performance-info';
 import type { FC } from 'react';
 import React from 'react';
 import { usePerfObserver } from 'use-perf-observer';
 import { UsePerfMetricsReturn } from 'use-perf-observer/PerfMetricsTypes';
 import { Button } from '../reusable-components/Button';
-import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
 import {
   alternativeForChoiceKeys,
   createColorForAlternativeAtom,
   getAtom,
   useInterstate,
 } from '../State/State';
-import {
-  ColorForAlternativeAtom,
-  PixelChoice,
-  rememberActiveChoiceKey,
-} from '../State/StateInterface';
+import type { ColorForAlternativeAtom, PixelChoice } from '../State/StateInterface';
+import { rememberActiveChoiceKey } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
 export const DisableEnableButtons: FC = () => {

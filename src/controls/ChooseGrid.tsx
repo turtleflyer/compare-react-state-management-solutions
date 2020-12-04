@@ -1,8 +1,8 @@
+import { PerformanceInfo } from 'performance-info';
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import { usePerfObserver } from 'use-perf-observer';
 import { DelayedInput } from '../reusable-components/DelayedInput';
-import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
 import { getAtom, useInterstate } from '../State/State';
 import { gridSizeKey } from '../State/StateInterface';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
