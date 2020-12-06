@@ -25,9 +25,9 @@ export const DEF_COLOR = '#AAAAAA';
 export const INPUT_WAITING_DELAY = 3000;
 export const DEF_PIXELS_PERCENT_TO_PAINT = 30;
 
-export const alternativeForChoiceKeys = [0, 1].map(
-  (c) => `${alternativeForChoiceKey}-${c}` as AlternativeForChoice
-) as [AlternativeForChoice, AlternativeForChoice];
+export const alternativeForChoiceKeys = ([0, 1].map(
+  (c) => `${alternativeForChoiceKey}-${c}`
+) as readonly AlternativeForChoice[]) as readonly [AlternativeForChoice, AlternativeForChoice];
 
 export function createColorForAlternativeAtom(choice: PixelChoice): ColorForAlternativeAtom {
   return getNextAtom(
@@ -37,9 +37,13 @@ export function createColorForAlternativeAtom(choice: PixelChoice): ColorForAlte
 }
 
 function createAlternativeForChoiceAtoms() {
-  return alternativeForChoiceKeys.map(
-    (k, i) => [k, createColorForAlternativeAtom(i as PixelChoice)] as AlternativeForChoiceAtom
-  );
+  return (alternativeForChoiceKeys.map((k, i) => [
+    k,
+    createColorForAlternativeAtom(i as PixelChoice),
+  ]) as readonly AlternativeForChoiceAtom[]) as readonly [
+    AlternativeForChoiceAtom,
+    AlternativeForChoiceAtom
+  ];
 }
 
 const initialState = {
