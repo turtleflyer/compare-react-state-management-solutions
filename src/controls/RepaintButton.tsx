@@ -15,12 +15,18 @@ import {
 import { buttonContainerStyle } from './styles';
 
 export const RepaintButton: FC = () => {
-  const alternativesRecord = [0, 1].map((i) =>
+  const alternativesRecord = ([0, 1].map((i) =>
     useInterstate(...getAtom(alternativeForChoiceKeys[i])).get()
-  ) as [ColorForAlternativeAtom | null, ColorForAlternativeAtom | null];
-  const setColors = [0, 1].map((i) =>
+  ) as readonly (ColorForAlternativeAtom | null)[]) as readonly [
+    ColorForAlternativeAtom | null,
+    ColorForAlternativeAtom | null
+  ];
+  const setColors = ([0, 1].map((i) =>
     useInterstate(...(alternativesRecord[i] ?? getAtom(colorForAlternativePlaceholderKey))).set()
-  ) as [SetInterstate<ColorValue>, SetInterstate<ColorValue>];
+  ) as readonly SetInterstate<ColorValue>[]) as readonly [
+    SetInterstate<ColorValue>,
+    SetInterstate<ColorValue>
+  ];
   const [activeChoice, setActiveChoice] = useInterstate(...getAtom(rememberActiveChoiceKey)).both();
   const [WrapDisplay, startMeasure] = usePerfObserver();
 
