@@ -10,7 +10,7 @@ import {
   alternativeForChoiceKeys,
   createColorForAlternativeAtom,
   getAtom,
-  useInterstate,
+  useInterstate
 } from '../State/State';
 import type { ColorForAlternativeAtom, PixelChoice } from '../State/StateInterface';
 import { rememberActiveChoiceKey } from '../State/StateInterface';
@@ -18,16 +18,18 @@ import { buttonContainerStyle } from './styles';
 
 export const DisableEnableButtons: FC = () => {
   const setActiveChoice = useInterstate(...getAtom(rememberActiveChoiceKey)).set();
-  const setAlternatives = [0, 1].map((i) =>
-    useInterstate(...getAtom(alternativeForChoiceKeys[i])).set()
-  ) as [
-    SetInterstate<ColorForAlternativeAtom | null>,
-    SetInterstate<ColorForAlternativeAtom | null>
+
+  type SetColorForAlternativeAtom = SetInterstate<ColorForAlternativeAtom | null>;
+
+  const setAlternatives = (alternativeForChoiceKeys.map((key) =>
+    useInterstate(...getAtom(key)).set()
+  ) as readonly SetColorForAlternativeAtom[]) as readonly [
+    SetColorForAlternativeAtom,
+    SetColorForAlternativeAtom
   ];
-  const perfMeasureAssets = [0, 1].map(() => usePerfObserver()) as [
-    UsePerfMetricsReturn,
-    UsePerfMetricsReturn
-  ];
+  const perfMeasureAssets = ([0, 1].map(() =>
+    usePerfObserver()
+  ) as readonly UsePerfMetricsReturn[]) as readonly [UsePerfMetricsReturn, UsePerfMetricsReturn];
 
   function getEvenOrOddRowSwitch(evenOrOdd: PixelChoice): () => void {
     return () => {
