@@ -1,7 +1,7 @@
 {
   "name": "use-perf-observer",
   "private": "true",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "usePerfObserver.tsx",
   "peerDependencies": {
     "react": "^17.0.0"

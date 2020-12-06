@@ -3,14 +3,14 @@ import type { SetInterstate } from '@smart-hooks/use-interstate';
 import { PerformanceInfo } from 'performance-info';
 import type { FC } from 'react';
 import React from 'react';
+import type { UsePerfMetricsReturn } from 'use-perf-observer';
 import { usePerfObserver } from 'use-perf-observer';
-import { UsePerfMetricsReturn } from 'use-perf-observer/PerfMetricsTypes';
 import { Button } from '../reusable-components/Button';
 import {
   alternativeForChoiceKeys,
   createColorForAlternativeAtom,
   getAtom,
-  useInterstate
+  useInterstate,
 } from '../State/State';
 import type { ColorForAlternativeAtom, PixelChoice } from '../State/StateInterface';
 import { rememberActiveChoiceKey } from '../State/StateInterface';

@@ -12,6 +12,6 @@
     "performance-info": "0.1.0",
     "random-color": "0.1.0",
     "react": "^17.0.0",
-    "use-perf-observer": "0.1.0"
+    "use-perf-observer": "0.1.1"
   }
 }
