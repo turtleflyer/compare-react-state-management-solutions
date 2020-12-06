@@ -15,8 +15,8 @@ import {
 import { buttonContainerStyle } from './styles';
 
 export const RepaintButton: FC = () => {
-  const alternativesRecord = ([0, 1].map((i) =>
-    useInterstate(...getAtom(alternativeForChoiceKeys[i])).get()
+  const alternativesRecord = (alternativeForChoiceKeys.map((key) =>
+    useInterstate(...getAtom(key)).get()
   ) as readonly (ColorForAlternativeAtom | null)[]) as readonly [
     ColorForAlternativeAtom | null,
     ColorForAlternativeAtom | null
