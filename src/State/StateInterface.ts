@@ -8,8 +8,8 @@ export type ColorForAlternative = typeof colorForAlternativePlaceholderKey;
 export type ColorValue = string;
 type ColorForAlternativeState = { [P in ColorForAlternative]: ColorValue };
 
-export const alternativeForChoiceKey = 'alternative-for-choice';
-export type AlternativeForChoice = typeof alternativeForChoiceKey;
+export const alternativeForChoicePlaceholderKey = 'alternative-for-choice';
+export type AlternativeForChoice = typeof alternativeForChoicePlaceholderKey;
 type AlternativeForChoiceState = {
   [P in AlternativeForChoice]: ColorForAlternativeAtom | null;
 };

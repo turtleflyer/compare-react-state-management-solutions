@@ -13,7 +13,7 @@ import type {
   State,
 } from './StateInterface';
 import {
-  alternativeForChoiceKey,
+  alternativeForChoicePlaceholderKey,
   choiceForPixelPlaceholderKey,
   colorForAlternativePlaceholderKey,
   gridSizeKey,
@@ -26,7 +26,7 @@ export const INPUT_WAITING_DELAY = 3000;
 export const DEF_PIXELS_PERCENT_TO_PAINT = 30;
 
 export const alternativeForChoiceKeys = ([0, 1].map(
-  (c) => `${alternativeForChoiceKey}-${c}`
+  (c) => `${alternativeForChoicePlaceholderKey}-${c}`
 ) as readonly AlternativeForChoice[]) as readonly [AlternativeForChoice, AlternativeForChoice];
 
 export function createColorForAlternativeAtom(choice: PixelChoice): ColorForAlternativeAtom {
