@@ -20,12 +20,10 @@ export const ControlPixel: FC<{
   const possibleStateAtom = useInterstate(...getAtom(alternativeForChoiceKeys[choice])).get();
 
   useEffect(() => {
-    if (choiceForPixel[0] === choiceForPixelPlaceholderKey) {
-      const nextAtom = getNextAtom(choiceForPixelPlaceholderKey, defChoice);
-      storeAtomsMethods.push(nextAtom);
-      setChoiceForPixel(nextAtom);
-    }
-  }, [choiceForPixel, defChoice]);
+    const nextAtom = getNextAtom(choiceForPixelPlaceholderKey, defChoice);
+    storeAtomsMethods.push(nextAtom);
+    setChoiceForPixel(nextAtom);
+  }, [defChoice]);
 
   return (
     <div {...{ style }}>
