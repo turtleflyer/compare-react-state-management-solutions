@@ -11,8 +11,8 @@ import { buttonContainerStyle } from './styles';
 
 export const RandomPaintButton: FC = () => {
   const gridSize = useInterstate(...getAtom(gridSizeKey)).get();
-  const [atomToPaint, setAtomToPaint] = useState(getAtom(choiceForPixelPlaceholderKey));
-  const paintRandomPixel = useInterstate(...atomToPaint).set();
+  const [atomToPaint, setAtomToPaint] = useState({ atom: getAtom(choiceForPixelPlaceholderKey) });
+  const paintRandomPixel = useInterstate(...atomToPaint.atom).set();
   const [WrapDisplay, startMeasure] = usePerfObserver();
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export const RandomPaintButton: FC = () => {
 
   function randomPaint() {
     startMeasure();
-    setAtomToPaint(drawPixelToPaint(gridSize ** 2));
+    setAtomToPaint({ atom: drawPixelToPaint(gridSize ** 2) });
   }
 
   return (
