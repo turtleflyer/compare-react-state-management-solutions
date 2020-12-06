@@ -42,4 +42,4 @@ export function usePerfObserver(
   return usePerfObserverReturn;
 }
 
-export type { Measures, Status, MetricsComponentProps };
+export type { Measures, Status, MetricsComponentProps, UsePerfMetricsReturn };

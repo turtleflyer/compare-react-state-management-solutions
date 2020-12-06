@@ -3,6 +3,7 @@ import { PerformanceInfo } from 'performance-info';
 import type { FC } from 'react';
 import React from 'react';
 import { connect } from 'react-redux';
+import type { UsePerfMetricsReturn } from 'use-perf-observer';
 import { usePerfObserver } from 'use-perf-observer';
 import { Button } from '../reusable-components/Button';
 import { switchAlternativeAction } from '../State/actions';
@@ -12,7 +13,9 @@ import { buttonContainerStyle } from './styles';
 export const DisableEnableButtons = connect(null, {
   switchAlternatives: switchAlternativeAction,
 })(function DisableEnableButtons({ switchAlternatives }) {
-  const perfMeasureAssets = [0, 1].map(() => usePerfObserver());
+  const perfMeasureAssets = ([0, 1].map(() =>
+    usePerfObserver()
+  ) as readonly UsePerfMetricsReturn[]) as readonly [UsePerfMetricsReturn, UsePerfMetricsReturn];
 
   function getEvenOrOddRowSwitch(evenOrOdd: PixelChoice): () => void {
     return () => {
