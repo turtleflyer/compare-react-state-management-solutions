@@ -4,8 +4,8 @@ import type { FC } from 'react';
 import React from 'react';
 import type { SetterOrUpdater } from 'recoil';
 import { useRecoilState, useSetRecoilState } from 'recoil';
+import type { UsePerfMetricsReturn } from 'use-perf-observer';
 import { usePerfObserver } from 'use-perf-observer';
-import type { UsePerfMetricsReturn } from 'use-perf-observer/PerfMetricsTypes';
 import { Button } from '../reusable-components/Button';
 import {
   alternativeForChoiceAtoms,

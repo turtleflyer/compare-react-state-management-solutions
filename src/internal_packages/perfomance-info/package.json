@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "main": "PerformanceInfo.tsx",
   "peerDependencies": {
-    "use-perf-observer": "0.1.0",
+    "use-perf-observer": "0.1.1",
     "react": "^17.0.0"
   },
   "dependencies": {
