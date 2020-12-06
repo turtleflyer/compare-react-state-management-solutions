@@ -1,0 +1,14 @@
+{
+  "name": "performance-info",
+  "private": "true",
+  "version": "0.1.0",
+  "main": "PerformanceInfo.tsx",
+  "peerDependencies": {
+    "use-perf-observer": "0.1.0",
+    "react": "^17.0.0"
+  },
+  "dependencies": {
+    "@testing-library/react": "^11.1.0",
+    "get-next-key": "0.1.0"
+  }
+}

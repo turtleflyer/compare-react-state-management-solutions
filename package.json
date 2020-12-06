@@ -28,6 +28,7 @@
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
     "get-next-key": "0.1.0",
+    "performance-info": "0.1.0",
     "prettier": "^2.1.2",
     "random-color": "0.1.0",
     "react": "^17.0.1",

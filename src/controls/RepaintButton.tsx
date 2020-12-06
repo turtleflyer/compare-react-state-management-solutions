@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { PerformanceInfo } from 'performance-info';
 import { getRandomColor } from 'random-color';
 import type { FC } from 'react';
 import React from 'react';
@@ -6,7 +7,6 @@ import type { SetterOrUpdater } from 'recoil';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { usePerfObserver } from 'use-perf-observer';
 import { Button } from '../reusable-components/Button';
-import { PerformanceInfo } from '../reusable-components/PerformanceInfo';
 import {
   alternativeForChoiceAtoms,
   colorForAlternativePlaceholderAtom,
