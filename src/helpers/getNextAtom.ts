@@ -1,10 +1,7 @@
 import { getNextKey } from 'get-next-key';
-import { atom, RecoilState } from 'recoil';
-import type { State } from '../State/StateInterface';
+import { atom } from 'recoil';
+import type { Atom, State } from '../State/StateInterface';
 
-export function getNextAtom<K extends keyof State, D extends State[K] = State[K]>(
-  prefix: K,
-  defaultValue: D
-): RecoilState<D> {
+export function getNextAtom<K extends keyof State>(prefix: K, defaultValue: State[K]): Atom<K> {
   return atom({ key: getNextKey(prefix), default: defaultValue });
 }

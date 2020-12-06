@@ -2,6 +2,7 @@
 import { getRandomColor } from 'random-color';
 import type { FC } from 'react';
 import React from 'react';
+import type { SetterOrUpdater } from 'recoil';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { usePerfObserver } from 'use-perf-observer';
 import { Button } from '../reusable-components/Button';
@@ -11,14 +12,25 @@ import {
   colorForAlternativePlaceholderAtom,
   rememberActiveChoiceAtom,
 } from '../State/State';
-import type { PixelChoice } from '../State/StateInterface';
+import type {
+  CarryAtomColorForAlternative,
+  ColorValue,
+  PixelChoice,
+} from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
 export const RepaintButton: FC = () => {
-  const alternatives = [0, 1].map((i) => useRecoilValue(alternativeForChoiceAtoms[i]));
-  const colorsState = [0, 1].map((i) =>
+  const alternatives = (alternativeForChoiceAtoms.map((atom) =>
+    useRecoilValue(atom)
+  ) as readonly CarryAtomColorForAlternative[]) as readonly [
+    CarryAtomColorForAlternative,
+    CarryAtomColorForAlternative
+  ];
+
+  type ManageColorsState = [ColorValue, SetterOrUpdater<ColorValue>];
+  const colorsState = ([0, 1].map((i) =>
     useRecoilState(alternatives[i]?.atom ?? colorForAlternativePlaceholderAtom)
-  );
+  ) as readonly ManageColorsState[]) as readonly [ManageColorsState, ManageColorsState];
   const [activeChoice, setActiveChoice] = useRecoilState(rememberActiveChoiceAtom);
 
   const [WrapDisplay, startMeasure] = usePerfObserver();

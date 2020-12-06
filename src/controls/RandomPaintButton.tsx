@@ -12,8 +12,8 @@ import { buttonContainerStyle } from './styles';
 export const RandomPaintButton: FC = () => {
   const gridSize = useRecoilValue(gridSizeAtom);
 
-  const [atomToPaint, setAtomToPaint] = useState([choiceForPixelPlaceholderAtom] as const);
-  const paintRandomPixel = useSetRecoilState(atomToPaint[0]);
+  const [atomToPaint, setAtomToPaint] = useState({ atom: choiceForPixelPlaceholderAtom });
+  const paintRandomPixel = useSetRecoilState(atomToPaint.atom);
   const [WrapDisplay, startMeasure] = usePerfObserver();
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export const RandomPaintButton: FC = () => {
 
   function randomPaint() {
     startMeasure();
-    setAtomToPaint([drawPixelToPaint(gridSize ** 2)]);
+    setAtomToPaint({ atom: drawPixelToPaint(gridSize ** 2) });
   }
 
   return (

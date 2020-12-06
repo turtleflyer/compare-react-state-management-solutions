@@ -17,8 +17,7 @@ const PixelToPaint: FC<{ pixelChoiceAtom: ChoiceForPixelAtom }> = ({ pixelChoice
 
   useEffect(() => {
     setChoice((prevChoice) => (1 - prevChoice) as PixelChoice);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setChoice]);
 
   return <></>;
 };
