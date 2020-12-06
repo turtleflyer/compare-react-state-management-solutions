@@ -16,7 +16,7 @@ export const ControlPixel: FC<{
   const [choiceForPixel, setChoiceForPixel] = useState<ChoiceForPixelAtom>(
     getAtom(choiceForPixelPlaceholderKey)
   );
-  const [choice, setChoice] = useInterstate(...choiceForPixel).both();
+  const choice = useInterstate(...choiceForPixel).get();
   const possibleStateAtom = useInterstate(...getAtom(alternativeForChoiceKeys[choice])).get();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export const ControlPixel: FC<{
       storeAtomsMethods.push(nextAtom);
       setChoiceForPixel(nextAtom);
     }
-  }, [defChoice, choiceForPixel, setChoice]);
+  }, [choiceForPixel, defChoice]);
 
   return (
     <div {...{ style }}>
