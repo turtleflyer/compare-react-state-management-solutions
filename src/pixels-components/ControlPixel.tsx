@@ -2,15 +2,16 @@ import { getNextKey } from 'get-next-key';
 import type { CSSProperties, FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { createNewPixelEntryAction, setChoiceForPixelAction } from '../State/actions';
+import { createNewPixelEntryAction } from '../State/actions';
 import { getAlternativeForChoice, getChoiceForPixel } from '../State/selectors';
-import { alternativeForChoiceKeys, choiceForPixelPlaceholderKey } from '../State/State';
+import { alternativeForChoiceKeys } from '../State/State';
 import type {
   ChoiceForPixel,
   ColorForAlternative,
   PixelChoice,
   State,
 } from '../State/StateInterface';
+import { choiceForPixelPlaceholderKey } from '../State/StateInterface';
 import { storeKeysMethods } from '../State/storeKeysMethods';
 import { Pixel } from './Pixel';
 
@@ -28,9 +29,8 @@ const ControlPixelInner = connect(
 }>);
 
 export const ControlPixel = connect(null, {
-  setChoice: setChoiceForPixelAction,
   createPixel: createNewPixelEntryAction,
-})(function ControlPixel({ pixelSize, defChoice, setChoice, createPixel }) {
+})(function ControlPixel({ pixelSize, defChoice, createPixel }) {
   const style: CSSProperties = { height: pixelSize, width: pixelSize };
 
   const [choiceForPixel, setChoiceForPixel] = useState<ChoiceForPixel>(
@@ -38,13 +38,11 @@ export const ControlPixel = connect(null, {
   );
 
   useEffect(() => {
-    if (choiceForPixel === choiceForPixelPlaceholderKey) {
-      const nextKey = getNextKey(choiceForPixelPlaceholderKey);
-      createPixel(nextKey, defChoice);
-      storeKeysMethods.push(nextKey);
-      setChoiceForPixel(nextKey);
-    }
-  }, [choiceForPixel, createPixel, defChoice, setChoice]);
+    const nextKey = getNextKey(choiceForPixelPlaceholderKey);
+    createPixel(nextKey, defChoice);
+    storeKeysMethods.push(nextKey);
+    setChoiceForPixel(nextKey);
+  }, [createPixel, defChoice]);
 
   return (
     <div {...{ style }}>
@@ -56,6 +54,5 @@ export const ControlPixel = connect(null, {
 } as FC<{
   pixelSize: string;
   defChoice: PixelChoice;
-  setChoice: (pixel: ChoiceForPixel, choice: PixelChoice) => void;
   createPixel: (pixel: ChoiceForPixel, choice: PixelChoice) => void;
 }>);

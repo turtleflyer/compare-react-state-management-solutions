@@ -37,7 +37,7 @@ export const App: FC = () => {
             <RandomPaintButton />
             <MassivePaintButton />
             <div {...{ style: { borderTop: '0.5px solid gray', margin: '15px 0' } }} />
-            <ChooseGrid {...{ commandToCreateFreshStore }} />
+            <ChooseGrid {...{ beAwareWhenChosen: commandToCreateFreshStore }} />
           </div>
         </div>
       </div>

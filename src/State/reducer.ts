@@ -3,20 +3,20 @@ import type { ActionReturn } from './actionTypes';
 import { ActionType } from './actionTypes';
 import {
   alternativeForChoiceKeys,
-  getNextColorForAlternativeAtom,
-  initialState as defInitState,
+  createColorForAlternativeForChoiceEntry,
+  defInitialState,
 } from './State';
-import { PixelChoice, State } from './StateInterface';
+import type {
+  AlternativeForChoice,
+  ColorForAlternative,
+  PixelChoice,
+  State,
+} from './StateInterface';
 
-let initialState = defInitState;
-
-export function resetInitState(gridSize: number): void {
-  initialState = { ...defInitState, gridSize };
-}
+let initialState: Readonly<Partial<State>>;
 
 export function appReducer(state = initialState as State, action: ActionReturn): State {
   switch (action.type) {
-    case ActionType.SET_CHOICE_FOR_PIXEL:
     case ActionType.CREATE_NEW_PIXEL_ENTRY: {
       const {
         payload: { choice, pixel },
@@ -57,19 +57,19 @@ export function appReducer(state = initialState as State, action: ActionReturn):
       const prevValue = state[alternativeForChoiceKeys[alternativeOfChoice]];
 
       if (!prevValue) {
-        const [nextColorForAlternativeKey, nextColor] = getNextColorForAlternativeAtom(
+        const colorForAlternativeForChoiceEntry = createColorForAlternativeForChoiceEntry(
           alternativeOfChoice
         );
 
         return {
           ...state,
-          [alternativeForChoiceKeys[alternativeOfChoice]]: nextColorForAlternativeKey,
-          [nextColorForAlternativeKey]: nextColor,
+          ...colorForAlternativeForChoiceEntry,
         };
       }
 
       return state;
     }
+
     case ActionType.SWITCH_ALTERNATIVES: {
       const {
         payload: { alternativeOfChoice },
@@ -77,14 +77,13 @@ export function appReducer(state = initialState as State, action: ActionReturn):
       const prevValue = state[alternativeForChoiceKeys[alternativeOfChoice]];
 
       if (!prevValue) {
-        const [nextColorForAlternativeKey, nextColor] = getNextColorForAlternativeAtom(
+        const colorForAlternativeForChoiceEntry = createColorForAlternativeForChoiceEntry(
           alternativeOfChoice
         );
 
         return {
           ...state,
-          [alternativeForChoiceKeys[alternativeOfChoice]]: nextColorForAlternativeKey,
-          [nextColorForAlternativeKey]: nextColor,
+          ...colorForAlternativeForChoiceEntry,
           rememberActiveChoice: alternativeOfChoice,
         };
       }
@@ -115,4 +114,15 @@ export function appReducer(state = initialState as State, action: ActionReturn):
     default:
       return state;
   }
+}
+
+function createSetOfEntries(): Readonly<Pick<State, ColorForAlternative | AlternativeForChoice>> {
+  return ([0, 1] as const).reduce(
+    (entries, c) => ({ ...entries, ...createColorForAlternativeForChoiceEntry(c) }),
+    {} as Pick<State, ColorForAlternative | AlternativeForChoice>
+  );
+}
+
+export function initializeState(gridSize: number): void {
+  initialState = { ...defInitialState, gridSize, ...createSetOfEntries() };
 }

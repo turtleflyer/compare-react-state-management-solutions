@@ -1,7 +1,6 @@
 import type { ChoiceForPixel, PixelChoice } from './StateInterface';
 
 export enum ActionType {
-  SET_CHOICE_FOR_PIXEL = 'pixels/setChoiceForPixel',
   CREATE_NEW_PIXEL_ENTRY = 'pixels/createNewPixelEntry',
   SWITCH_PIXEL_CHOICE = 'pixels/switchPixelChoice',
   CHOOSE_GRID = 'grid/chooseGrid',
@@ -11,33 +10,22 @@ export enum ActionType {
   REPAINT_ROW = 'alternatives/repaintRow',
 }
 
-interface PixelsPayloads {
-  pixel: ChoiceForPixel;
-  choice: PixelChoice;
-}
-
 interface AlternativesPayloads {
   alternativeOfChoice: PixelChoice;
 }
 
 export type ActionReturn<T extends ActionType = ActionType> =
-  | (T extends ActionType.SET_CHOICE_FOR_PIXEL
-      ? {
-          type: ActionType.SET_CHOICE_FOR_PIXEL;
-          payload: PixelsPayloads;
-        }
-      : never)
   | (T extends ActionType.CREATE_NEW_PIXEL_ENTRY
       ? {
           type: ActionType.CREATE_NEW_PIXEL_ENTRY;
-          payload: PixelsPayloads;
+          payload: {
+            pixel: ChoiceForPixel;
+            choice: PixelChoice;
+          };
         }
       : never)
   | (T extends ActionType.SWITCH_PIXEL_CHOICE
-      ? {
-          type: ActionType.SWITCH_PIXEL_CHOICE;
-          payload: { pixel: ChoiceForPixel };
-        }
+      ? { type: ActionType.SWITCH_PIXEL_CHOICE; payload: { pixel: ChoiceForPixel } }
       : never)
   | (T extends ActionType.CHOOSE_GRID
       ? { type: ActionType.CHOOSE_GRID; payload: { gridSize: number } }

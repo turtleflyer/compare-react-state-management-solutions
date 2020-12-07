@@ -1,15 +1,15 @@
-export const choiceForPixel = 'choice-for-pixel' as const;
-export type ChoiceForPixel = typeof choiceForPixel;
+export const choiceForPixelPlaceholderKey = 'choice-for-pixel' as const;
+export type ChoiceForPixel = typeof choiceForPixelPlaceholderKey;
 export type PixelChoice = 0 | 1;
 type ChoiceForPixelState = { [P in ChoiceForPixel]: PixelChoice };
 
-export const colorForAlternative = 'color-for-alternative';
-export type ColorForAlternative = typeof colorForAlternative;
+export const colorForAlternativePlaceholderKey = 'color-for-alternative';
+export type ColorForAlternative = typeof colorForAlternativePlaceholderKey;
 export type ColorValue = string;
 type ColorForAlternativeState = { [P in ColorForAlternative]: ColorValue };
 
-export const alternativeForChoice = 'alternative-for-choice';
-export type AlternativeForChoice = typeof alternativeForChoice;
+export const alternativeForChoicePlaceholderKey = 'alternative-for-choice';
+export type AlternativeForChoice = typeof alternativeForChoicePlaceholderKey;
 type AlternativeForChoiceState = {
   [P in AlternativeForChoice]: ColorForAlternative | null;
 };

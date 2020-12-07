@@ -2,12 +2,6 @@ import type { ActionReturn } from './actionTypes';
 import { ActionType } from './actionTypes';
 import type { ChoiceForPixel, PixelChoice } from './StateInterface';
 
-export function setChoiceForPixelAction(
-  pixel: ChoiceForPixel,
-  choice: PixelChoice
-): ActionReturn<ActionType.SET_CHOICE_FOR_PIXEL> {
-  return { type: ActionType.SET_CHOICE_FOR_PIXEL, payload: { pixel, choice } };
-}
 export function createNewPixelEntryAction(
   pixel: ChoiceForPixel,
   choice: PixelChoice
