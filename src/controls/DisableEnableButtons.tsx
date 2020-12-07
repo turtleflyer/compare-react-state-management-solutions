@@ -21,7 +21,7 @@ export const DisableEnableButtons: FC = () => {
 
   type SetColorForAlternativeAtom = SetInterstate<ColorForAlternativeAtom | null>;
 
-  const setAlternatives = (alternativeForChoiceKeys.map((key) =>
+  const setAlternativesOfChoices = (alternativeForChoiceKeys.map((key) =>
     useInterstate(...getAtom(key)).set()
   ) as readonly SetColorForAlternativeAtom[]) as readonly [
     SetColorForAlternativeAtom,
@@ -34,7 +34,7 @@ export const DisableEnableButtons: FC = () => {
   function getEvenOrOddRowSwitch(evenOrOdd: PixelChoice): () => void {
     return () => {
       perfMeasureAssets[evenOrOdd][1]();
-      setAlternatives[evenOrOdd]((prevAtom) => {
+      setAlternativesOfChoices[evenOrOdd]((prevAtom) => {
         if (!prevAtom) {
           setActiveChoice(evenOrOdd);
           return createColorForAlternativeAtom(evenOrOdd);
