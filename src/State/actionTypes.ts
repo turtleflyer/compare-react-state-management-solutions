@@ -11,7 +11,7 @@ export enum ActionType {
 }
 
 interface AlternativesPayloads {
-  alternativeOfChoice: PixelChoice;
+  choice: PixelChoice;
 }
 
 export type ActionReturn<T extends ActionType = ActionType> =

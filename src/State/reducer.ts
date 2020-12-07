@@ -52,14 +52,12 @@ export function appReducer(state = initialState as State, action: ActionReturn):
 
     case ActionType.TURN_ON_ALTERNATIVE: {
       const {
-        payload: { alternativeOfChoice },
+        payload: { choice },
       } = action;
-      const prevValue = state[alternativeForChoiceKeys[alternativeOfChoice]];
+      const prevValue = state[alternativeForChoiceKeys[choice]];
 
       if (!prevValue) {
-        const colorForAlternativeForChoiceEntry = createColorForAlternativeForChoiceEntry(
-          alternativeOfChoice
-        );
+        const colorForAlternativeForChoiceEntry = createColorForAlternativeForChoiceEntry(choice);
 
         return {
           ...state,
@@ -72,28 +70,24 @@ export function appReducer(state = initialState as State, action: ActionReturn):
 
     case ActionType.SWITCH_ALTERNATIVES: {
       const {
-        payload: { alternativeOfChoice },
+        payload: { choice },
       } = action;
-      const prevValue = state[alternativeForChoiceKeys[alternativeOfChoice]];
+      const prevValue = state[alternativeForChoiceKeys[choice]];
 
       if (!prevValue) {
-        const colorForAlternativeForChoiceEntry = createColorForAlternativeForChoiceEntry(
-          alternativeOfChoice
-        );
+        const colorForAlternativeForChoiceEntry = createColorForAlternativeForChoiceEntry(choice);
 
         return {
           ...state,
           ...colorForAlternativeForChoiceEntry,
-          rememberActiveChoice: alternativeOfChoice,
+          rememberActiveChoice: choice,
         };
       }
 
-      const { rememberActiveChoice: prevActiveChoice } = state;
-
       return {
         ...state,
-        [alternativeForChoiceKeys[alternativeOfChoice]]: null,
-        rememberActiveChoice: (1 - prevActiveChoice) as PixelChoice,
+        [alternativeForChoiceKeys[choice]]: null,
+        rememberActiveChoice: (1 - choice) as PixelChoice,
       };
     }
 

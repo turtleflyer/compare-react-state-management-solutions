@@ -28,13 +28,13 @@ export function rememberActiveChoiceAction(
 export function turnOnAlternativeAction(
   alternativeOfChoice: PixelChoice
 ): ActionReturn<ActionType.TURN_ON_ALTERNATIVE> {
-  return { type: ActionType.TURN_ON_ALTERNATIVE, payload: { alternativeOfChoice } };
+  return { type: ActionType.TURN_ON_ALTERNATIVE, payload: { choice: alternativeOfChoice } };
 }
 
 export function switchAlternativeAction(
   alternativeOfChoice: PixelChoice
 ): ActionReturn<ActionType.SWITCH_ALTERNATIVES> {
-  return { type: ActionType.SWITCH_ALTERNATIVES, payload: { alternativeOfChoice } };
+  return { type: ActionType.SWITCH_ALTERNATIVES, payload: { choice: alternativeOfChoice } };
 }
 
 export function repaintRowAction(): ActionReturn<ActionType.REPAINT_ROW> {
