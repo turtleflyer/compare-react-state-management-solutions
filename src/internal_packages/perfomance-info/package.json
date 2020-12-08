@@ -1,9 +1,10 @@
 {
-  "name": "use-perf-observer",
+  "name": "performance-info",
   "private": "true",
-  "version": "0.1.2",
-  "main": "usePerfObserver.tsx",
+  "version": "0.1.1",
+  "main": "PerformanceInfo.tsx",
   "peerDependencies": {
+    "use-perf-observer": "^0.1.1",
     "react": "^17.0.0"
   },
   "dependencies": {
