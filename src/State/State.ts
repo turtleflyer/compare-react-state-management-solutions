@@ -72,9 +72,7 @@ export function createAlternativeForChoiceAtoms(): readonly [
   ];
 }
 
-let chooseGridInputKey: string;
-
-export function useRefreshApp(): [({ gridSize }: { gridSize: number }) => void, string] {
+export function useRefreshApp(): [string, ({ gridSize }: { gridSize: number }) => void] {
   const [, toRefresh] = useState({});
   const setAlternatives = (alternativeForChoiceAtoms.map((a) =>
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -85,16 +83,16 @@ export function useRefreshApp(): [({ gridSize }: { gridSize: number }) => void, 
   ];
   const setGridSize = useSetRecoilState(gridSizeAtom);
 
-  chooseGridInputKey = getNextKey('choose-grid-input');
+  const refreshKey = getNextKey('refresh-key');
 
-  return [
-    ({ gridSize }) => {
-      setAlternatives.every((setter, i) =>
-        setter({ atom: createColorForAlternativeAtom(i as PixelChoice) })
-      );
-      setGridSize(gridSize);
-      toRefresh({});
-    },
-    chooseGridInputKey,
-  ];
+  function commandToCreateRefreshKey({ gridSize }: { gridSize: number }) {
+    setAlternatives.every((setter, i) =>
+      setter({ atom: createColorForAlternativeAtom(i as PixelChoice) })
+    );
+
+    setGridSize(gridSize);
+    toRefresh({});
+  }
+
+  return [refreshKey, commandToCreateRefreshKey];
 }

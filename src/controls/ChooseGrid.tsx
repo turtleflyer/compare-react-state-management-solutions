@@ -4,21 +4,21 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { usePerfObserver } from 'use-perf-observer';
 import { DelayedInput } from '../reusable-components/DelayedInput';
-import { gridSizeAtom, useRefreshApp } from '../State/State';
+import { gridSizeAtom } from '../State/State';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
 
 export const ChooseGrid: FC<{
   addStyle?: CSSProperties;
-}> = ({ addStyle = {} }) => {
+  beAwareWhenChosen: ({ gridSize }: { gridSize: number }) => void;
+}> = ({ addStyle = {}, beAwareWhenChosen }) => {
   const gridSize = useRecoilValue(gridSizeAtom);
-  const [refresher, inputKey] = useRefreshApp();
   const [WrapDisplay, startMeasure] = usePerfObserver({ measureFromCreating: true });
 
   function inputCallback(input: string) {
     startMeasure();
     storeAtomsMethods.reset();
     const nextGridSize = parseInt(input, 10) || gridSize;
-    refresher({ gridSize: nextGridSize });
+    beAwareWhenChosen({ gridSize: nextGridSize });
   }
 
   return (
@@ -29,7 +29,6 @@ export const ChooseGrid: FC<{
           inputCallback,
           value: `${gridSize}`,
           addStyle: { marginBottom: '2px' },
-          key: inputKey,
         }}
       />
       <WrapDisplay>
