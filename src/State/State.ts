@@ -21,7 +21,7 @@ import {
   rememberActiveChoiceKey,
 } from './StateInterface';
 
-export const DEF_GRID_SIZE = 32;
+export const DEF_GRID_SIZE = 1;
 export const DEF_COLOR = '#AAAAAA';
 export const INPUT_WAITING_DELAY = 3000;
 export const DEF_PIXELS_PERCENT_TO_PAINT = 30;
@@ -72,8 +72,12 @@ export function createAlternativeForChoiceAtoms(): readonly [
   ];
 }
 
+function createFreshKey(): string {
+  return getNextKey('refresh-key');
+}
+
 export function useRefreshApp(): [string, ({ gridSize }: { gridSize: number }) => void] {
-  const [, toRefresh] = useState({});
+  const [refreshKey, createKey] = useState(createFreshKey);
   const setAlternatives = (alternativeForChoiceAtoms.map((a) =>
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useSetRecoilState(a)
@@ -83,7 +87,6 @@ export function useRefreshApp(): [string, ({ gridSize }: { gridSize: number }) =
   ];
   const setGridSize = useSetRecoilState(gridSizeAtom);
 
-  const refreshKey = getNextKey('refresh-key');
 
   function commandToCreateRefreshKey({ gridSize }: { gridSize: number }) {
     setAlternatives.every((setter, i) =>
@@ -91,7 +94,7 @@ export function useRefreshApp(): [string, ({ gridSize }: { gridSize: number }) =
     );
 
     setGridSize(gridSize);
-    toRefresh({});
+    createKey(createFreshKey);
   }
 
   return [refreshKey, commandToCreateRefreshKey];
