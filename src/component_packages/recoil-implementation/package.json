@@ -5,7 +5,6 @@
   "main": "App.tsx",
   "dependencies": {
     "@smart-hooks/use-multi-state": "^3.1.0",
-    "@smart-hooks/use-smart-memo": "^4.0.0",
     "@types/react": "^17.0.0",
     "get-next-key": "^0.1.0",
     "performance-info": "^0.1.0",
