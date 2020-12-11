@@ -5,7 +5,6 @@ import { useRecoilValue } from 'recoil';
 import { usePerfObserver } from 'use-perf-observer';
 import { DelayedInput } from '../reusable-components/DelayedInput';
 import { gridSizeAtom } from '../State/State';
-import { storeAtomsMethods } from '../State/storeAtomsMethods';
 
 export const ChooseGrid: FC<{
   addStyle?: CSSProperties;
@@ -16,7 +15,6 @@ export const ChooseGrid: FC<{
 
   function inputCallback(input: string) {
     startMeasure();
-    storeAtomsMethods.reset();
     const nextGridSize = parseInt(input, 10) || gridSize;
     beAwareWhenChosen({ gridSize: nextGridSize });
   }

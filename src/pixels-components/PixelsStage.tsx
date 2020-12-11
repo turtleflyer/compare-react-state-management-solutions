@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { gridSizeAtom } from '../State/State';
 import type { PixelChoice } from '../State/StateInterface';
+import { storeAtomsMethods } from '../State/storeAtomsMethods';
 import { PixelsLine } from './PixelsLine';
 
 export const PixelsStage: FC = () => {
@@ -29,6 +30,7 @@ export const PixelsStage: FC = () => {
         );
       }
 
+      storeAtomsMethods.reset();
       setLines(currentLine);
     }
   };
