@@ -1,10 +1,10 @@
 {
   "name": "recoil-component",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "private": "true",
   "main": "App.tsx",
   "dependencies": {
-    "@smart-hooks/use-multi-state": "^3.1.0",
+    "@smart-hooks/use-multi-state": "^3.2.0",
     "@types/react": "^17.0.0",
     "get-next-key": "^0.1.0",
     "performance-info": "^0.1.0",
