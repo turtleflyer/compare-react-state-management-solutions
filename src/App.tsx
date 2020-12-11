@@ -10,10 +10,10 @@ import { PixelsStage } from './pixels-components/PixelsStage';
 import { useCreateStore } from './State/store';
 
 export const App: FC = () => {
-  const [store, commandToCreateFreshStore] = useCreateStore();
+  const [store, refreshKey, commandToCreateFreshStore] = useCreateStore();
 
   return (
-    <Provider {...{ store }}>
+    <Provider {...{ store, key: refreshKey }}>
       <div {...{ style: { display: 'inline-block' } }}>
         <div
           {...{

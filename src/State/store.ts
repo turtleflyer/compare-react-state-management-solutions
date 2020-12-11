@@ -1,25 +1,37 @@
-import { useState } from 'react';
+import { useMultiState } from '@smart-hooks/use-multi-state';
+import { getNextKey } from 'get-next-key';
 import { createStore, Store } from 'redux';
 import type { ActionReturn, ActionType } from './actionTypes';
 import { appReducer, initializeState } from './reducer';
 import { DEF_GRID_SIZE } from './State';
 import type { State } from './StateInterface';
 
+function createFreshKey(): string {
+  return getNextKey('refresh-key');
+}
+
 export function useCreateStore(): [
   Store<State, ActionReturn<ActionType>>,
-  (gridSize: number) => void
+  string,
+  ({ gridSize }: { gridSize: number }) => void
 ] {
-  const [store, provideStore] = useState<Store<State, ActionReturn<ActionType>>>(() => {
-    initializeState(DEF_GRID_SIZE);
+  const [{ store, refreshKey }, { store: provideStore, refreshKey: setNewKey }] = useMultiState<{
+    store: Store<State, ActionReturn<ActionType>>;
+    refreshKey: string;
+  }>({
+    store: () => {
+      initializeState(DEF_GRID_SIZE);
 
-    return createStore(appReducer);
+      return createStore(appReducer);
+    },
+    refreshKey: createFreshKey,
   });
 
-  function commandToCreateFreshStore(gridSize: number): void {
+  function commandToCreateFreshStore({ gridSize }: { gridSize: number }): void {
     initializeState(gridSize);
-
-    return provideStore(createStore(appReducer));
+    provideStore(createStore(appReducer));
+    setNewKey(createFreshKey);
   }
 
-  return [store, commandToCreateFreshStore];
+  return [store, refreshKey, commandToCreateFreshStore];
 }
