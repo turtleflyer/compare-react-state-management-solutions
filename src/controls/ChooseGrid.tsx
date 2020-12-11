@@ -6,8 +6,6 @@ import { DelayedInput } from '../reusable-components/DelayedInput';
 import { getGridSize } from '../State/selectors';
 import type { State } from '../State/StateInterface';
 
-const refreshKeyPlaceholder = 'refresh-input';
-
 export const ChooseGrid = connect((state: State) => ({ gridSize: getGridSize(state) }))(
   function ChooseGrid({ addStyle = {}, beAwareWhenChosen, gridSize }) {
     const [WrapDisplay, startMeasure] = usePerfObserver({ measureFromCreating: true });
