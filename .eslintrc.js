@@ -27,16 +27,16 @@ module.exports = {
     sourceType: 'module',
   },
   rules: { ...defRules },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
+      },
+    },
+  },
   overrides: [
     {
       files: ['**/*.ts', '**/*.tsx'],
-      settings: {
-        'import/resolver': {
-          node: {
-            extensions: ['.ts', '.tsx', '.d.ts'],
-          },
-        },
-      },
       extends: ['plugin:@typescript-eslint/recommended', 'prettier/@typescript-eslint'],
       parser: '@typescript-eslint/parser',
       rules: {
