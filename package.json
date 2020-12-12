@@ -1,6 +1,6 @@
 {
   "name": "redux-hooks-implementation",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "private": true,
   "workspaces": [
     "src/internal_packages/*",
@@ -37,7 +37,7 @@
     "react-redux": "^7.2.2",
     "react-scripts": "^4.0.1",
     "redux": "^4.0.5",
-    "redux-hooks-component": "^0.1.2",
+    "redux-hooks-component": "^1.0.0",
     "typescript": "^4.0.5",
     "use-perf-observer": "^0.1.1",
     "web-vitals": "^1.0.1"
