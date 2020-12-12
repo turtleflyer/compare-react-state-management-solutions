@@ -1,22 +1,21 @@
 import { PerformanceInfo } from 'performance-info';
 import React, { FC } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { usePerfObserver } from 'use-perf-observer';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
 import { switchPixelChoiceAction } from '../State/actions';
 import { getGridSize } from '../State/selectors';
-import type { ChoiceForPixel, State } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
-export const RandomPaintButton = connect((state: State) => ({ gridSize: getGridSize(state) }), {
-  switchPixelChoice: switchPixelChoiceAction,
-})(function RandomPaintButton({ gridSize, switchPixelChoice }) {
+export const RandomPaintButton: FC = () => {
+  const gridSize = useSelector(getGridSize);
+  const dispatch = useDispatch();
   const [WrapDisplay, startMeasure] = usePerfObserver();
 
   function randomPaint() {
     startMeasure();
-    switchPixelChoice(drawPixelToPaint(gridSize ** 2));
+    dispatch(switchPixelChoiceAction(drawPixelToPaint(gridSize ** 2)));
   }
 
   return (
@@ -32,4 +31,4 @@ export const RandomPaintButton = connect((state: State) => ({ gridSize: getGridS
       </WrapDisplay>
     </div>
   );
-} as FC<{ gridSize: number; switchPixelChoice: (pixel: ChoiceForPixel) => void }>);
+};

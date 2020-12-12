@@ -1,7 +1,7 @@
 import { PerformanceInfo } from 'performance-info';
 import type { ChangeEvent, CSSProperties, FC } from 'react';
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { usePerfObserver } from 'use-perf-observer';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
@@ -9,22 +9,22 @@ import { InputField } from '../reusable-components/InputField';
 import { switchPixelChoiceAction } from '../State/actions';
 import { getGridSize } from '../State/selectors';
 import { DEF_PIXELS_PERCENT_TO_PAINT } from '../State/State';
-import type { ChoiceForPixel, State } from '../State/StateInterface';
+import type { ChoiceForPixel } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
 const renderInfoContainerStyle: CSSProperties = { margin: '-5px 0 0 5px', height: 20 };
 
-export const MassivePaintButton = connect((state: State) => ({ gridSize: getGridSize(state) }), {
-  switchPixelChoice: switchPixelChoiceAction,
-})(function MassivePaintButton({ gridSize, switchPixelChoice }) {
+export const MassivePaintButton: FC = () => {
+  const gridSize = useSelector(getGridSize);
+  const dispatch = useDispatch();
   const [percentInput, setPercentInput] = useState(`${DEF_PIXELS_PERCENT_TO_PAINT}`);
   const [pixelsToPaint, setPixelsToPaint] = useState<ChoiceForPixel[]>([]);
   const [WrapDisplay, startMeasure] = usePerfObserver();
 
   useEffect(() => {
-    pixelsToPaint.forEach((p) => switchPixelChoice(p));
+    pixelsToPaint.forEach((p) => dispatch(switchPixelChoiceAction(p)));
     setPixelsToPaint((prevPixels) => (prevPixels.length > 0 ? [] : prevPixels));
-  }, [pixelsToPaint, switchPixelChoice]);
+  }, [dispatch, pixelsToPaint]);
 
   function randomPaint() {
     startMeasure();
@@ -72,4 +72,4 @@ export const MassivePaintButton = connect((state: State) => ({ gridSize: getGrid
       </div>
     </div>
   );
-} as FC<{ gridSize: number; switchPixelChoice: (pixel: ChoiceForPixel) => void }>);
+};

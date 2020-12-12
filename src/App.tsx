@@ -29,7 +29,7 @@ export const App: FC = () => {
           <div {...{ style: { margin: '10px 0 auto 5px' } }}>
             <div {...{ style: { margin: '0 0 10px' } }}>
               <strong>
-                Implemented using &apos;react-redux&apos; (connect components) library
+                Implemented using &apos;react-redux&apos; (hooks) library
               </strong>
             </div>
             <RepaintButton />

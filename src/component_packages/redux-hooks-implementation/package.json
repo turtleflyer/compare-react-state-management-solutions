@@ -1,5 +1,5 @@
 {
-  "name": "redux-connect-component",
+  "name": "redux-hooks-component",
   "version": "0.2.0",
   "private": "true",
   "main": "App.tsx",

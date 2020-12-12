@@ -1,58 +1,41 @@
 import { getNextKey } from 'get-next-key';
 import type { CSSProperties, FC } from 'react';
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createNewPixelEntryAction } from '../State/actions';
 import { getAlternativeForChoice, getChoiceForPixel } from '../State/selectors';
 import { alternativeForChoiceKeys } from '../State/State';
-import type {
-  ChoiceForPixel,
-  ColorForAlternative,
-  PixelChoice,
-  State,
-} from '../State/StateInterface';
+import type { ChoiceForPixel, PixelChoice, State } from '../State/StateInterface';
 import { choiceForPixelPlaceholderKey } from '../State/StateInterface';
 import { storeKeysMethods } from '../State/storeKeysMethods';
 import { Pixel } from './Pixel';
 
-const ControlPixelInner = connect(
-  (state: State, { choiceForPixel }: { choiceForPixel: ChoiceForPixel }) => ({
-    possibleAltControl: getAlternativeForChoice(
-      state,
-      alternativeForChoiceKeys[getChoiceForPixel(state, choiceForPixel)]
-    ),
-  })
-)(function ControlPixelInner({ possibleAltControl }) {
-  return possibleAltControl ? <Pixel {...{ altControl: possibleAltControl }} /> : null;
-} as FC<{
-  possibleAltControl: ColorForAlternative | null;
-}>);
-
-export const ControlPixel = connect(null, {
-  createPixel: createNewPixelEntryAction,
-})(function ControlPixel({ pixelSize, defChoice, createPixel }) {
+export const ControlPixel: FC<{ pixelSize: string; defChoice: PixelChoice }> = ({
+  pixelSize,
+  defChoice,
+}) => {
   const style: CSSProperties = { height: pixelSize, width: pixelSize };
-
   const [choiceForPixel, setChoiceForPixel] = useState<ChoiceForPixel>(
     choiceForPixelPlaceholderKey
   );
+  const choice = useSelector((state: State) => getChoiceForPixel(state, choiceForPixel));
+  const possibleAltControl = useSelector((state: State) =>
+    getAlternativeForChoice(state, alternativeForChoiceKeys[choice])
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const nextKey = getNextKey(choiceForPixelPlaceholderKey);
-    createPixel(nextKey, defChoice);
+    dispatch(createNewPixelEntryAction(nextKey, defChoice));
     storeKeysMethods.push(nextKey);
     setChoiceForPixel(nextKey);
-  }, [createPixel, defChoice]);
+  }, [defChoice, dispatch]);
 
   return (
     <div {...{ style }}>
-      {choiceForPixel === choiceForPixelPlaceholderKey ? null : (
-        <ControlPixelInner {...{ choiceForPixel }} />
+      {possibleAltControl && choiceForPixel[0] !== choiceForPixelPlaceholderKey && (
+        <Pixel {...{ altControl: possibleAltControl }} />
       )}
     </div>
   );
-} as FC<{
-  pixelSize: string;
-  defChoice: PixelChoice;
-  createPixel: (pixel: ChoiceForPixel, choice: PixelChoice) => void;
-}>);
+};
