@@ -26,7 +26,7 @@ export const App: FC = () => {
         <PixelsStage />
         <div {...{ style: { margin: '10px 0 auto 5px' } }}>
           <div {...{ style: { margin: '0 0 10px' } }}>
-            <strong>Implemented using &apos;react-redux&apos; (connect components) library</strong>
+            <strong>Implemented using &apos;react-redux&apos; (connect) library</strong>
           </div>
           <RepaintButton />
           <DisableEnableButtons />
