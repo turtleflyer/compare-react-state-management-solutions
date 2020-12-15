@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { getNextKey } from 'get-next-key';
+import { getNextKey } from '@~internal/get-next-key';
 import type { FC, ReactElement } from 'react';
 import { cloneElement, useEffect, useMemo, useRef, useState } from 'react';
 import { createObserver } from './createObserver';

@@ -1,8 +1,8 @@
-import { PerformanceInfo } from 'performance-info';
+import { PerformanceInfo } from '@~internal/performance-info';
+import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { usePerfObserver } from 'use-perf-observer';
 import { DelayedInput } from '../reusable-components/DelayedInput';
 import { gridSizeAtom } from '../State/State';
 

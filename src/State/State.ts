@@ -1,5 +1,5 @@
-import { getNextKey } from 'get-next-key';
-import { getRandomColor } from 'random-color';
+import { getNextKey } from '@~internal/get-next-key';
+import { getRandomColor } from '@~internal/random-color';
 import { useState } from 'react';
 import type { SetterOrUpdater } from 'recoil';
 import { atom, useSetRecoilState } from 'recoil';
@@ -86,7 +86,6 @@ export function useRefreshApp(): [string, ({ gridSize }: { gridSize: number }) =
     SetterOrUpdater<CarryAtomColorForAlternative>
   ];
   const setGridSize = useSetRecoilState(gridSizeAtom);
-
 
   function commandToCreateRefreshKey({ gridSize }: { gridSize: number }) {
     setAlternatives.every((setter, i) =>
