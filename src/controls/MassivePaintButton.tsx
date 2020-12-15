@@ -1,15 +1,16 @@
+import { drawPixels } from '@~internal/draw-pixels';
 import { PerformanceInfo } from '@~internal/performance-info';
 import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { ChangeEvent, CSSProperties, FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
 import { InputField } from '../reusable-components/InputField';
 import { switchPixelChoiceAction } from '../State/actions';
 import { getGridSize } from '../State/selectors';
 import { DEF_PIXELS_PERCENT_TO_PAINT } from '../State/State';
 import type { ChoiceForPixel, State } from '../State/StateInterface';
+import { storeKeysMethods } from '../State/storeKeysMethods';
 import { buttonContainerStyle } from './styles';
 
 const renderInfoContainerStyle: CSSProperties = { margin: '-5px 0 0 5px', height: 20 };
@@ -34,17 +35,16 @@ export const MassivePaintButton = connect((state: State) => ({ gridSize: getGrid
 
     const allPixelsNumber = gridSize ** 2;
     const pixelsNumberToPaint = (allPixelsNumber * percent) / 100;
-    const pixels: ChoiceForPixel[] = [];
 
-    for (let i = 0; i < pixelsNumberToPaint; i++) {
-      let pixel: ChoiceForPixel;
-      do {
-        pixel = drawPixelToPaint(allPixelsNumber);
-      } while (pixels.includes(pixel));
-      pixels.push(pixel);
-    }
-
-    setPixelsToPaint(pixels);
+    setPixelsToPaint(
+      drawPixels(allPixelsNumber, pixelsNumberToPaint).map(
+        (p) =>
+          storeKeysMethods.get(p) ??
+          (() => {
+            throw Error('It must be defined');
+          })()
+      )
+    );
   }
 
   function percentCallback(e: ChangeEvent<HTMLInputElement>) {
