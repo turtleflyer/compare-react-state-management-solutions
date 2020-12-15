@@ -1,7 +1,7 @@
-import { PerformanceInfo } from 'performance-info';
+import { PerformanceInfo } from '@~internal/performance-info';
+import { usePerfObserver } from '@~internal/use-perf-observer';
 import React, { CSSProperties, FC } from 'react';
 import { connect } from 'react-redux';
-import { usePerfObserver } from 'use-perf-observer';
 import { DelayedInput } from '../reusable-components/DelayedInput';
 import { getGridSize } from '../State/selectors';
 import type { State } from '../State/StateInterface';

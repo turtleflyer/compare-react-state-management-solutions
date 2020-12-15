@@ -1,4 +1,4 @@
-import { getNextKey } from 'get-next-key';
+import { getNextKey } from '@~internal/get-next-key';
 import type { CSSProperties, FC, ReactElement } from 'react';
 import React, { useEffect, useState } from 'react';
 import type { PixelChoice } from '../State/StateInterface';
