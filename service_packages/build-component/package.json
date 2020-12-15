@@ -1,5 +1,5 @@
 {
-  "name": "build-component",
+  "name": "@~internal/build-component",
   "private": "true",
   "version": "0.2.0",
   "bin": {

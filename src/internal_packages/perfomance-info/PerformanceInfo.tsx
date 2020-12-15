@@ -1,6 +1,6 @@
+import { MetricsComponentProps } from '@~internal/use-perf-observer';
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
-import { MetricsComponentProps } from 'use-perf-observer';
 
 const style: CSSProperties = {
   display: 'flex',

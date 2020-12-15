@@ -1,4 +1,4 @@
-import { getRandomColor } from 'random-color';
+import { getRandomColor } from '@~internal/random-color';
 import { getNextAtom } from '../helpers/getNextAtom';
 import type {
   AlternativeForChoice,

@@ -1,7 +1,7 @@
-import { PerformanceInfo } from 'performance-info';
+import { PerformanceInfo } from '@~internal/performance-info';
+import { usePerfObserver } from '@~internal/use-perf-observer';
 import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { usePerfObserver } from 'use-perf-observer';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
 import { switchPixelChoiceAction } from '../State/actions';

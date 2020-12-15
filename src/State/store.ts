@@ -1,5 +1,5 @@
 import { useMultiState } from '@smart-hooks/use-multi-state';
-import { getNextKey } from 'get-next-key';
+import { getNextKey } from '@~internal/get-next-key';
 import { createStore, Store } from 'redux';
 import type { ActionReturn, ActionType } from './actionTypes';
 import { appReducer, initializeState } from './reducer';

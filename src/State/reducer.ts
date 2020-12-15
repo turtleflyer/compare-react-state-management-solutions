@@ -1,4 +1,4 @@
-import { getRandomColor } from 'random-color';
+import { getRandomColor } from '@~internal/random-color';
 import type { ActionReturn } from './actionTypes';
 import { ActionType } from './actionTypes';
 import {
