@@ -1,5 +1,5 @@
 {
-  "name": "random-color",
+  "name": "@~internal/random-color",
   "private": "true",
   "version": "0.1.0",
   "main": "randomColor.ts"

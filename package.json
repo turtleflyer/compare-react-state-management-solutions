@@ -1,6 +1,6 @@
 {
   "name": "compare-two-implementations",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "homepage": "http://turtleflyer.github.io/compare-react-state-management-solutions",
   "workspaces": [
@@ -8,6 +8,10 @@
     "src/component_packages/*"
   ],
   "dependencies": {
+    "@~internal/recoil-component": "^1.0.0",
+    "@~internal/redux-connect-component": "^1.0.0",
+    "@~internal/redux-hooks-component": "^1.0.0",
+    "@~internal/use-interstate-component": "^1.0.0",
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -25,20 +29,12 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "get-next-key": "^0.1.0",
     "gh-pages": "^3.1.0",
-    "performance-info": "^0.1.0",
     "prettier": "^2.1.2",
-    "random-color": "^0.1.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "^4.0.0",
-    "recoil-component": "^1.0.0",
-    "redux-connect-component": "^1.0.0",
-    "redux-hooks-component": "^1.0.0",
     "typescript": "^4.0.5",
-    "use-interstate-component": "^1.0.0",
-    "use-perf-observer": "^0.1.1",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
