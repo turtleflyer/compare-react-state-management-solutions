@@ -2,14 +2,13 @@ import { drawPixels } from '@~internal/draw-pixels';
 import { PerformanceInfo } from '@~internal/performance-info';
 import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { ChangeEvent, CSSProperties, FC } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../reusable-components/Button';
 import { InputField } from '../reusable-components/InputField';
-import { switchPixelChoiceAction } from '../State/actions';
+import { switchMultiplePixelsAction } from '../State/actions';
 import { getGridSize } from '../State/selectors';
 import { DEF_PIXELS_PERCENT_TO_PAINT } from '../State/State';
-import type { ChoiceForPixel } from '../State/StateInterface';
 import { storeKeysMethods } from '../State/storeKeysMethods';
 import { buttonContainerStyle } from './styles';
 
@@ -19,13 +18,7 @@ export const MassivePaintButton: FC = () => {
   const gridSize = useSelector(getGridSize);
   const dispatch = useDispatch();
   const [percentInput, setPercentInput] = useState(`${DEF_PIXELS_PERCENT_TO_PAINT}`);
-  const [pixelsToPaint, setPixelsToPaint] = useState<ChoiceForPixel[]>([]);
   const [WrapDisplay, startMeasure] = usePerfObserver();
-
-  useEffect(() => {
-    pixelsToPaint.forEach((p) => dispatch(switchPixelChoiceAction(p)));
-    setPixelsToPaint((prevPixels) => (prevPixels.length > 0 ? [] : prevPixels));
-  }, [dispatch, pixelsToPaint]);
 
   function randomPaint() {
     startMeasure();
@@ -36,13 +29,15 @@ export const MassivePaintButton: FC = () => {
     const allPixelsNumber = gridSize ** 2;
     const pixelsNumberToPaint = (allPixelsNumber * percent) / 100;
 
-    setPixelsToPaint(
-      drawPixels(allPixelsNumber, pixelsNumberToPaint).map(
-        (p) =>
-          storeKeysMethods.get(p) ??
-          (() => {
-            throw Error('It must be defined');
-          })()
+    dispatch(
+      switchMultiplePixelsAction(
+        drawPixels(allPixelsNumber, pixelsNumberToPaint).map(
+          (p) =>
+            storeKeysMethods.get(p) ??
+            (() => {
+              throw Error('It must be defined');
+            })()
+        )
       )
     );
   }

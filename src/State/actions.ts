@@ -15,6 +15,12 @@ export function switchPixelChoiceAction(
   return { type: ActionType.SWITCH_PIXEL_CHOICE, payload: { pixel } };
 }
 
+export function switchMultiplePixelsAction(
+  pixels: ChoiceForPixel[]
+): ActionReturn<ActionType.SWITCH_MULTIPLE_PIXELS> {
+  return { type: ActionType.SWITCH_MULTIPLE_PIXELS, payload: { pixels } };
+}
+
 export function chooseGridAction(gridSize: number): ActionReturn<ActionType.CHOOSE_GRID> {
   return { type: ActionType.CHOOSE_GRID, payload: { gridSize } };
 }

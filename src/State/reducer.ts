@@ -8,6 +8,7 @@ import {
 } from './State';
 import type {
   AlternativeForChoice,
+  ChoiceForPixel,
   ColorForAlternative,
   PixelChoice,
   State,
@@ -16,6 +17,12 @@ import type {
 let initialState: Readonly<Partial<State>>;
 
 export function appReducer(state = initialState as State, action: ActionReturn): State {
+  function updatePixel(update: Partial<State>, pixel: ChoiceForPixel) {
+    const prevChoice = state[pixel];
+
+    return { ...update, [pixel]: (1 - prevChoice) as PixelChoice };
+  }
+
   switch (action.type) {
     case ActionType.CREATE_NEW_PIXEL_ENTRY: {
       const {
@@ -29,9 +36,18 @@ export function appReducer(state = initialState as State, action: ActionReturn):
       const {
         payload: { pixel },
       } = action;
-      const prevChoice = state[pixel];
 
-      return { ...state, [pixel]: (1 - prevChoice) as PixelChoice };
+      return { ...state, ...updatePixel({}, pixel) };
+    }
+
+    case ActionType.SWITCH_MULTIPLE_PIXELS: {
+      const {
+        payload: { pixels },
+      } = action;
+
+      const stateUpdate = pixels.reduce(updatePixel, {} as Partial<State>);
+
+      return { ...state, ...stateUpdate };
     }
 
     case ActionType.CHOOSE_GRID: {
