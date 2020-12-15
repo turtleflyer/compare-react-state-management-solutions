@@ -9,7 +9,7 @@ const appsContainerStyle: CSSProperties = { display: 'flex' };
 
 export const App: FC = () => (
   <div {...{ style: { display: 'flex', flexDirection: 'column', height: 'calc(100vh - 20px)' } }}>
-    <div {...{ style: { margin: '5px 0 0 10px', fontWeight: 'bold' } }}>v.1.1.0</div>
+    <div {...{ style: { margin: '5px 0 0 10px', fontWeight: 'bold' } }}>v.1.2.0</div>
     <div {...{ style: { display: 'flex', flexGrow: 1 } }}>
       <div {...{ style: appsContainerStyle }}>
         <RecoilApp />
