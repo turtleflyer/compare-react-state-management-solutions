@@ -3,6 +3,7 @@ import type { ChoiceForPixel, PixelChoice } from './StateInterface';
 export enum ActionType {
   CREATE_NEW_PIXEL_ENTRY = 'pixels/createNewPixelEntry',
   SWITCH_PIXEL_CHOICE = 'pixels/switchPixelChoice',
+  SWITCH_MULTIPLE_PIXELS = 'pixels/switchMultiplePixels',
   CHOOSE_GRID = 'grid/chooseGrid',
   REMEMBER_ACTIVE_CHOICE = 'management/rememberActiveChoice',
   TURN_ON_ALTERNATIVE = 'alternatives/turnOnAlternative',
@@ -17,7 +18,7 @@ interface AlternativesPayloads {
 export type ActionReturn<T extends ActionType = ActionType> =
   | (T extends ActionType.CREATE_NEW_PIXEL_ENTRY
       ? {
-          type: ActionType.CREATE_NEW_PIXEL_ENTRY;
+          type: T;
           payload: {
             pixel: ChoiceForPixel;
             choice: PixelChoice;
@@ -25,18 +26,15 @@ export type ActionReturn<T extends ActionType = ActionType> =
         }
       : never)
   | (T extends ActionType.SWITCH_PIXEL_CHOICE
-      ? { type: ActionType.SWITCH_PIXEL_CHOICE; payload: { pixel: ChoiceForPixel } }
+      ? { type: T; payload: { pixel: ChoiceForPixel } }
       : never)
-  | (T extends ActionType.CHOOSE_GRID
-      ? { type: ActionType.CHOOSE_GRID; payload: { gridSize: number } }
+  | (T extends ActionType.SWITCH_MULTIPLE_PIXELS
+      ? { type: T; payload: { pixels: ChoiceForPixel[] } }
       : never)
+  | (T extends ActionType.CHOOSE_GRID ? { type: T; payload: { gridSize: number } } : never)
   | (T extends ActionType.REMEMBER_ACTIVE_CHOICE
-      ? { type: ActionType.REMEMBER_ACTIVE_CHOICE; payload: { rememberActiveChoice: PixelChoice } }
+      ? { type: T; payload: { rememberActiveChoice: PixelChoice } }
       : never)
-  | (T extends ActionType.TURN_ON_ALTERNATIVE
-      ? { type: ActionType.TURN_ON_ALTERNATIVE; payload: AlternativesPayloads }
-      : never)
-  | (T extends ActionType.SWITCH_ALTERNATIVES
-      ? { type: ActionType.SWITCH_ALTERNATIVES; payload: AlternativesPayloads }
-      : never)
-  | (T extends ActionType.REPAINT_ROW ? { type: ActionType.REPAINT_ROW } : never);
+  | (T extends ActionType.TURN_ON_ALTERNATIVE ? { type: T; payload: AlternativesPayloads } : never)
+  | (T extends ActionType.SWITCH_ALTERNATIVES ? { type: T; payload: AlternativesPayloads } : never)
+  | (T extends ActionType.REPAINT_ROW ? { type: T } : never);
