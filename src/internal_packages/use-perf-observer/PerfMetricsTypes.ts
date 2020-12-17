@@ -51,10 +51,11 @@ export interface Measures {
 
 export type Status = 'never' | 'pending' | 'done' | 'error';
 
-export interface MetricsComponentProps {
-  data: Measures | null;
-  status?: Status;
-}
+export type MetricsComponentProps =
+  | { status?: undefined; data: Measures | null; error?: Error }
+  | { status: 'never' | 'pending'; data: null; error?: undefined }
+  | { status: 'error'; data: null; error: Error }
+  | { status: 'done'; data: Measures; error?: undefined };
 
 export interface UsePerfMetricsSettings {
   measureFromCreating: boolean;
