@@ -1,14 +1,14 @@
 {
   "name": "@~internal/redux-hooks-component",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "private": "true",
   "main": "App.tsx",
   "dependencies": {
     "@~internal/draw-pixels": "^0.1.0",
     "@~internal/get-next-key": "^0.1.0",
-    "@~internal/performance-info": "^0.1.0",
+    "@~internal/performance-info": "^0.2.0",
     "@~internal/random-color": "^0.1.0",
-    "@~internal/use-perf-observer": "^0.1.1",
+    "@~internal/use-perf-observer": "^0.2.0",
     "@smart-hooks/use-multi-state": "^3.2.0",
     "@types/react": "^17.0.0",
     "@types/react-redux": "^7.1.11",
