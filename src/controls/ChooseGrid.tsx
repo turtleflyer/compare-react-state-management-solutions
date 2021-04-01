@@ -11,7 +11,7 @@ export const ChooseGrid: FC<{
   addStyle?: CSSProperties;
   beAwareWhenChosen: ({ gridSize }: { gridSize: number }) => void;
 }> = ({ addStyle = {}, beAwareWhenChosen }) => {
-  const gridSize = useInterstate(...getAtom(gridSizeKey)).get();
+  const gridSize = useInterstate(...getAtom(gridSizeKey));
   const [WrapDisplay, startMeasure] = usePerfObserver({ measureFromCreating: true });
 
   function inputCallback(input: string) {

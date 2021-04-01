@@ -1,7 +1,7 @@
-import { getUseInterstate } from '@smart-hooks/use-interstate';
 import { getNextKey } from 'get-next-key';
 import { getRandomColor } from 'random-color';
 import { useState } from 'react';
+import { goInterstate, Interstate } from 'use-interstate';
 import { getNextAtom } from '../helpers/getNextAtom';
 import type {
   AlternativeForChoice,
@@ -67,7 +67,8 @@ export function getAtom<K extends keyof State>(key: K): Atom<K> {
   return [key, storedAtoms[key]] as [K, State[K]];
 }
 
-export const { useInterstate, Scope } = getUseInterstate<State>();
+export const { initInterstate, useInterstate, setInterstate } = goInterstate<State & Interstate>();
+initInterstate({ ...initialState });
 
 function createFreshKey(): string {
   return getNextKey('scope');
@@ -78,6 +79,7 @@ export function useRefreshScope(): [string, ({ gridSize }: { gridSize: number })
 
   function commandToCreateFreshKeyForScope({ gridSize }: { gridSize: number }): void {
     addAtoms([gridSizeKey, gridSize], ...createAlternativeForChoiceAtoms());
+    initInterstate({ ...initialState, [gridSizeKey]: gridSize });
     createKey(createFreshKey);
   }
 

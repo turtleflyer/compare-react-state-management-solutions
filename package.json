@@ -8,7 +8,6 @@
     "service_packages/*"
   ],
   "dependencies": {
-    "@smart-hooks/use-interstate": "^5.1.0",
     "@smart-hooks/use-multi-state": "^3.1.0",
     "@smart-hooks/use-smart-memo": "^4.0.0",
     "@testing-library/jest-dom": "^5.11.5",
@@ -34,6 +33,7 @@
     "react-dom": "^17.0.1",
     "react-scripts": "^4.0.1",
     "typescript": "^4.0.5",
+    "use-interstate": "*",
     "use-interstate-component": "0.1.2",
     "use-perf-observer": "0.1.1",
     "web-vitals": "^1.0.1"

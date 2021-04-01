@@ -7,7 +7,7 @@ import { gridSizeKey } from '../State/StateInterface';
 import { PixelsLine } from './PixelsLine';
 
 export const PixelsStage: FC = () => {
-  const gridSize = useInterstate(...getAtom(gridSizeKey)).get();
+  const gridSize = useInterstate(...getAtom(gridSizeKey));
   const [stageHeight, setStageHeight] = useState(0);
 
   const lines: ReactElement | null = useSmartMemo(() => {

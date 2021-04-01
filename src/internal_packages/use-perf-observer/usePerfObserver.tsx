@@ -18,7 +18,7 @@ export function usePerfObserver(
   settings: Partial<UsePerfMetricsSettings> = {}
 ): UsePerfMetricsReturn {
   const actualSettings = { ...defSettings, ...settings };
-  const startMeasureRec = useRef<(event?: EventTimingType) => void>(() => {});
+  const startMeasureRec = useRef<(event?: EventTimingType) => void>(() => undefined);
 
   const [usePerfObserverReturn] = useState<UsePerfMetricsReturn>([
     function WrapMetrics({ children }: WrapMetricsComponentChildren) {

@@ -16,8 +16,8 @@ export const ControlPixel: FC<{
   const [choiceForPixel, setChoiceForPixel] = useState<ChoiceForPixelAtom>(
     getAtom(choiceForPixelPlaceholderKey)
   );
-  const choice = useInterstate(...choiceForPixel).get();
-  const possibleStateAtom = useInterstate(...getAtom(alternativeForChoiceKeys[choice])).get();
+  const choice = useInterstate(...choiceForPixel);
+  const possibleStateAtom = useInterstate(...getAtom(alternativeForChoiceKeys[choice]));
 
   useEffect(() => {
     const nextAtom = getNextAtom(choiceForPixelPlaceholderKey, defChoice);

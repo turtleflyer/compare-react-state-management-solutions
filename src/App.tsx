@@ -6,13 +6,13 @@ import { MassivePaintButton } from './controls/MassivePaintButton';
 import { RandomPaintButton } from './controls/RandomPaintButton';
 import { RepaintButton } from './controls/RepaintButton';
 import { PixelsStage } from './pixels-components/PixelsStage';
-import { Scope, useRefreshScope } from './State/State';
+import { useRefreshScope } from './State/State';
 
 export const App: FC = () => {
-  const [keyForScope, commandToCreateFreshKeyForScope] = useRefreshScope();
+  const [keyForTree, commandToCreateFreshKeyForScope] = useRefreshScope();
 
   return (
-    <Scope {...{ key: keyForScope }}>
+    <div key={keyForTree}>
       <div {...{ style: { display: 'inline-block' } }}>
         <div
           {...{
@@ -38,6 +38,6 @@ export const App: FC = () => {
           </div>
         </div>
       </div>
-    </Scope>
+    </div>
   );
 };
