@@ -12,6 +12,6 @@
     "@smart-hooks/use-multi-state": "^3.2.0",
     "@types/react": "^17.0.0",
     "react": "^17.0.0",
-    "recoil": "^0.1.2"
+    "recoil": "^0.2.0"
   }
 }
