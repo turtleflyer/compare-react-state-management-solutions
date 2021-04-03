@@ -1,53 +1,46 @@
-const defRules = {
-  'no-nested-ternary': 'off',
-  'no-plusplus': 'off',
-  'no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
-  'import/extensions': 'off',
-  'import/prefer-default-export': 'off',
-  'jsx-a11y/label-has-associated-control': ['error', { assert: 'either', depth: 2 }],
-  'react/destructuring-assignment': 'off',
-  'react/jsx-curly-newline': 'off',
-  'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx', '.tsx'] }],
-  'react/jsx-props-no-spreading': 'off',
-  'react/prop-types': 'off',
-  'react/state-in-constructor': 'off',
-};
-
 module.exports = {
   env: {
     browser: true,
-    es2020: true,
+    node: true,
+    es2021: true,
   },
-  extends: ['airbnb', 'prettier', 'plugin:react/recommended', 'plugin:react-hooks/recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'prettier',
+    'plugin:react-hooks/recommended',
+    'plugin:jsx-a11y/recommended',
+  ],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 11,
+    ecmaVersion: 12,
     sourceType: 'module',
   },
-  rules: { ...defRules },
-  settings: {
-    'import/resolver': {
-      node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
-      },
-    },
+  plugins: ['react', '@typescript-eslint'],
+  rules: {
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/ban-types': 'off',
+    'no-console': 'error',
+    'default-case': 'error',
+    'default-case-last': 'error',
+    '@typescript-eslint/default-param-last': 'error',
+    eqeqeq: 'error',
+    'dot-notation': 'error',
+    'no-else-return': 'error',
+    'consistent-return': 'error',
+    '@typescript-eslint/no-magic-numbers': [
+      'error',
+      { ignoreArrayIndexes: true, ignore: [0, 1, 2], ignoreDefaultValues: true },
+    ],
+    'no-return-assign': 'error',
+    'no-return-await': 'error',
+    '@typescript-eslint/no-use-before-define': ['error', { functions: false }],
+    'no-param-reassign': ['error', { props: true }],
+    'no-shadow': 'error',
+    'react/prop-types': 'off',
   },
-  overrides: [
-    {
-      files: ['**/*.ts', '**/*.tsx'],
-      extends: ['plugin:@typescript-eslint/recommended', 'prettier/@typescript-eslint'],
-      parser: '@typescript-eslint/parser',
-      rules: {
-        ...defRules,
-        '@typescript-eslint/ban-types': ['error', { types: { object: false } }],
-        '@typescript-eslint/no-empty-function': 'off',
-        'no-shadow': 'off',
-        '@typescript-eslint/no-shadow': 'error',
-        'no-use-before-define': 'off',
-        '@typescript-eslint/no-use-before-define': 'error',
-      },
-    },
-  ],
 };
