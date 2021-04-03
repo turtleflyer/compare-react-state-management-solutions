@@ -40,7 +40,7 @@ module.exports = {
     'no-return-await': 'error',
     '@typescript-eslint/no-use-before-define': ['error', { functions: false }],
     'no-param-reassign': ['error', { props: true }],
-    'no-shadow': 'error',
+    '@typescript-eslint/no-shadow': 'error',
     'react/prop-types': 'off',
   },
 };
