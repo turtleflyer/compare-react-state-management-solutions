@@ -18,7 +18,7 @@ export const RandomPaintButton: FC = () => {
 
   useEffect(() => {
     paintRandomPixel((prev) => (1 - prev) as PixelChoice);
-  }, [paintRandomPixel, atomToPaint]);
+  }, [paintRandomPixel]);
 
   function randomPaint() {
     startMeasure();

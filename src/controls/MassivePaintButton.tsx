@@ -11,6 +11,7 @@ import type { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
 import { buttonContainerStyle } from './styles';
 
+const ONE_HUNDRED_PERCENT = 100;
 const renderInfoContainerStyle: CSSProperties = { margin: '-5px 0 0 5px', height: 20 };
 
 const PixelToPaint: FC<{ pixelChoiceAtom: ChoiceForPixelAtom }> = ({ pixelChoiceAtom }) => {
@@ -36,11 +37,11 @@ export const MassivePaintButton: FC = () => {
   function randomPaint() {
     startMeasure();
     const checkPercent = parseInt(percentInput, 10);
-    const percent = checkPercent >= 0 && checkPercent <= 100 ? checkPercent : 0;
+    const percent = checkPercent >= 0 && checkPercent <= ONE_HUNDRED_PERCENT ? checkPercent : 0;
     setPercentInput(`${percent}`);
 
     const allPixelsNumber = gridSize ** 2;
-    const pixelsNumberToPaint = (allPixelsNumber * percent) / 100;
+    const pixelsNumberToPaint = (allPixelsNumber * percent) / ONE_HUNDRED_PERCENT;
 
     setPixelsToPaint(
       drawPixels(allPixelsNumber, pixelsNumberToPaint).map((p) => (
