@@ -16,6 +16,7 @@ import type {
 
 let initialState: Readonly<Partial<State>>;
 
+// eslint-disable-next-line @typescript-eslint/default-param-last
 export function appReducer(state = initialState as State, action: ActionReturn): State {
   function updatePixel(update: Partial<State>, pixel: ChoiceForPixel) {
     const prevChoice = state[pixel];

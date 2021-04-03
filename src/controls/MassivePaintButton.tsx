@@ -12,6 +12,7 @@ import { DEF_PIXELS_PERCENT_TO_PAINT } from '../State/State';
 import { storeKeysMethods } from '../State/storeKeysMethods';
 import { buttonContainerStyle } from './styles';
 
+const ONE_HUNDRED_PERCENT = 100;
 const renderInfoContainerStyle: CSSProperties = { margin: '-5px 0 0 5px', height: 20 };
 
 export const MassivePaintButton: FC = () => {
@@ -23,11 +24,11 @@ export const MassivePaintButton: FC = () => {
   function randomPaint() {
     startMeasure();
     const checkPercent = parseInt(percentInput, 10);
-    const percent = checkPercent >= 0 && checkPercent <= 100 ? checkPercent : 0;
+    const percent = checkPercent >= 0 && checkPercent <= ONE_HUNDRED_PERCENT ? checkPercent : 0;
     setPercentInput(`${percent}`);
 
     const allPixelsNumber = gridSize ** 2;
-    const pixelsNumberToPaint = (allPixelsNumber * percent) / 100;
+    const pixelsNumberToPaint = (allPixelsNumber * percent) / ONE_HUNDRED_PERCENT;
 
     dispatch(
       switchMultiplePixelsAction(
