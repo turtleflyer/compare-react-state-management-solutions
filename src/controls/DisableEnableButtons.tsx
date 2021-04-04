@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { PerformanceInfo } from 'performance-info';
+import { PerformanceInfo } from '@~internal/performance-info';
+import type { UsePerfMetricsReturn } from '@~internal/use-perf-observer';
+import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { FC } from 'react';
 import React from 'react';
-import type { UsePerfMetricsReturn } from 'use-perf-observer';
-import { usePerfObserver } from 'use-perf-observer';
 import { Button } from '../reusable-components/Button';
 import {
   alternativeForChoiceKeys,
@@ -22,6 +22,7 @@ export const DisableEnableButtons: FC = () => {
   function getEvenOrOddRowSwitch(evenOrOdd: PixelChoice): () => void {
     return () => {
       perfMeasureAssets[evenOrOdd][1]();
+
       setInterstate(alternativeForChoiceKeys[evenOrOdd], (prevAtom) => {
         if (!prevAtom) {
           setInterstate(rememberActiveChoiceKey, evenOrOdd);
@@ -39,6 +40,7 @@ export const DisableEnableButtons: FC = () => {
     <>
       {['enable/disable even rows', 'enable/disable odd rows'].map((name, i) => {
         const WrapDisplay = perfMeasureAssets[i][0];
+
         return (
           <div {...{ style: buttonContainerStyle }} key={name}>
             <Button

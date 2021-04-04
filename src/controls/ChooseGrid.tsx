@@ -1,11 +1,10 @@
-import { PerformanceInfo } from 'performance-info';
+import { PerformanceInfo } from '@~internal/performance-info';
+import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
-import { usePerfObserver } from 'use-perf-observer';
 import { DelayedInput } from '../reusable-components/DelayedInput';
 import { getAtom, useInterstate } from '../State/State';
 import { gridSizeKey } from '../State/StateInterface';
-import { storeAtomsMethods } from '../State/storeAtomsMethods';
 
 export const ChooseGrid: FC<{
   addStyle?: CSSProperties;
@@ -16,7 +15,6 @@ export const ChooseGrid: FC<{
 
   function inputCallback(input: string) {
     startMeasure();
-    storeAtomsMethods.reset();
     const nextGridSize = parseInt(input, 10) || gridSize;
     beAwareWhenChosen({ gridSize: nextGridSize });
   }

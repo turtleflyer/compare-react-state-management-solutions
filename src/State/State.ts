@@ -1,5 +1,5 @@
-import { getNextKey } from 'get-next-key';
-import { getRandomColor } from 'random-color';
+import { getNextKey } from '@~internal/get-next-key';
+import { getRandomColor } from '@~internal/random-color';
 import { useState } from 'react';
 import { goInterstate, Interstate } from 'use-interstate';
 import { getNextAtom } from '../helpers/getNextAtom';

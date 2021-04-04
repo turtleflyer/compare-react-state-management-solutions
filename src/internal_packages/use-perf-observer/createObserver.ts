@@ -47,7 +47,7 @@ function calculateResult(
 
 export function createObserver(
   perfMarkName: string,
-  updateChildrenProps: Dispatch<SetStateAction<Required<MetricsComponentProps>>>,
+  updateChildrenProps: Dispatch<SetStateAction<MetricsComponentProps>>,
   updateStartMeasureCallback: (startMeasureCallback: () => void) => void
 ): CreateObserverResult {
   let initRun = true;
@@ -84,7 +84,11 @@ export function createObserver(
           [markEntry] = markList;
           observer.observe({ entryTypes: ['longtask'] });
         } else {
-          updateChildrenProps((props) => ({ ...props, status: 'error' }));
+          updateChildrenProps({
+            status: 'error',
+            data: null,
+            error: Error('(usePerfObserver) No long task has been registered'),
+          });
           timeoutID = clearScheduledTimeout(timeoutID, observer, stateFlags, {
             scheduleNext: false,
           });
@@ -128,7 +132,7 @@ export function createObserver(
     lastEndTime = 0;
     markEntry = undefined;
     firstLongTaskEntry = undefined;
-    updateChildrenProps((info) => ({ ...info, status: 'pending' }));
+    updateChildrenProps({ status: 'pending', data: null });
     createdObserver.observe({ entryTypes: ['mark', 'longtask'] });
     performance.mark(perfMarkName);
   });

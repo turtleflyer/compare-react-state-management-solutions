@@ -12,31 +12,27 @@ export const App: FC = () => {
   const [keyForTree, commandToCreateFreshKeyForScope] = useRefreshScope();
 
   return (
-    <div key={keyForTree}>
-      <div {...{ style: { display: 'inline-block' } }}>
-        <div
-          {...{
-            style: {
-              display: 'flex',
-              flexDirection: 'column',
-              height: 'calc(100vh - 20px)',
-              margin: '10px auto 10px 10px',
-            },
-          }}
-        >
-          <PixelsStage />
-          <div {...{ style: { margin: '10px 0 auto 5px' } }}>
-            <div {...{ style: { margin: '0 0 10px' } }}>
-              <strong>Implemented using &apos;use-interstate&apos; library</strong>
-            </div>
-            <RepaintButton />
-            <DisableEnableButtons />
-            <RandomPaintButton />
-            <MassivePaintButton />
-            <div {...{ style: { borderTop: '0.5px solid gray', margin: '15px 0' } }} />
-            <ChooseGrid {...{ beAwareWhenChosen: commandToCreateFreshKeyForScope }} />
-          </div>
+    <div
+      {...{
+        style: {
+          display: 'flex',
+          flexDirection: 'column',
+          margin: '10px auto 10px 10px',
+        },
+        key: keyForTree,
+      }}
+    >
+      <PixelsStage />
+      <div {...{ style: { margin: '10px 0 auto 5px' } }}>
+        <div {...{ style: { margin: '0 0 10px' } }}>
+          <strong>Implemented using &apos;use-interstate&apos; library</strong>
         </div>
+        <RepaintButton />
+        <DisableEnableButtons />
+        <RandomPaintButton />
+        <MassivePaintButton />
+        <div {...{ style: { borderTop: '0.5px solid gray', margin: '15px 0' } }} />
+        <ChooseGrid {...{ beAwareWhenChosen: commandToCreateFreshKeyForScope }} />
       </div>
     </div>
   );

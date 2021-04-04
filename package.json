@@ -1,6 +1,6 @@
 {
   "name": "use-interstate-implementation",
-  "version": "0.1.2",
+  "version": "1.2.0",
   "private": true,
   "workspaces": [
     "src/internal_packages/*",
@@ -8,8 +8,14 @@
     "service_packages/*"
   ],
   "dependencies": {
+    "@~internal/build-component": "^0.1.0",
+    "@~internal/draw-pixels": "^0.1.0",
+    "@~internal/get-next-key": "^0.1.0",
+    "@~internal/performance-info": "^0.2.0",
+    "@~internal/random-color": "^0.1.0",
+    "@~internal/use-interstate-component": "1.2.0",
+    "@~internal/use-perf-observer": "^0.2.0",
     "@smart-hooks/use-multi-state": "^3.1.0",
-    "@smart-hooks/use-smart-memo": "^4.0.0",
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^13.1.1",
@@ -19,23 +25,17 @@
     "@types/react-dom": "^17.0.0",
     "@typescript-eslint/eslint-plugin": "^4.6.0",
     "@typescript-eslint/parser": "^4.6.0",
-    "build-component": "0.1.0",
     "eslint": "^7.12.1",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "get-next-key": "0.1.0",
-    "performance-info": "0.1.0",
     "prettier": "^2.1.2",
-    "random-color": "0.1.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "^4.0.1",
     "typescript": "^4.0.5",
     "use-interstate": "*",
-    "use-interstate-component": "0.1.2",
-    "use-perf-observer": "0.1.1",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
@@ -43,7 +43,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "compile-packages": "tsc -p service_packages/tsconfig.json",
     "build-component": "build-component ./config/bcfiles.json"
   },
   "eslintConfig": {

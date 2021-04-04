@@ -1,13 +1,14 @@
-import { PerformanceInfo } from 'performance-info';
+import { drawPixels } from '@~internal/draw-pixels';
+import { PerformanceInfo } from '@~internal/performance-info';
+import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { ChangeEvent, CSSProperties, FC, ReactElement } from 'react';
 import React, { useEffect, useState } from 'react';
-import { usePerfObserver } from 'use-perf-observer';
-import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
 import { Button } from '../reusable-components/Button';
 import { InputField } from '../reusable-components/InputField';
 import { DEF_PIXELS_PERCENT_TO_PAINT, getAtom, setInterstate, useInterstate } from '../State/State';
 import type { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
 import { gridSizeKey } from '../State/StateInterface';
+import { storeAtomsMethods } from '../State/storeAtomsMethods';
 import { buttonContainerStyle } from './styles';
 
 const ONE_HUNDRED_PERCENT = 100;
@@ -39,16 +40,21 @@ export const MassivePaintButton: FC = () => {
 
     const allPixelsNumber = gridSize ** 2;
     const pixelsNumberToPaint = (allPixelsNumber * percent) / ONE_HUNDRED_PERCENT;
-    const pixelsAtoms: ChoiceForPixelAtom[] = [];
-    for (let i = 0; i < pixelsNumberToPaint; i++) {
-      let atom: ChoiceForPixelAtom;
-      do {
-        atom = drawPixelToPaint(allPixelsNumber);
-      } while (pixelsAtoms.includes(atom));
-      pixelsAtoms.push(atom);
-    }
-    // eslint-disable-next-line react/jsx-key
-    setPixelsToPaint(pixelsAtoms.map((a) => <PixelToPaint {...{ pixelChoiceAtom: a }} />));
+
+    setPixelsToPaint(
+      drawPixels(allPixelsNumber, pixelsNumberToPaint).map((p) => (
+        // eslint-disable-next-line react/jsx-key
+        <PixelToPaint
+          {...{
+            pixelChoiceAtom:
+              storeAtomsMethods.get(p) ??
+              (() => {
+                throw Error('It must be defined');
+              })(),
+          }}
+        />
+      ))
+    );
   }
 
   function percentCallback(e: ChangeEvent<HTMLInputElement>) {
