@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import type { SetInterstate } from '@smart-hooks/use-interstate';
-import { PerformanceInfo } from 'performance-info';
-import { getRandomColor } from 'random-color';
+import { PerformanceInfo } from '@~internal/performance-info';
+import { getRandomColor } from '@~internal/random-color';
+import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { FC } from 'react';
 import React from 'react';
-import { usePerfObserver } from 'use-perf-observer';
 import { Button } from '../reusable-components/Button';
 import { alternativeForChoiceKeys, getAtom, useInterstate } from '../State/State';
 import type { ColorForAlternativeAtom, ColorValue, PixelChoice } from '../State/StateInterface';

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { getNextKey } from 'get-next-key';
+import { getNextKey } from '@~internal/get-next-key';
 import type { FC, ReactElement } from 'react';
 import { cloneElement, useEffect, useMemo, useRef, useState } from 'react';
 import { createObserver } from './createObserver';
@@ -29,12 +29,16 @@ export const MeasureComponent: FC<
   const { measureFromCreating, name } = settings;
 
   const [perfMarkName] = useState(() => getNextKey(name ?? 'start-use-perf-metrics'));
-  const [childrenProps, setChildrenProps] = useState<Required<MetricsComponentProps>>(() => {
+  const [childrenProps, setChildrenProps] = useState<MetricsComponentProps>(() => {
     if (isSupported) {
       return { data: null, status: 'never' };
     }
 
-    return { data: null, status: 'error' };
+    return {
+      data: null,
+      status: 'error',
+      error: Error('(usePerfObserver) The browser does not support the library'),
+    };
   });
   const firstTimeRunRec = useRef(true);
   const [conditionalObserverResult] = useState(() =>
@@ -57,7 +61,7 @@ export const MeasureComponent: FC<
       firstTimeRunRec.current = false;
 
       if (measureFromCreating) {
-        setChildrenProps((info) => ({ ...info, status: 'pending' }));
+        setChildrenProps({ status: 'pending', data: null });
       }
 
       return callback();

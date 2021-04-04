@@ -1,5 +1,5 @@
 {
-  "name": "get-next-key",
+  "name": "@~internal/get-next-key",
   "private": "true",
   "version": "0.1.0",
   "main": "getNextKey.ts"

@@ -1,17 +1,17 @@
 {
-  "name": "use-interstate-component",
-  "version": "0.1.2",
+  "name": "@~internal/use-interstate-component-depr",
+  "version": "1.2.0",
   "private": "true",
   "main": "App.tsx",
   "dependencies": {
+    "@~internal/draw-pixels": "^0.1.0",
+    "@~internal/get-next-key": "^0.1.0",
+    "@~internal/performance-info": "^0.2.0",
+    "@~internal/random-color": "^0.1.0",
+    "@~internal/use-perf-observer": "^0.2.0",
     "@smart-hooks/use-interstate": "^5.1.0",
-    "@smart-hooks/use-multi-state": "^3.1.0",
-    "@smart-hooks/use-smart-memo": "^4.0.0",
+    "@smart-hooks/use-multi-state": "^3.2.0",
     "@types/react": "^17.0.0",
-    "get-next-key": "0.1.0",
-    "performance-info": "0.1.0",
-    "random-color": "0.1.0",
-    "react": "^17.0.0",
-    "use-perf-observer": "0.1.1"
+    "react": "^17.0.0"
   }
 }

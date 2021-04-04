@@ -1,0 +1,6 @@
+{
+  "name": "@~internal/draw-pixels",
+  "private": "true",
+  "version": "0.1.0",
+  "main": "drawPixels.ts"
+}
