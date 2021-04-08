@@ -5,39 +5,35 @@ import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { FC } from 'react';
 import React from 'react';
 import { Button } from '../reusable-components/Button';
-import { alternativeForChoiceKeys, getAtom, setInterstate, useInterstate } from '../State/State';
-import type { ColorForAlternativeAtom, PixelChoice } from '../State/StateInterface';
-import {
-  colorForAlternativePlaceholderKey,
-  rememberActiveChoiceKey,
+import { alternativeForChoiceKeys, setInterstate } from '../State/State';
+import type {
+  ColorForAlternativeState,
+  PixelChoice,
+  RememberActiveChoiceState,
 } from '../State/StateInterface';
+import { rememberActiveChoiceKey } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
 export const RepaintButton: FC = () => {
-  const alternativesRecord = (alternativeForChoiceKeys.map((key) =>
-    useInterstate(...getAtom(key))
-  ) as readonly (ColorForAlternativeAtom | null)[]) as readonly [
-    ColorForAlternativeAtom | null,
-    ColorForAlternativeAtom | null
-  ];
-  const activeChoice = useInterstate(...getAtom(rememberActiveChoiceKey));
   const [WrapDisplay, startMeasure] = usePerfObserver();
 
   function repaintRow() {
     startMeasure();
-    setInterstate(
-      alternativesRecord[activeChoice]?.[0] ?? colorForAlternativePlaceholderKey,
-      (prevColor) => {
-        const nextPotentialChoice = (1 - activeChoice) as PixelChoice;
-        if (alternativesRecord[nextPotentialChoice] !== null) {
-          setInterstate(rememberActiveChoiceKey, nextPotentialChoice);
-        }
-        if (alternativesRecord[activeChoice] !== null) {
-          return getRandomColor(prevColor);
-        }
-        return prevColor;
-      }
-    );
+
+    setInterstate((state) => {
+      const { [rememberActiveChoiceKey]: activeChoice } = state;
+      const { [alternativeForChoiceKeys[activeChoice]]: altKey } = state;
+      const nextPotentialChoice = (1 - activeChoice) as PixelChoice;
+
+      return {
+        ...(state[alternativeForChoiceKeys[nextPotentialChoice]] === null
+          ? ({} as RememberActiveChoiceState)
+          : { [rememberActiveChoiceKey]: nextPotentialChoice }),
+        ...(altKey === null
+          ? ({} as ColorForAlternativeState)
+          : { [altKey]: getRandomColor(state[altKey]) }),
+      };
+    });
   }
 
   return (

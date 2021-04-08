@@ -6,10 +6,10 @@ import { MassivePaintButton } from './controls/MassivePaintButton';
 import { RandomPaintButton } from './controls/RandomPaintButton';
 import { RepaintButton } from './controls/RepaintButton';
 import { PixelsStage } from './pixels-components/PixelsStage';
-import { useRefreshScope } from './State/State';
+import { useRefreshApp } from './State/State';
 
 export const App: FC = () => {
-  const [keyForTree, commandToCreateFreshKeyForScope] = useRefreshScope();
+  const [refreshKey, commandToCreateRefreshKey] = useRefreshApp();
 
   return (
     <div
@@ -19,7 +19,7 @@ export const App: FC = () => {
           flexDirection: 'column',
           margin: '10px auto 10px 10px',
         },
-        key: keyForTree,
+        key: refreshKey,
       }}
     >
       <PixelsStage />
@@ -32,7 +32,7 @@ export const App: FC = () => {
         <RandomPaintButton />
         <MassivePaintButton />
         <div {...{ style: { borderTop: '0.5px solid gray', margin: '15px 0' } }} />
-        <ChooseGrid {...{ beAwareWhenChosen: commandToCreateFreshKeyForScope }} />
+        <ChooseGrid {...{ beAwareWhenChosen: commandToCreateRefreshKey }} />
       </div>
     </div>
   );

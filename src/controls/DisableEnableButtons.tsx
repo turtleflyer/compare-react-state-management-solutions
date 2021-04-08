@@ -7,7 +7,7 @@ import React from 'react';
 import { Button } from '../reusable-components/Button';
 import {
   alternativeForChoiceKeys,
-  createColorForAlternativeAtom,
+  createColorForAlternativeEntry,
   setInterstate,
 } from '../State/State';
 import type { PixelChoice } from '../State/StateInterface';
@@ -15,23 +15,33 @@ import { rememberActiveChoiceKey } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
 export const DisableEnableButtons: FC = () => {
-  const perfMeasureAssets = ([0, 1].map(() =>
-    usePerfObserver()
-  ) as readonly UsePerfMetricsReturn[]) as readonly [UsePerfMetricsReturn, UsePerfMetricsReturn];
+  const perfMeasureAssets = [0, 1].map(() => usePerfObserver()) as [
+    UsePerfMetricsReturn,
+    UsePerfMetricsReturn
+  ];
 
   function getEvenOrOddRowSwitch(evenOrOdd: PixelChoice): () => void {
     return () => {
       perfMeasureAssets[evenOrOdd][1]();
 
-      setInterstate(alternativeForChoiceKeys[evenOrOdd], (prevAtom) => {
-        if (!prevAtom) {
-          setInterstate(rememberActiveChoiceKey, evenOrOdd);
-          return createColorForAlternativeAtom(evenOrOdd);
+      setInterstate((state) => {
+        const altForChoiceKey = alternativeForChoiceKeys[evenOrOdd];
+        const colorForAltKey = state[altForChoiceKey];
+
+        if (colorForAltKey) {
+          return {
+            [altForChoiceKey]: null,
+            [rememberActiveChoiceKey]: (1 - evenOrOdd) as PixelChoice,
+          };
         }
 
-        setInterstate(rememberActiveChoiceKey, (1 - evenOrOdd) as PixelChoice);
+        const colorForAlternativeEntry = createColorForAlternativeEntry(evenOrOdd);
 
-        return null;
+        return {
+          ...Object.fromEntries([colorForAlternativeEntry]),
+          [altForChoiceKey]: colorForAlternativeEntry[0],
+          [rememberActiveChoiceKey]: evenOrOdd,
+        };
       });
     };
   }

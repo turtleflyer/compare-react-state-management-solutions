@@ -1,17 +1,17 @@
 import type { FC, ReactElement } from 'react';
 import React, { useState } from 'react';
-import { getAtom, useInterstate } from '../State/State';
+import { readInterstate } from '../State/State';
 import type { PixelChoice } from '../State/StateInterface';
 import { gridSizeKey } from '../State/StateInterface';
-import { storeAtomsMethods } from '../State/storeAtomsMethods';
+import { storeKeysMethods } from '../State/storeKeysMethods';
 import { PixelsLine } from './PixelsLine';
 
 export const PixelsStage: FC = () => {
-  const gridSize = useInterstate(...getAtom(gridSizeKey));
   const [lines, setLines] = useState<ReactElement | null>(null);
 
   const ref = (e: HTMLDivElement | null) => {
     if (e && !lines) {
+      const gridSize = readInterstate(gridSizeKey);
       const { height } = e.getBoundingClientRect();
       const pixelSize = `${height / gridSize}px`;
       let currentLine: ReactElement | null = null;
@@ -30,7 +30,7 @@ export const PixelsStage: FC = () => {
         );
       }
 
-      storeAtomsMethods.reset();
+      storeKeysMethods.reset();
       setLines(currentLine);
     }
   };

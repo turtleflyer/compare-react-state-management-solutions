@@ -1,10 +1,10 @@
+import { getNextKey } from '@~internal/get-next-key';
 import type { CSSProperties, FC } from 'react';
 import React, { useEffect, useState } from 'react';
-import { getNextAtom } from '../helpers/getNextAtom';
-import { alternativeForChoiceKeys, getAtom, useInterstate } from '../State/State';
-import type { ChoiceForPixelAtom, PixelChoice } from '../State/StateInterface';
+import { alternativeForChoiceKeys, setInterstate, useInterstate } from '../State/State';
+import type { ChoiceForPixel, PixelChoice } from '../State/StateInterface';
 import { choiceForPixelPlaceholderKey } from '../State/StateInterface';
-import { storeAtomsMethods } from '../State/storeAtomsMethods';
+import { storeKeysMethods } from '../State/storeKeysMethods';
 import { Pixel } from './Pixel';
 
 export const ControlPixel: FC<{
@@ -13,22 +13,24 @@ export const ControlPixel: FC<{
 }> = ({ pixelSize, defChoice }) => {
   const style: CSSProperties = { height: pixelSize, width: pixelSize };
 
-  const [choiceForPixel, setChoiceForPixel] = useState<ChoiceForPixelAtom>(
-    getAtom(choiceForPixelPlaceholderKey)
+  const [choiceForPixel, setChoiceForPixel] = useState<ChoiceForPixel>(
+    choiceForPixelPlaceholderKey
   );
-  const choice = useInterstate(...choiceForPixel);
-  const possibleStateAtom = useInterstate(...getAtom(alternativeForChoiceKeys[choice]));
+
+  const choice = useInterstate(choiceForPixel);
+  const possibleAltKey = useInterstate(alternativeForChoiceKeys[choice]);
 
   useEffect(() => {
-    const nextAtom = getNextAtom(choiceForPixelPlaceholderKey, defChoice);
-    storeAtomsMethods.push(nextAtom);
-    setChoiceForPixel(nextAtom);
-  }, [defChoice]);
+    const nextKey = getNextKey(choiceForPixelPlaceholderKey);
+    storeKeysMethods.push(nextKey);
+    setInterstate(nextKey, defChoice);
+    setChoiceForPixel(nextKey);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div {...{ style }}>
-      {possibleStateAtom && choiceForPixel[0] !== choiceForPixelPlaceholderKey && (
-        <Pixel {...{ altControlAtom: possibleStateAtom }} />
+      {possibleAltKey && choiceForPixel !== choiceForPixelPlaceholderKey && (
+        <Pixel {...{ altControlKey: possibleAltKey }} />
       )}
     </div>
   );
