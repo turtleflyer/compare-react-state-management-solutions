@@ -2,47 +2,35 @@ import type { ActionReturn } from './actionTypes';
 import { ActionType } from './actionTypes';
 import type { ChoiceForPixel, PixelChoice } from './StateInterface';
 
-export function createNewPixelEntryAction(
+export const createNewPixelEntryAction = (
   pixel: ChoiceForPixel,
   choice: PixelChoice
-): ActionReturn<ActionType.CREATE_NEW_PIXEL_ENTRY> {
-  return { type: ActionType.CREATE_NEW_PIXEL_ENTRY, payload: { pixel, choice } };
-}
+): ActionReturn<ActionType.CREATE_NEW_PIXEL_ENTRY> => ({
+  type: ActionType.CREATE_NEW_PIXEL_ENTRY,
+  payload: { pixel, choice },
+});
 
-export function switchPixelChoiceAction(
+export const switchPixelChoiceAction = (
   pixel: ChoiceForPixel
-): ActionReturn<ActionType.SWITCH_PIXEL_CHOICE> {
-  return { type: ActionType.SWITCH_PIXEL_CHOICE, payload: { pixel } };
-}
+): ActionReturn<ActionType.SWITCH_PIXEL_CHOICE> => ({
+  type: ActionType.SWITCH_PIXEL_CHOICE,
+  payload: { pixel },
+});
 
-export function switchMultiplePixelsAction(
+export const switchMultiplePixelsAction = (
   pixels: ChoiceForPixel[]
-): ActionReturn<ActionType.SWITCH_MULTIPLE_PIXELS> {
-  return { type: ActionType.SWITCH_MULTIPLE_PIXELS, payload: { pixels } };
-}
+): ActionReturn<ActionType.SWITCH_MULTIPLE_PIXELS> => ({
+  type: ActionType.SWITCH_MULTIPLE_PIXELS,
+  payload: { pixels },
+});
 
-export function chooseGridAction(gridSize: number): ActionReturn<ActionType.CHOOSE_GRID> {
-  return { type: ActionType.CHOOSE_GRID, payload: { gridSize } };
-}
-
-export function rememberActiveChoiceAction(
-  rememberActiveChoice: PixelChoice
-): ActionReturn<ActionType.REMEMBER_ACTIVE_CHOICE> {
-  return { type: ActionType.REMEMBER_ACTIVE_CHOICE, payload: { rememberActiveChoice } };
-}
-
-export function turnOnAlternativeAction(
+export const switchAlternativeAction = (
   alternativeOfChoice: PixelChoice
-): ActionReturn<ActionType.TURN_ON_ALTERNATIVE> {
-  return { type: ActionType.TURN_ON_ALTERNATIVE, payload: { choice: alternativeOfChoice } };
-}
+): ActionReturn<ActionType.SWITCH_ALTERNATIVES> => ({
+  type: ActionType.SWITCH_ALTERNATIVES,
+  payload: { choice: alternativeOfChoice },
+});
 
-export function switchAlternativeAction(
-  alternativeOfChoice: PixelChoice
-): ActionReturn<ActionType.SWITCH_ALTERNATIVES> {
-  return { type: ActionType.SWITCH_ALTERNATIVES, payload: { choice: alternativeOfChoice } };
-}
-
-export function repaintRowAction(): ActionReturn<ActionType.REPAINT_ROW> {
-  return { type: ActionType.REPAINT_ROW };
-}
+export const repaintRowAction = (): ActionReturn<ActionType.REPAINT_ROW> => ({
+  type: ActionType.REPAINT_ROW,
+});

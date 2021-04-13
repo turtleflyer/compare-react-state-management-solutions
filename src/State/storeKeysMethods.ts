@@ -6,6 +6,7 @@ interface StoreKeysMethods {
   get: (i: number) => ChoiceForPixel | undefined;
   reset: () => void;
 }
+
 export const storeKeysMethods: StoreKeysMethods = {
   push(newKey) {
     storeKeys.push(newKey);

@@ -10,14 +10,16 @@ import { choiceForPixelPlaceholderKey } from '../State/StateInterface';
 import { storeKeysMethods } from '../State/storeKeysMethods';
 import { Pixel } from './Pixel';
 
-export const ControlPixel: FC<{ pixelSize: string; defChoice: PixelChoice }> = ({
-  pixelSize,
-  defChoice,
-}) => {
+export const ControlPixel: FC<{
+  pixelSize: string;
+  defChoice: PixelChoice;
+}> = ({ pixelSize, defChoice }) => {
   const style: CSSProperties = { height: pixelSize, width: pixelSize };
+
   const [choiceForPixel, setChoiceForPixel] = useState<ChoiceForPixel>(
     choiceForPixelPlaceholderKey
   );
+
   const choice = useSelector((state: State) => getChoiceForPixel(state, choiceForPixel));
   const possibleAltControl = useSelector((state: State) =>
     getAlternativeForChoice(state, alternativeForChoiceKeys[choice])
@@ -26,10 +28,10 @@ export const ControlPixel: FC<{ pixelSize: string; defChoice: PixelChoice }> = (
 
   useEffect(() => {
     const nextKey = getNextKey(choiceForPixelPlaceholderKey);
-    dispatch(createNewPixelEntryAction(nextKey, defChoice));
     storeKeysMethods.push(nextKey);
+    dispatch(createNewPixelEntryAction(nextKey, defChoice));
     setChoiceForPixel(nextKey);
-  }, [defChoice, dispatch]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div {...{ style }}>

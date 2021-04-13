@@ -1,24 +1,25 @@
-export const choiceForPixelPlaceholderKey = 'choice-for-pixel' as const;
+export const choiceForPixelPlaceholderKey = 'choice-for-pixel';
+
+export type ChoiceForPixelState = Record<ChoiceForPixel, PixelChoice>;
 export type ChoiceForPixel = typeof choiceForPixelPlaceholderKey;
 export type PixelChoice = 0 | 1;
-type ChoiceForPixelState = { [P in ChoiceForPixel]: PixelChoice };
 
-export const colorForAlternativePlaceholderKey = 'color-for-alternative';
-export type ColorForAlternative = typeof colorForAlternativePlaceholderKey;
+export const colorForAlternativeKeyPrefix = 'color-for-alternative';
+
+export type ColorForAlternativeState = Record<ColorForAlternative, ColorValue>;
+export type ColorForAlternative = typeof colorForAlternativeKeyPrefix;
 export type ColorValue = string;
-type ColorForAlternativeState = { [P in ColorForAlternative]: ColorValue };
 
 export const alternativeForChoicePlaceholderKey = 'alternative-for-choice';
-export type AlternativeForChoice = typeof alternativeForChoicePlaceholderKey;
-type AlternativeForChoiceState = {
-  [P in AlternativeForChoice]: ColorForAlternative | null;
-};
 
-interface GridSizeState {
+export type AlternativeForChoiceState = Record<AlternativeForChoice, ColorForAlternative | null>;
+export type AlternativeForChoice = typeof alternativeForChoicePlaceholderKey;
+
+export interface GridSizeState {
   gridSize: number;
 }
 
-interface RememberActiveChoiceState {
+export interface RememberActiveChoiceState {
   rememberActiveChoice: PixelChoice;
 }
 
@@ -27,7 +28,3 @@ export type State = ChoiceForPixelState &
   AlternativeForChoiceState &
   GridSizeState &
   RememberActiveChoiceState;
-
-export type Atom<K extends keyof State> = readonly [K, State[K]];
-
-export type ColorForAlternativeAtom = Atom<ColorForAlternative>;
