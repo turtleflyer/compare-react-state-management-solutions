@@ -7,7 +7,6 @@ import type {
   AlternativeForChoiceState,
   ColorForAlternative,
   ColorForAlternativeState,
-  ColorValue,
   PixelChoice,
   State,
 } from './StateInterface';
@@ -32,12 +31,19 @@ export const { initInterstate, useInterstate, readInterstate, setInterstate } = 
   State & Interstate
 >();
 
-export const createColorForAlternativeEntry = (
+export const createColorForAlternativeForChoiceEntry = (
   choice: PixelChoice
-): [ColorForAlternative, ColorValue] => [
-  getNextKey(`${colorForAlternativeKeyPrefix}-${choice}` as ColorForAlternative),
-  getRandomColor(DEF_COLOR),
-];
+): ColorForAlternativeState & AlternativeForChoiceState => {
+  const [colorForAlternativeKey, color] = [
+    getNextKey(`${colorForAlternativeKeyPrefix}-${choice}` as ColorForAlternative),
+    getRandomColor(DEF_COLOR),
+  ];
+
+  return {
+    [alternativeForChoiceKeys[choice]]: colorForAlternativeKey,
+    [colorForAlternativeKey]: color,
+  };
+};
 
 const initialState = {
   [choiceForPixelPlaceholderKey]: 0,
@@ -65,12 +71,8 @@ export const useRefreshApp = (): [string, ({ gridSize }: { gridSize: number }) =
 };
 
 function createColorForChoiceDefState(): ColorForAlternativeState & AlternativeForChoiceState {
-  return alternativeForChoiceKeys.reduce((accState, k, i) => {
-    const colorForAlternativeEntry = createColorForAlternativeEntry(i as PixelChoice);
-
-    return {
-      ...accState,
-      ...Object.fromEntries([colorForAlternativeEntry, [k, colorForAlternativeEntry[0]]]),
-    };
-  }, {} as ColorForAlternativeState & AlternativeForChoiceState);
+  return ([0, 1] as const).reduce(
+    (entries, c) => ({ ...entries, ...createColorForAlternativeForChoiceEntry(c) }),
+    {} as ColorForAlternativeState & AlternativeForChoiceState
+  );
 }

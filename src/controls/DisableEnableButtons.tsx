@@ -7,10 +7,15 @@ import React from 'react';
 import { Button } from '../reusable-components/Button';
 import {
   alternativeForChoiceKeys,
-  createColorForAlternativeEntry,
+  createColorForAlternativeForChoiceEntry,
   setInterstate,
 } from '../State/State';
-import type { PixelChoice } from '../State/StateInterface';
+import type {
+  AlternativeForChoiceState,
+  ColorForAlternativeState,
+  PixelChoice,
+  RememberActiveChoiceState,
+} from '../State/StateInterface';
 import { rememberActiveChoiceKey } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
@@ -20,27 +25,26 @@ export const DisableEnableButtons: FC = () => {
     UsePerfMetricsReturn
   ];
 
-  function getEvenOrOddRowSwitch(evenOrOdd: PixelChoice): () => void {
+  function getEvenOrOddRowSwitch(choice: PixelChoice): () => void {
     return () => {
-      perfMeasureAssets[evenOrOdd][1]();
+      perfMeasureAssets[choice][1]();
 
       setInterstate((state) => {
-        const altForChoiceKey = alternativeForChoiceKeys[evenOrOdd];
+        const altForChoiceKey = alternativeForChoiceKeys[choice];
         const colorForAltKey = state[altForChoiceKey];
 
         if (colorForAltKey) {
           return {
             [altForChoiceKey]: null,
-            [rememberActiveChoiceKey]: (1 - evenOrOdd) as PixelChoice,
-          };
+            [rememberActiveChoiceKey]: (1 - choice) as PixelChoice,
+          } as ColorForAlternativeState & AlternativeForChoiceState & RememberActiveChoiceState;
         }
 
-        const colorForAlternativeEntry = createColorForAlternativeEntry(evenOrOdd);
+        const colorForAlternativeForChoiceEntry = createColorForAlternativeForChoiceEntry(choice);
 
         return {
-          ...Object.fromEntries([colorForAlternativeEntry]),
-          [altForChoiceKey]: colorForAlternativeEntry[0],
-          [rememberActiveChoiceKey]: evenOrOdd,
+          ...colorForAlternativeForChoiceEntry,
+          [rememberActiveChoiceKey]: choice,
         };
       });
     };
