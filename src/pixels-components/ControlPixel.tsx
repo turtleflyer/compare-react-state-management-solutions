@@ -21,7 +21,7 @@ export const ControlPixel: FC<{
     const nextAtom = getNextAtom(choiceForPixelPlaceholderKey, defChoice);
     storeAtomsMethods.push(nextAtom);
     setChoiceForPixel(nextAtom);
-  }, [defChoice]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div {...{ style }}>

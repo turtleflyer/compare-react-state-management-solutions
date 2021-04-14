@@ -4,7 +4,9 @@ let storeAtoms = [] as ChoiceForPixelAtom[];
 
 interface StoreAtomsMethods {
   push: (newAtom: ChoiceForPixelAtom) => void;
+
   get: (i: number) => ChoiceForPixelAtom | undefined;
+
   reset: () => void;
 }
 

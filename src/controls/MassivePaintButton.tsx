@@ -34,12 +34,11 @@ export const MassivePaintButton: FC = () => {
     pixelsToPaint,
   ]);
 
-  function randomPaint() {
+  const randomPaint = (): void => {
     startMeasure();
     const checkPercent = parseInt(percentInput, 10);
     const percent = checkPercent >= 0 && checkPercent <= ONE_HUNDRED_PERCENT ? checkPercent : 0;
     setPercentInput(`${percent}`);
-
     const allPixelsNumber = gridSize ** 2;
     const pixelsNumberToPaint = (allPixelsNumber * percent) / ONE_HUNDRED_PERCENT;
 
@@ -57,14 +56,11 @@ export const MassivePaintButton: FC = () => {
         />
       ))
     );
-  }
+  };
 
-  function percentCallback(e: ChangeEvent<HTMLInputElement>) {
-    const {
-      target: { value: input },
-    } = e;
+  const percentCallback = ({ target: { value: input } }: ChangeEvent<HTMLInputElement>): void => {
     setPercentInput(input);
-  }
+  };
 
   return (
     <>

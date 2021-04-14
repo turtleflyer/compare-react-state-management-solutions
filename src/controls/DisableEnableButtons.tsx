@@ -12,46 +12,40 @@ import {
   createColorForAlternativeAtom,
   rememberActiveChoiceAtom,
 } from '../State/State';
-import type {
-  CarryAtom,
-  CarryAtomColorForAlternative,
-  ColorForAlternative,
-  PixelChoice,
-} from '../State/StateInterface';
+import type { HoldColorForAlternativeAtom, PixelChoice } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';
 
 export const DisableEnableButtons: FC = () => {
   const setActiveChoice = useSetRecoilState(rememberActiveChoiceAtom);
 
   type ManageAlternativesState = [
-    CarryAtomColorForAlternative,
-    SetterOrUpdater<CarryAtomColorForAlternative>
+    HoldColorForAlternativeAtom,
+    SetterOrUpdater<HoldColorForAlternativeAtom | null>
   ];
 
-  const manageAlternativesState = (alternativeForChoiceAtoms.map((atom) =>
-    useRecoilState(atom)
-  ) as readonly ManageAlternativesState[]) as readonly [
+  const manageAlternativesState = alternativeForChoiceAtoms.map((atom) => useRecoilState(atom)) as [
     ManageAlternativesState,
     ManageAlternativesState
   ];
-  const perfMeasureAssets = ([0, 1].map(() =>
-    usePerfObserver()
-  ) as readonly UsePerfMetricsReturn[]) as readonly [UsePerfMetricsReturn, UsePerfMetricsReturn];
 
-  function getEvenOrOddRowSwitch(evenOrOdd: PixelChoice): () => void {
+  const perfMeasureAssets = [0, 1].map(() => usePerfObserver()) as [
+    UsePerfMetricsReturn,
+    UsePerfMetricsReturn
+  ];
+
+  function getEvenOrOddRowSwitch(choice: PixelChoice): () => void {
     return () => {
-      const prevAtom = manageAlternativesState[evenOrOdd][0];
+      perfMeasureAssets[choice][1]();
+      const prevAtom = manageAlternativesState[choice][0];
 
-      perfMeasureAssets[evenOrOdd][1]();
-
-      if (!prevAtom) {
-        setActiveChoice(evenOrOdd);
-        manageAlternativesState[evenOrOdd][1]({
-          atom: createColorForAlternativeAtom(evenOrOdd),
-        } as CarryAtom<ColorForAlternative>);
+      if (prevAtom) {
+        manageAlternativesState[choice][1](null);
+        setActiveChoice((1 - choice) as PixelChoice);
       } else {
-        setActiveChoice((1 - evenOrOdd) as PixelChoice);
-        manageAlternativesState[evenOrOdd][1](null);
+        manageAlternativesState[choice][1]({
+          atom: createColorForAlternativeAtom(choice),
+        });
+        setActiveChoice(choice);
       }
     };
   }

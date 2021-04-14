@@ -2,36 +2,37 @@ import type { RecoilState } from 'recoil';
 
 export type Atom<K extends keyof State> = RecoilState<State[K]>;
 
-export const choiceForPixelPlaceholderKey = 'choice-for-pixel' as const;
+export const choiceForPixelPlaceholderKey = 'choice-for-pixel';
+
+export type ChoiceForPixelState = Record<ChoiceForPixel, PixelChoice>;
 export type ChoiceForPixel = typeof choiceForPixelPlaceholderKey;
 export type PixelChoice = 0 | 1;
-type ChoiceForPixelState = { [P in ChoiceForPixel]: PixelChoice };
 
-export const colorForAlternativePlaceholderKey = 'color-for-alternative';
-export type ColorForAlternative = typeof colorForAlternativePlaceholderKey;
+export const colorForAlternativeKeyPrefix = 'color-for-alternative';
+export type ColorForAlternativeState = Record<ColorForAlternative, ColorValue>;
+export type ColorForAlternative = typeof colorForAlternativeKeyPrefix;
 export type ColorValue = string;
-type ColorForAlternativeState = { [P in ColorForAlternative]: ColorValue };
 
-export const alternativeForChoicePlaceholderKey = 'alternative-for-choice';
-export type AlternativeForChoice = typeof alternativeForChoicePlaceholderKey;
-export interface CarryAtom<K extends keyof State> {
-  atom: Atom<K>;
-}
+export const alternativeForChoiceKeyPrefix = 'alternative-for-choice';
 
-export type CarryAtomColorForAlternative = CarryAtom<ColorForAlternative> | null;
-
-type AlternativeForChoiceState = {
-  [P in AlternativeForChoice]: CarryAtomColorForAlternative;
+export type AlternativeForChoiceState = Record<
+  AlternativeForChoice,
+  HoldColorForAlternativeAtom | null
+>;
+export type AlternativeForChoice = typeof alternativeForChoiceKeyPrefix;
+export type HoldColorForAlternativeAtom = {
+  atom: Atom<ColorForAlternative>;
 };
 
 export const gridSizeKey = 'grid-size';
-export type GridSize = typeof gridSizeKey;
-interface GridSizeState {
+
+export interface GridSizeState {
   [gridSizeKey]: number;
 }
 
 export const rememberActiveChoiceKey = 'remember-active-choice';
-interface RememberActiveChoiceState {
+
+export interface RememberActiveChoiceState {
   [rememberActiveChoiceKey]: PixelChoice;
 }
 
