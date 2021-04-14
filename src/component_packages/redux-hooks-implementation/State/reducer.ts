@@ -1,4 +1,4 @@
-import { getRandomColor } from '@~internal/random-color';
+import { getRandomColor } from '@compare-react-state-management-solutions/random-color';
 import type { ActionReturn } from './actionTypes';
 import { ActionType } from './actionTypes';
 import {
