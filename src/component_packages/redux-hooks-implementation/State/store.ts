@@ -1,0 +1,33 @@
+import { getNextKey } from '@~internal/get-next-key';
+import { useState } from 'react';
+import { createStore, Store } from 'redux';
+import type { ActionReturn, ActionType } from './actionTypes';
+import { appReducer, initializeState } from './reducer';
+import { DEF_GRID_SIZE } from './State';
+import type { State } from './StateInterface';
+
+export const useCreateStore = (): [
+  Store<State, ActionReturn<ActionType>>,
+  string,
+  ({ gridSize }: { gridSize: number }) => void
+] => {
+  const [store, provideStore] = useState<Store<State, ActionReturn<ActionType>>>(() => {
+    initializeState(DEF_GRID_SIZE);
+
+    return createStore(appReducer);
+  });
+
+  const [refreshKey, setNewKey] = useState(createFreshKey);
+
+  const commandToCreateFreshStore = ({ gridSize }: { gridSize: number }): void => {
+    initializeState(gridSize);
+    provideStore(createStore(appReducer));
+    setNewKey(createFreshKey);
+  };
+
+  return [store, refreshKey, commandToCreateFreshStore];
+};
+
+function createFreshKey(): string {
+  return getNextKey('refresh-key');
+}
