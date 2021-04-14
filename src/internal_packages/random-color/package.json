@@ -1,5 +1,5 @@
 {
-  "name": "@~internal/random-color",
+  "name": "@compare-react-state-management-solutions/random-color",
   "private": "true",
   "version": "0.1.0",
   "main": "randomColor.ts"

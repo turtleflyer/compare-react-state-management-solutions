@@ -1,6 +1,6 @@
-import { Button } from '@~internal/control-components/Button';
-import { PerformanceInfo } from '@~internal/performance-info';
-import { usePerfObserver } from '@~internal/use-perf-observer';
+import { Button } from '@compare-react-state-management-solutions/control-components/Button';
+import { PerformanceInfo } from '@compare-react-state-management-solutions/performance-info';
+import { usePerfObserver } from '@compare-react-state-management-solutions/use-perf-observer';
 import type { FC } from 'react';
 import React from 'react';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';

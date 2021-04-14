@@ -1,4 +1,4 @@
-import { getNextKey } from '@~internal/get-next-key';
+import { getNextKey } from '@compare-react-state-management-solutions/get-next-key';
 import type { CSSProperties, FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { alternativeForChoiceKeys, setInterstate, useInterstate } from '../State/State';
