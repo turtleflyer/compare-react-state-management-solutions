@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { Button } from '@~internal/control-components/Button';
 import { PerformanceInfo } from '@~internal/performance-info';
 import type { UsePerfMetricsReturn } from '@~internal/use-perf-observer';
 import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { FC } from 'react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Button } from '../reusable-components/Button';
 import { switchAlternativeAction } from '../State/actions';
 import type { PixelChoice } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';

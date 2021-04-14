@@ -1,9 +1,9 @@
+import { Button } from '@~internal/control-components/Button';
 import { PerformanceInfo } from '@~internal/performance-info';
 import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { FC } from 'react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Button } from '../reusable-components/Button';
 import { repaintRowAction } from '../State/actions';
 import { buttonContainerStyle } from './styles';
 

@@ -1,9 +1,9 @@
+import { Button } from '@~internal/control-components/Button';
 import { PerformanceInfo } from '@~internal/performance-info';
 import { usePerfObserver } from '@~internal/use-perf-observer';
 import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
-import { Button } from '../reusable-components/Button';
 import { switchPixelChoiceAction } from '../State/actions';
 import { getGridSize } from '../State/selectors';
 import { buttonContainerStyle } from './styles';

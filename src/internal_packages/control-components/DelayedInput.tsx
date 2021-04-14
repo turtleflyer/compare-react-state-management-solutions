@@ -1,9 +1,10 @@
 import { useMultiState } from '@smart-hooks/use-multi-state';
 import type { ChangeEvent, CSSProperties, FC } from 'react';
 import React, { useRef } from 'react';
-import { INPUT_WAITING_DELAY } from '../State/State';
 import { InputField } from './InputField';
 import { Spinner } from './Spinner';
+
+const INPUT_WAITING_DELAY = 3000;
 
 export const DelayedInput: FC<{
   label: string;

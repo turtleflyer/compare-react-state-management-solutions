@@ -1,11 +1,11 @@
+import { Button } from '@~internal/control-components/Button';
+import { InputField } from '@~internal/control-components/InputField';
 import { drawPixels } from '@~internal/draw-pixels';
 import { PerformanceInfo } from '@~internal/performance-info';
 import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { ChangeEvent, CSSProperties, FC } from 'react';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '../reusable-components/Button';
-import { InputField } from '../reusable-components/InputField';
 import { switchMultiplePixelsAction } from '../State/actions';
 import { getGridSize } from '../State/selectors';
 import { DEF_PIXELS_PERCENT_TO_PAINT } from '../State/State';

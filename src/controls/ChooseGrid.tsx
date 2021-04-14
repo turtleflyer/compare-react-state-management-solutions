@@ -1,8 +1,8 @@
+import { DelayedInput } from '@~internal/control-components/DelayedInput';
 import { PerformanceInfo } from '@~internal/performance-info';
 import { usePerfObserver } from '@~internal/use-perf-observer';
 import React, { CSSProperties, FC } from 'react';
 import { useSelector } from 'react-redux';
-import { DelayedInput } from '../reusable-components/DelayedInput';
 import { getGridSize } from '../State/selectors';
 
 export const ChooseGrid: FC<{
