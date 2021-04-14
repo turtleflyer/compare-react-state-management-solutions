@@ -17,7 +17,7 @@ export const RandomPaintButton: FC = () => {
 
   useEffect(() => {
     paintRandomPixel((prev) => (1 - prev) as PixelChoice);
-  }, [paintRandomPixel]);
+  }, [atomToPaint]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const randomPaint = (): void => {
     startMeasure();
