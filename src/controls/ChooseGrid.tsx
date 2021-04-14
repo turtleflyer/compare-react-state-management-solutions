@@ -1,8 +1,8 @@
+import { DelayedInput } from '@~internal/control-components/DelayedInput';
 import { PerformanceInfo } from '@~internal/performance-info';
 import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
-import { DelayedInput } from '../reusable-components/DelayedInput';
 import { readInterstate } from '../State/State';
 import { gridSizeKey } from '../State/StateInterface';
 

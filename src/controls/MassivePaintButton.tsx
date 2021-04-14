@@ -1,10 +1,10 @@
+import { Button } from '@~internal/control-components/Button';
+import { InputField } from '@~internal/control-components/InputField';
 import { drawPixels } from '@~internal/draw-pixels';
 import { PerformanceInfo } from '@~internal/performance-info';
 import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { ChangeEvent, CSSProperties, FC } from 'react';
 import React, { useState } from 'react';
-import { Button } from '../reusable-components/Button';
-import { InputField } from '../reusable-components/InputField';
 import { DEF_PIXELS_PERCENT_TO_PAINT, readInterstate, setInterstate } from '../State/State';
 import type { PixelChoice } from '../State/StateInterface';
 import { gridSizeKey } from '../State/StateInterface';

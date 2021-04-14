@@ -1,20 +1,20 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { Button } from '@~internal/control-components/Button';
 import { PerformanceInfo } from '@~internal/performance-info';
 import type { UsePerfMetricsReturn } from '@~internal/use-perf-observer';
 import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { FC } from 'react';
 import React from 'react';
-import { Button } from '../reusable-components/Button';
 import {
   alternativeForChoiceKeys,
   createColorForAlternativeForChoiceEntry,
-  setInterstate,
+  setInterstate
 } from '../State/State';
 import type {
   AlternativeForChoiceState,
   ColorForAlternativeState,
   PixelChoice,
-  RememberActiveChoiceState,
+  RememberActiveChoiceState
 } from '../State/StateInterface';
 import { rememberActiveChoiceKey } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';

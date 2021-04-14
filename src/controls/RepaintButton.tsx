@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { Button } from '@~internal/control-components/Button';
 import { PerformanceInfo } from '@~internal/performance-info';
 import { getRandomColor } from '@~internal/random-color';
 import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { FC } from 'react';
 import React from 'react';
-import { Button } from '../reusable-components/Button';
 import { alternativeForChoiceKeys, setInterstate } from '../State/State';
 import type {
   ColorForAlternativeState,
