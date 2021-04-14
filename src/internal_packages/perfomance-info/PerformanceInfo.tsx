@@ -1,4 +1,4 @@
-import type { MetricsComponentProps } from '@~internal/use-perf-observer';
+import type { MetricsComponentProps } from '@compare-react-state-management-solutions/use-perf-observer';
 import type { FC } from 'react';
 import React from 'react';
 import { DisplayInfo } from './DisplayInfo';

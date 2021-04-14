@@ -1,5 +1,5 @@
 {
-  "name": "@~internal/build-component",
+  "name": "@compare-react-state-management-solutions/build-component",
   "private": "true",
   "version": "0.3.0",
   "bin": {

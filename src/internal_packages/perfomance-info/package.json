@@ -1,10 +1,10 @@
 {
-  "name": "@~internal/performance-info",
+  "name": "@compare-react-state-management-solutions/performance-info",
   "private": "true",
   "version": "0.2.0",
   "main": "PerformanceInfo.tsx",
   "peerDependencies": {
-    "@~internal/use-perf-observer": "^0.2.0",
+    "@compare-react-state-management-solutions/use-perf-observer": "^0.2.0",
     "react": "^17.0.0"
   }
 }

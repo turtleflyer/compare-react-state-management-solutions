@@ -1,4 +1,4 @@
-import { getNextKey } from '@~internal/get-next-key';
+import { getNextKey } from '@compare-react-state-management-solutions/get-next-key';
 import { atom } from 'recoil';
 import type { Atom, State } from '../State/StateInterface';
 

@@ -1,5 +1,5 @@
-import { getNextKey } from '@~internal/get-next-key';
-import { getRandomColor } from '@~internal/random-color';
+import { getNextKey } from '@compare-react-state-management-solutions/get-next-key';
+import { getRandomColor } from '@compare-react-state-management-solutions/random-color';
 import { useState } from 'react';
 import type { SetterOrUpdater } from 'recoil';
 import { atom, useSetRecoilState } from 'recoil';
