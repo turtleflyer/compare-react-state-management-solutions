@@ -1,10 +1,10 @@
+import { Button } from '@~internal/control-components/Button';
 import { PerformanceInfo } from '@~internal/performance-info';
 import { usePerfObserver } from '@~internal/use-perf-observer';
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { drawPixelToPaint } from '../helpers/drawPixelToPaint';
-import { Button } from '../reusable-components/Button';
 import { choiceForPixelPlaceholderAtom, gridSizeAtom } from '../State/State';
 import type { PixelChoice } from '../State/StateInterface';
 import { buttonContainerStyle } from './styles';

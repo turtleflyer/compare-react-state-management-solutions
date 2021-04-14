@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { Button } from '@~internal/control-components/Button';
 import { PerformanceInfo } from '@~internal/performance-info';
 import type { UsePerfMetricsReturn } from '@~internal/use-perf-observer';
 import { usePerfObserver } from '@~internal/use-perf-observer';
@@ -6,7 +7,6 @@ import type { FC } from 'react';
 import React from 'react';
 import type { SetterOrUpdater } from 'recoil';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { Button } from '../reusable-components/Button';
 import {
   alternativeForChoiceAtoms,
   createColorForAlternativeAtom,

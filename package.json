@@ -9,6 +9,7 @@
   ],
   "dependencies": {
     "@~internal/build-component": "^0.1.0",
+    "@~internal/control-components": "^0.1.0",
     "@~internal/draw-pixels": "^0.1.0",
     "@~internal/get-next-key": "^0.1.0",
     "@~internal/performance-info": "^0.2.0",
