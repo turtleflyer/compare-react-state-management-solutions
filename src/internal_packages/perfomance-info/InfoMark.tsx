@@ -116,6 +116,7 @@ export const InfoMark: FC<{ style?: CSSProperties; popupInfo: JSX.Element | stri
       </div>
       {infoTipBoxPosition && (
         <InfoTipBox
+          /* eslint-disable @typescript-eslint/no-magic-numbers */
           {...{
             popupInfo,
             left: infoTipBoxPosition.x + 10,
@@ -127,6 +128,7 @@ export const InfoMark: FC<{ style?: CSSProperties; popupInfo: JSX.Element | stri
             clearDelay,
             toHide: hideInfoTipOnMouseLeave,
           }}
+          /* eslint-enable @typescript-eslint/no-magic-numbers */
         />
       )}
     </>
