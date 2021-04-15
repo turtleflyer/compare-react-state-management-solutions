@@ -14,7 +14,7 @@
     "@compare-react-state-management-solutions/use-interstate-component": "1.2.0",
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
+    "@testing-library/user-event": "^13.1.3",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
     "@types/react": "^17.0.0",
