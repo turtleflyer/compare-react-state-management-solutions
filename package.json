@@ -41,7 +41,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "sync-component:use-interstate": "git checkout use-interstate src/component_packages/use-interstate-implementation",
+    "sync-component:recoil": "git checkout recoil src/component_packages/recoil-implementation",
+    "sync-component:redux": "git checkout redux-hooks src/component_packages/redux-hooks-implementation",
+    "sync-component:all": "npm run sync-component:use-interstate && npm run sync-component:recoil && npm run sync-component:redux"
   },
   "eslintConfig": {
     "extends": [
