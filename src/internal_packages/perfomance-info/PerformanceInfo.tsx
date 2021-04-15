@@ -4,7 +4,7 @@ import React from 'react';
 import { DisplayInfo } from './DisplayInfo';
 import { InfoMark } from './InfoMark';
 
-const AknowlageTip: FC = () => (
+const AcknowledgeTip: FC = () => (
   /* eslint-disable react/jsx-one-expression-per-line */
   <>
     <strong>TTI (Time to Interactive)</strong> metric measures the time until the main sub-resources
@@ -29,7 +29,7 @@ export const PerformanceInfo: FC<MetricsComponentProps> = (props) => {
           {...{
             info: [
               `TTI: ${Math.round(TTI)}ms - TBT: ${Math.round(TBT)}ms`,
-              <InfoMark key="InfoTip" {...{ popupInfo: <AknowlageTip /> }} />,
+              <InfoMark key="InfoTip" {...{ popupInfo: <AcknowledgeTip /> }} />,
             ],
           }}
         />

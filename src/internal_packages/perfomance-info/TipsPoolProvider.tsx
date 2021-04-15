@@ -1,45 +1,45 @@
-import React, { createContext, useContext, useMemo } from 'react';
-import type { Dispatch, FC } from 'react';
-
-type InfoTipBoxPositionDispather = Dispatch<
-  React.SetStateAction<{
-    x: number;
-    y: number;
-  } | null>
->;
+import type { FC } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 interface TipsPoolMethods {
-  addInfoTipBoxPositionDispatcher: (dispatcher: InfoTipBoxPositionDispather) => void;
-  removeInfoTipBoxPositionDispatcher: (dispatcher: InfoTipBoxPositionDispather) => void;
-  zeroInfoTipBoxPositions: (except: InfoTipBoxPositionDispather) => void;
+  addTipHandler: (dispatcher: () => void) => void;
+  removeTipHandler: (dispatcher: () => void) => void;
+  hideOtherTips: (except: () => void) => void;
 }
 
 const createTipsPoolMethods = (): TipsPoolMethods => {
-  let dispatchersPool: InfoTipBoxPositionDispather[] = [];
+  let dispatchersPool: (() => void)[] = [];
 
   return {
-    addInfoTipBoxPositionDispatcher: (dispatcher) => {
-      dispatchersPool = [...dispatchersPool, dispatcher];
+    addTipHandler: (handler) => {
+      dispatchersPool = [...dispatchersPool, handler];
     },
 
-    removeInfoTipBoxPositionDispatcher: (dispatcher) => {
-      dispatchersPool = dispatchersPool.filter((d) => d !== dispatcher);
+    removeTipHandler: (handler) => {
+      dispatchersPool = dispatchersPool.filter((nextHandler) => nextHandler !== handler);
     },
 
-    zeroInfoTipBoxPositions: (except) => {
-      dispatchersPool.forEach((d) => d !== except && d(null));
+    hideOtherTips: (except) => {
+      dispatchersPool.forEach((nextHandler) => nextHandler !== except && nextHandler());
     },
   };
 };
 
-const TipsPoolContext = createContext(createTipsPoolMethods());
+interface TipsPoolContextValue {
+  tipsPoolMethods: TipsPoolMethods;
+  popupDelay: number;
+}
 
-export const TipsPoolProvider: FC = ({ children }) => {
-  const tipsPoolMethods = useMemo(createTipsPoolMethods, []);
+const TipsPoolContext = createContext<TipsPoolContextValue | null>(null);
+
+export const TipsPoolProvider: FC<{ popupDelay?: number }> = ({ popupDelay = 100, children }) => {
+  const [tipsPoolMethods] = useState(createTipsPoolMethods);
 
   return (
-    <TipsPoolContext.Provider {...{ value: tipsPoolMethods }}>{children}</TipsPoolContext.Provider>
+    <TipsPoolContext.Provider {...{ value: { tipsPoolMethods, popupDelay } }}>
+      {children}
+    </TipsPoolContext.Provider>
   );
 };
 
-export const useTipsPoolMethods = (): TipsPoolMethods => useContext(TipsPoolContext);
+export const useTipsPool = (): TipsPoolContextValue | null => useContext(TipsPoolContext);
