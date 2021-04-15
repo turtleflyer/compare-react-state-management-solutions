@@ -23,10 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 .vscode
 
-/src/component_packages/**/*.js
-/src/component_packages/**/*.ts
-/src/component_packages/**/*.tsx
-
 /compiled_bundles
 
 .eslintcache

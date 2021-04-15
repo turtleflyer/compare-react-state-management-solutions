@@ -10,9 +10,9 @@
     "@~internal/performance-info": "^0.2.0",
     "@~internal/random-color": "^0.1.0",
     "@~internal/use-perf-observer": "^0.2.0",
-    "@smart-hooks/use-interstate": "^5.1.0",
     "@smart-hooks/use-multi-state": "^3.2.0",
     "@types/react": "^17.0.0",
-    "react": "^17.0.0"
+    "react": "^17.0.0",
+    "use-interstate": "*"
   }
 }
