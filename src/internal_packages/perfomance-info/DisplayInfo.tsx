@@ -44,7 +44,9 @@ export const DisplayInfo: FC<{ info?: (JSX.Element | string)[] }> = ({ info }) =
     >
       {info.map((e) =>
         typeof e === 'string' ? (
-          <span {...{ style: elementStyle }}>{e}</span>
+          <span {...{ style: elementStyle }} key={e}>
+            {e}
+          </span>
         ) : (
           cloneElement(e, {
             ...e.props,
