@@ -1,8 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
 import type { CSSProperties, FC } from 'react';
-import { useTipsPoolMethods } from './TipsPoolProvider';
-
-const POPUP_DELAY = 1000;
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useTipsPool } from './TipsPoolProvider';
 
 const infoMarkStyle: CSSProperties = {
   display: 'flex',
@@ -56,13 +54,21 @@ export const InfoMark: FC<{ style?: CSSProperties; popupInfo: JSX.Element | stri
 }) => {
   const infoMarkRef = useRef<HTMLDivElement>(null);
   const delayTimeoutID = useRef<NodeJS.Timeout | null>(null);
+
   const [infoTipBoxPosition, setInfoTipBoxPosition] = useState<{ x: number; y: number } | null>(
     null
   );
-  const tipsPoolMethods = useTipsPoolMethods();
 
-  const setTipToHideOnMouseLeave = () => {
-    delayTimeoutID.current = setTimeout(() => setInfoTipBoxPosition(null), POPUP_DELAY);
+  const tipHandler = useCallback(() => setInfoTipBoxPosition(null), []);
+
+  const { tipsPoolMethods, popupDelay } =
+    useTipsPool() ??
+    (() => {
+      throw Error('TipsPoolProvider should be in the root of the app');
+    })();
+
+  const hideInfoTipOnMouseLeave = () => {
+    delayTimeoutID.current = setTimeout(() => setInfoTipBoxPosition(null), popupDelay);
   };
 
   const clearDelay = () => {
@@ -70,14 +76,15 @@ export const InfoMark: FC<{ style?: CSSProperties; popupInfo: JSX.Element | stri
     delayTimeoutID.current = null;
   };
 
-  const showTip = () => {
+  const showInfoTip = () => {
     if (infoTipBoxPosition) {
       clearDelay();
+
       return;
     }
 
     if (infoMarkRef.current) {
-      tipsPoolMethods.zeroInfoTipBoxPositions(setInfoTipBoxPosition);
+      tipsPoolMethods.hideOtherTips(tipHandler);
       const { x, y } = infoMarkRef.current.getBoundingClientRect();
       setInfoTipBoxPosition({ x, y });
     } else {
@@ -86,11 +93,10 @@ export const InfoMark: FC<{ style?: CSSProperties; popupInfo: JSX.Element | stri
   };
 
   useEffect(() => {
-    tipsPoolMethods.addInfoTipBoxPositionDispatcher(setInfoTipBoxPosition);
+    tipsPoolMethods.addTipHandler(tipHandler);
 
-    return () => tipsPoolMethods.removeInfoTipBoxPositionDispatcher(setInfoTipBoxPosition);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return () => tipsPoolMethods.removeTipHandler(tipHandler);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -98,17 +104,17 @@ export const InfoMark: FC<{ style?: CSSProperties; popupInfo: JSX.Element | stri
         {...{
           ref: infoMarkRef,
           style: { ...infoMarkStyle, ...style },
-          onMouseOver: showTip,
-          onFocus: showTip,
-          onMouseLeave: setTipToHideOnMouseLeave,
-          onBlur: setTipToHideOnMouseLeave,
+          onMouseOver: showInfoTip,
+          onFocus: showInfoTip,
+          onMouseLeave: hideInfoTipOnMouseLeave,
+          onBlur: hideInfoTipOnMouseLeave,
           role: 'link',
           tabIndex: 0,
         }}
       >
         i
       </div>
-      {infoTipBoxPosition ? (
+      {infoTipBoxPosition && (
         <InfoTipBox
           /* eslint-disable @typescript-eslint/no-magic-numbers */
           {...{
@@ -120,11 +126,11 @@ export const InfoMark: FC<{ style?: CSSProperties; popupInfo: JSX.Element | stri
               infoTipBoxPosition.y +
               5,
             clearDelay,
-            toHide: setTipToHideOnMouseLeave,
+            toHide: hideInfoTipOnMouseLeave,
           }}
           /* eslint-enable @typescript-eslint/no-magic-numbers */
         />
-      ) : null}
+      )}
     </>
   );
 };
