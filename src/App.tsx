@@ -1,8 +1,7 @@
-import { TipsPoolProvider } from '@~internal/performance-info';
-import { App as RecoilApp } from '@~internal/recoil-component';
-import { App as ReduxConnectApp } from '@~internal/redux-connect-component';
-import { App as ReduxHooksApp } from '@~internal/redux-hooks-component';
-import { App as UseInterstateApp } from '@~internal/use-interstate-component';
+import { TipsPoolProvider } from '@compare-react-state-management-solutions/performance-info';
+import { App as RecoilApp } from '@compare-react-state-management-solutions/recoil-component';
+import { App as ReduxHooksApp } from '@compare-react-state-management-solutions/redux-hooks-component';
+import { App as UseInterstateApp } from '@compare-react-state-management-solutions/use-interstate-component';
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
 
@@ -18,9 +17,6 @@ export const App: FC = () => (
         </div>
         <div {...{ style: appsContainerStyle }}>
           <UseInterstateApp />
-        </div>
-        <div {...{ style: appsContainerStyle }}>
-          <ReduxConnectApp />
         </div>
         <div {...{ style: appsContainerStyle }}>
           <ReduxHooksApp />

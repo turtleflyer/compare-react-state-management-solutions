@@ -1,4 +1,4 @@
-import { getNextKey } from '@~internal/get-next-key';
+import { getNextKey } from '@compare-react-state-management-solutions/get-next-key';
 import { useState } from 'react';
 import { createStore, Store } from 'redux';
 import type { ActionReturn, ActionType } from './actionTypes';

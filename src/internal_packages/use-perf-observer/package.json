@@ -1,5 +1,5 @@
 {
-  "name": "@~internal/use-perf-observer",
+  "name": "@compare-react-state-management-solutions/use-perf-observer",
   "private": "true",
   "version": "0.2.0",
   "main": "usePerfObserver.tsx",
@@ -7,7 +7,7 @@
     "react": "^17.0.0"
   },
   "dependencies": {
-    "@~internal/get-next-key": "^0.1.0",
+    "@compare-react-state-management-solutions/get-next-key": "^0.1.0",
     "@testing-library/react": "^11.1.0"
   }
 }

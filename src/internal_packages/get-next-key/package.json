@@ -1,5 +1,5 @@
 {
-  "name": "@~internal/get-next-key",
+  "name": "@compare-react-state-management-solutions/get-next-key",
   "private": "true",
   "version": "0.1.0",
   "main": "getNextKey.ts"

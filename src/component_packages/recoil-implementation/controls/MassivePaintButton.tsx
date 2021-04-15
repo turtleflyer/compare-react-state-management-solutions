@@ -1,8 +1,8 @@
-import { Button } from '@~internal/control-components/Button';
-import { InputField } from '@~internal/control-components/InputField';
-import { drawPixels } from '@~internal/draw-pixels';
-import { PerformanceInfo } from '@~internal/performance-info';
-import { usePerfObserver } from '@~internal/use-perf-observer';
+import { Button } from '@compare-react-state-management-solutions/control-components/Button';
+import { InputField } from '@compare-react-state-management-solutions/control-components/InputField';
+import { drawPixels } from '@compare-react-state-management-solutions/draw-pixels';
+import { PerformanceInfo } from '@compare-react-state-management-solutions/performance-info';
+import { usePerfObserver } from '@compare-react-state-management-solutions/use-perf-observer';
 import type { ChangeEvent, CSSProperties, FC, ReactElement } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
