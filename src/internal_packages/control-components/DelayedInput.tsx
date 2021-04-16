@@ -1,9 +1,9 @@
-import { useMultiState } from '@smart-hooks/use-multi-state';
 import type { ChangeEvent, CSSProperties, FC } from 'react';
-import React, { useRef } from 'react';
-import { INPUT_WAITING_DELAY } from '../State/State';
+import React, { useRef, useState } from 'react';
 import { InputField } from './InputField';
 import { Spinner } from './Spinner';
+
+const INPUT_WAITING_DELAY = 3000;
 
 export const DelayedInput: FC<{
   label: string;
@@ -16,41 +16,30 @@ export const DelayedInput: FC<{
     activeTimeoutId?: NodeJS.Timeout;
   }
   const keepDelayedInputRecords = useRef<KeepDelayedInputRecords>({});
+  const [inputValue, setInputValue] = useState(value);
+  const [showSpin, setShowSpin] = useState(false);
 
-  interface InputState {
-    inputValue: string;
-    showSpin: boolean;
-  }
-  const [inputState, setInputState] = useMultiState<InputState>({
-    inputValue: value,
-    showSpin: false,
-  });
-
-  function waitDelay(input: string) {
+  const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const input = e.target.value;
     const {
       current: records,
       current: { activeTimeoutId },
     } = keepDelayedInputRecords;
-
-    setInputState.showSpin(true);
+    
+    setInputValue(input);
+    setShowSpin(true);
 
     if (activeTimeoutId) {
       clearTimeout(activeTimeoutId);
     }
 
     records.activeTimeoutId = setTimeout(() => {
-      setInputState.showSpin(false);
+      setShowSpin(false);
       records.activeTimeoutId = undefined;
 
       inputCallback(input);
     }, INPUT_WAITING_DELAY);
-  }
-
-  function onChange(e: ChangeEvent<HTMLInputElement>): void {
-    const input = e.target.value;
-    setInputState.inputValue(input);
-    waitDelay(input);
-  }
+  };
 
   return (
     <div {...{ style: { display: 'flex', alignItems: 'center', ...addStyle } }}>
@@ -58,12 +47,12 @@ export const DelayedInput: FC<{
         {...{
           label,
           onChange,
-          value: inputState.inputValue,
+          value: inputValue,
           width,
           addStyle: { marginRight: 10 },
         }}
       />
-      <Spinner {...{ toShow: inputState.showSpin }} />
+      <Spinner {...{ toShow: showSpin }} />
     </div>
   );
 };
