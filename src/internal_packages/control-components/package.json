@@ -1,8 +1,0 @@
-{
-  "name": "@compare-react-state-management-solutions/control-components",
-  "private": "true",
-  "version": "0.2.0",
-  "dependencies": {
-    "react": "^17.0.1"
-  }
-}
