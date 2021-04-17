@@ -10,7 +10,6 @@
     "@compare-react-state-management-solutions/performance-info": "^0.3.0",
     "@compare-react-state-management-solutions/random-color": "^0.1.0",
     "@compare-react-state-management-solutions/use-perf-observer": "^0.2.0",
-    "@types/react": "^17.0.0",
     "react": "^17.0.0",
     "use-interstate": "*"
   }
