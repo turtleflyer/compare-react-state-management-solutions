@@ -3,11 +3,8 @@
   "private": "true",
   "version": "0.2.0",
   "main": "usePerfObserver.tsx",
-  "peerDependencies": {
-    "react": "^17.0.0"
-  },
   "dependencies": {
     "@compare-react-state-management-solutions/get-next-key": "^0.1.0",
-    "@testing-library/react": "^11.1.0"
+    "react": "^17.0.0"
   }
 }
