@@ -8,7 +8,7 @@ import { MassivePaintButton } from './MassivePaintButton';
 import { MeasuredControlButton } from './MeasuredControlButton';
 
 export const DEF_GRID_SIZE = 32;
-type ControlPanelProps = HookOrNotProp<'repaintRow'> &
+type ControlPanelProps = { headline: string } & HookOrNotProp<'repaintRow'> &
   HookOrNotProp<'switchRows', [() => void, () => void], 'switchRowsHooks'> &
   HookOrNotProp<'paintRandomSinglePixel'> &
   PaintRandomPixels &
@@ -18,7 +18,7 @@ export const ControlPanel: FC<ControlPanelProps> = (props) => {
   return (
     <div {...{ style: { margin: '10px 0 auto 5px' } }}>
       <div {...{ style: { margin: '0 0 10px' } }}>
-        <strong>Implemented using &apos;use-interstate&apos; library</strong>
+        <strong>{props.headline}</strong>
       </div>
       <MeasuredControlButton
         {...{

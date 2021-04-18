@@ -23,6 +23,7 @@ export const App: FC = () => {
       <PixelsStage />
       <ControlPanel
         {...{
+          headline: 'Implemented using "use-interstate" library',
           repaintRow,
           switchRows,
           paintRandomSinglePixel,
