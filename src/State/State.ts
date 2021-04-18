@@ -10,9 +10,7 @@ import type {
 } from './StateInterface';
 import { alternativeForChoicePlaceholderKey, colorForAlternativeKeyPrefix } from './StateInterface';
 
-export const DEF_GRID_SIZE = 32;
 export const DEF_COLOR = '#AAAAAA';
-export const DEF_PIXELS_PERCENT_TO_PAINT = 30;
 
 export const alternativeForChoiceKeys = [0, 1].map(
   (c) => `${alternativeForChoicePlaceholderKey}-${c}`

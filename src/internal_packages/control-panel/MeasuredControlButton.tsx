@@ -1,24 +1,28 @@
-import { Button } from '@compare-react-state-management-solutions/control-components/Button';
+/* eslint-disable react-hooks/rules-of-hooks */
 import { PerformanceInfo } from '@compare-react-state-management-solutions/performance-info';
 import { usePerfObserver } from '@compare-react-state-management-solutions/use-perf-observer';
 import type { FC } from 'react';
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { repaintRowAction } from '../State/actions';
+import { Button } from './Button';
 import { buttonContainerStyle } from './styles';
 
-export const RepaintButton: FC = () => {
-  const dispatch = useDispatch();
+export const MeasuredControlButton: FC<{ name: string; onPushButton: () => void }> = ({
+  name,
+  onPushButton,
+}) => {
   const [WrapDisplay, startMeasure] = usePerfObserver();
-
-  function repaintRow() {
-    startMeasure();
-    dispatch(repaintRowAction());
-  }
 
   return (
     <div {...{ style: buttonContainerStyle }}>
-      <Button {...{ callback: repaintRow, name: 're-paint' }} />
+      <Button
+        {...{
+          callback: () => {
+            startMeasure();
+            onPushButton();
+          },
+          name,
+        }}
+      />
       <WrapDisplay>
         <PerformanceInfo {...{ data: null }} />
       </WrapDisplay>
