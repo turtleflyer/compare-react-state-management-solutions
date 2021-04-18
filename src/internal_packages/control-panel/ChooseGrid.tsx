@@ -3,19 +3,20 @@ import { usePerfObserver } from '@compare-react-state-management-solutions/use-p
 import type { FC } from 'react';
 import React from 'react';
 import { DelayedInput } from './DelayedInput';
+import { HookOrNotProp } from './HookOrNotProp';
 
-export interface ChooseGridProps {
-  gridSize: number;
+export type ChooseGridProps = HookOrNotProp<'gridSize', number> & {
   onGridChosen: (p: { gridSize: number }) => void;
-}
+};
 
-export const ChooseGrid: FC<ChooseGridProps> = ({ gridSize, onGridChosen }) => {
+export const ChooseGrid: FC<ChooseGridProps> = (props) => {
+  const gridSize = props.gridSize ?? props.useGridSize();
   const [WrapDisplay, startMeasure] = usePerfObserver({ measureFromCreating: true });
 
   const inputCallback = (input: string): void => {
     startMeasure();
     const nextGridSize = parseInt(input, 10);
-    nextGridSize > 0 && onGridChosen({ gridSize: nextGridSize });
+    props.onGridChosen({ gridSize: nextGridSize > 0 ? nextGridSize : gridSize });
   };
 
   return (
