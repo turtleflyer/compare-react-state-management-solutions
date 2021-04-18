@@ -3,7 +3,7 @@
   "private": "true",
   "version": "0.3.0",
   "main": "PerformanceInfo.tsx",
-  "peerDependencies": {
+  "dependencies": {
     "@compare-react-state-management-solutions/use-perf-observer": "^0.2.0",
     "react": "^17.0.0"
   }
