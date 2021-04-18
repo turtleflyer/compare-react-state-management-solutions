@@ -29,6 +29,7 @@ export const App: FC = () => {
         <PixelsStage />
         <ControlPanel
           {...{
+            headline: 'Implemented using "react-redux" library',
             useRepaintRow,
             switchRowsHooks,
             usePaintRandomSinglePixel,
