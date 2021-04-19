@@ -1,8 +1,9 @@
+import { DEF_GRID_SIZE } from '@compare-react-state-management-solutions/control-panel';
 import { getNextKey } from '@compare-react-state-management-solutions/get-next-key';
 import { getRandomColor } from '@compare-react-state-management-solutions/random-color';
 import { useState } from 'react';
-import type { SetterOrUpdater } from 'recoil';
-import { atom, useSetRecoilState } from 'recoil';
+import type { RecoilState } from 'recoil';
+import { atom } from 'recoil';
 import { getNextAtom } from '../helpers/getNextAtom';
 import type {
   AlternativeForChoiceAtom,
@@ -10,7 +11,6 @@ import type {
   ChoiceForPixelAtom,
   ColorForAlternative,
   ColorForAlternativeAtom,
-  HoldColorForAlternativeAtom,
   PixelChoice,
 } from './StateInterface';
 import {
@@ -21,9 +21,7 @@ import {
   rememberActiveChoiceKey,
 } from './StateInterface';
 
-export const DEF_GRID_SIZE = 32;
 export const DEF_COLOR = '#AAAAAA';
-export const DEF_PIXELS_PERCENT_TO_PAINT = 30;
 
 export const createColorForAlternativeAtom = (choice: PixelChoice): Atom<ColorForAlternative> =>
   getNextAtom(
@@ -41,46 +39,37 @@ export const colorForAlternativePlaceholderAtom = atom({
   default: DEF_COLOR,
 }) as ColorForAlternativeAtom;
 
-export const gridSizeAtom = atom({ key: gridSizeKey, default: DEF_GRID_SIZE });
-
+let gridSizeAtom = atom({ key: gridSizeKey, default: DEF_GRID_SIZE });
+export const getGridSizeAtom = (): RecoilState<number> => gridSizeAtom;
 export const rememberActiveChoiceAtom = atom({ key: rememberActiveChoiceKey, default: 0 });
 
-export const alternativeForChoiceAtoms = ([0, 1] as const).map((c) =>
-  atom({
-    key: `${alternativeForChoiceKeyPrefix}-${c}`,
-    default: { atom: createColorForAlternativeAtom(c) },
-  })
-) as [AlternativeForChoiceAtom, AlternativeForChoiceAtom];
+const alternativeForChoiceKeys = ([0, 1] as const).map(
+  (c) => `${alternativeForChoiceKeyPrefix}-${c}`
+) as [string, string];
 
 export const createAlternativeForChoiceAtoms = (): [
   AlternativeForChoiceAtom,
   AlternativeForChoiceAtom
 ] =>
-  ([0, 1] as const).map((c) =>
-    atom({
-      key: `${alternativeForChoiceKeyPrefix}-${c}`,
-      default: { atom: createColorForAlternativeAtom(c) },
-    })
+  alternativeForChoiceKeys.map((key, i) =>
+    atom({ key: key, default: { atom: createColorForAlternativeAtom(i as PixelChoice) } })
   ) as [AlternativeForChoiceAtom, AlternativeForChoiceAtom];
+
+let alternativeForChoiceAtoms = createAlternativeForChoiceAtoms();
+
+export const getAlternativeForChoiceAtoms = (): [
+  AlternativeForChoiceAtom,
+  AlternativeForChoiceAtom
+] => alternativeForChoiceAtoms;
 
 const createFreshKey = (): string => getNextKey('refresh-key');
 
 export const useRefreshApp = (): [string, ({ gridSize }: { gridSize: number }) => void] => {
   const [refreshKey, createKey] = useState(createFreshKey);
 
-  const setAlternatives = alternativeForChoiceAtoms.map((a) =>
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useSetRecoilState(a)
-  ) as [SetterOrUpdater<HoldColorForAlternativeAtom>, SetterOrUpdater<HoldColorForAlternativeAtom>];
-
-  const setGridSize = useSetRecoilState(gridSizeAtom);
-
   const commandToCreateRefreshKey = ({ gridSize }: { gridSize: number }) => {
-    setAlternatives.every((setter, i) =>
-      setter({ atom: createColorForAlternativeAtom(i as PixelChoice) })
-    );
-
-    setGridSize(gridSize);
+    alternativeForChoiceAtoms = createAlternativeForChoiceAtoms();
+    gridSizeAtom = atom({ key: gridSizeKey, default: gridSize });
     createKey(createFreshKey);
   };
 

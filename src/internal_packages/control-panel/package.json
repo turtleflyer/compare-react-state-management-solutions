@@ -1,0 +1,9 @@
+{
+  "name": "@compare-react-state-management-solutions/control-panel",
+  "private": "true",
+  "version": "0.1.0",
+  "main": "ControlPanel.tsx",
+  "dependencies": {
+    "react": "^17.0.1"
+  }
+}
