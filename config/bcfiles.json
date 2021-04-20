@@ -1,6 +1,7 @@
 {
   "filesToIncludeToBuild": [
     "App.tsx",
+    "controlStage.ts",
     "helpers",
     "pixels-components",
     "State"
