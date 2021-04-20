@@ -1,15 +1,15 @@
+import { DEF_GRID_SIZE } from '@compare-react-state-management-solutions/control-panel';
 import { getNextKey } from '@compare-react-state-management-solutions/get-next-key';
 import { useState } from 'react';
 import { createStore, Store } from 'redux';
 import type { ActionReturn, ActionType } from './actionTypes';
 import { appReducer, initializeState } from './reducer';
-import { DEF_GRID_SIZE } from './State';
 import type { State } from './StateInterface';
 
 export const useCreateStore = (): [
   Store<State, ActionReturn<ActionType>>,
   string,
-  ({ gridSize }: { gridSize: number }) => void
+  (p: { gridSize: number }) => void
 ] => {
   const [store, provideStore] = useState<Store<State, ActionReturn<ActionType>>>(() => {
     initializeState(DEF_GRID_SIZE);

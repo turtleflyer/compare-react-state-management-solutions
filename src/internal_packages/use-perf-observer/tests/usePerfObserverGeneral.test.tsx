@@ -25,7 +25,7 @@ describe('Test usePerfObserver', () => {
     );
 
     expect(retrieve.status).toBe('pending');
-    expect(retrieve.data).toBe(null);
+    expect(retrieve.data).toBeNull();
 
     addPerfEntries([
       { entryType: 'mark', name: 'start-0', startTime: 1 },
@@ -35,7 +35,7 @@ describe('Test usePerfObserver', () => {
     ]);
 
     expect(retrieve.status).toBe('pending');
-    expect(retrieve.data).toBe(null);
+    expect(retrieve.data).toBeNull();
 
     act(() => {
       jest.advanceTimersByTime(5000);
@@ -47,6 +47,7 @@ describe('Test usePerfObserver', () => {
     act(retrieve.startMeasure!);
 
     expect(retrieve.status).toBe('pending');
+    expect(retrieve.data).toBeNull();
 
     addPerfEntries([
       { entryType: 'mark', name: 'start-1', startTime: 500 },
@@ -56,7 +57,7 @@ describe('Test usePerfObserver', () => {
     ]);
 
     expect(retrieve.status).toBe('pending');
-    expect(retrieve.data).toEqual({ TTI: 405, TBT: 250 });
+    expect(retrieve.data).toBeNull();
 
     act(() =>
       addPerfEntries(
@@ -74,6 +75,7 @@ describe('Test usePerfObserver', () => {
     act(retrieve.startMeasure!);
 
     expect(retrieve.status).toBe('pending');
+    expect(retrieve.data).toBeNull();
 
     addPerfEntries([
       { entryType: 'longtask', startTime: 8000, duration: 1000 },
@@ -82,6 +84,7 @@ describe('Test usePerfObserver', () => {
     ]);
 
     expect(retrieve.status).toBe('pending');
+    expect(retrieve.data).toBeNull();
 
     act(() => {
       jest.advanceTimersByTime(5000);
@@ -93,6 +96,7 @@ describe('Test usePerfObserver', () => {
     act(retrieve.startMeasure!);
 
     expect(retrieve.status).toBe('pending');
+    expect(retrieve.data).toBeNull();
 
     act(() =>
       addPerfEntries([
@@ -109,6 +113,7 @@ describe('Test usePerfObserver', () => {
     act(retrieve.startMeasure!);
 
     expect(retrieve.status).toBe('pending');
+    expect(retrieve.data).toBeNull();
 
     act(() =>
       addPerfEntries([
@@ -124,6 +129,7 @@ describe('Test usePerfObserver', () => {
     act(retrieve.startMeasure!);
 
     expect(retrieve.status).toBe('pending');
+    expect(retrieve.data).toBeNull();
 
     addPerfEntries([{ entryType: 'mark', name: 'start-1', startTime: 40200 }]);
 
@@ -143,6 +149,7 @@ describe('Test usePerfObserver', () => {
     act(retrieve.startMeasure!);
 
     expect(retrieve.status).toBe('pending');
+    expect(retrieve.data).toBeNull();
 
     act(() =>
       addPerfEntries([
@@ -159,10 +166,12 @@ describe('Test usePerfObserver', () => {
     act(retrieve.startMeasure!);
 
     expect(retrieve.status).toBe('pending');
+    expect(retrieve.data).toBeNull();
 
     addPerfEntries([{ entryType: 'mark', name: 'start-1', startTime: 100000 }]);
 
     expect(retrieve.status).toBe('pending');
+    expect(retrieve.data).toBeNull();
 
     act(() => {
       jest.advanceTimersByTime(5000);
@@ -174,10 +183,12 @@ describe('Test usePerfObserver', () => {
     rerender(<TestComponent {...{ retrieve }} />);
 
     expect(retrieve.status).toBe('never');
+    expect(retrieve.data).toBeNull();
 
     act(retrieve.startMeasure!);
 
     expect(retrieve.status).toBe('pending');
+    expect(retrieve.data).toBeNull();
 
     act(() =>
       addPerfEntries([
@@ -194,14 +205,17 @@ describe('Test usePerfObserver', () => {
     rerender(<TestComponent {...{ retrieve, name: 'fancy-name' }} />);
 
     expect(retrieve.status).toBe('never');
+    expect(retrieve.data).toBeNull();
 
     act(retrieve.startMeasure!);
 
     expect(retrieve.status).toBe('pending');
+    expect(retrieve.data).toBeNull();
 
     act(() => addPerfEntries([{ entryType: 'mark', name: 'fancy-name-1', startTime: 200000 }]));
 
     expect(retrieve.status).toBe('pending');
+    expect(retrieve.data).toBeNull();
 
     act(() => {
       jest.advanceTimersByTime(5000);

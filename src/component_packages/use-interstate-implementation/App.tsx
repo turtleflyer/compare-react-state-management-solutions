@@ -1,12 +1,10 @@
+import { ControlPanel } from '@compare-react-state-management-solutions/control-panel';
 import type { FC } from 'react';
 import React from 'react';
-import { ChooseGrid } from './controls/ChooseGrid';
-import { DisableEnableButtons } from './controls/DisableEnableButtons';
-import { MassivePaintButton } from './controls/MassivePaintButton';
-import { RandomPaintButton } from './controls/RandomPaintButton';
-import { RepaintButton } from './controls/RepaintButton';
+import { paintRandomPixels, paintRandomSinglePixel, repaintRow, switchRows } from './controlStage';
 import { PixelsStage } from './pixels-components/PixelsStage';
-import { useRefreshApp } from './State/State';
+import { readInterstate, useRefreshApp } from './State/State';
+import { gridSizeKey } from './State/StateInterface';
 
 export const App: FC = () => {
   const [refreshKey, commandToCreateRefreshKey] = useRefreshApp();
@@ -23,17 +21,17 @@ export const App: FC = () => {
       }}
     >
       <PixelsStage />
-      <div {...{ style: { margin: '10px 0 auto 5px' } }}>
-        <div {...{ style: { margin: '0 0 10px' } }}>
-          <strong>Implemented using &apos;use-interstate&apos; library</strong>
-        </div>
-        <RepaintButton />
-        <DisableEnableButtons />
-        <RandomPaintButton />
-        <MassivePaintButton />
-        <div {...{ style: { borderTop: '0.5px solid gray', margin: '15px 0' } }} />
-        <ChooseGrid {...{ beAwareWhenChosen: commandToCreateRefreshKey }} />
-      </div>
+      <ControlPanel
+        {...{
+          headline: 'Implemented using "use-interstate" library',
+          repaintRow,
+          switchRows,
+          paintRandomSinglePixel,
+          paintRandomPixels,
+          gridSize: readInterstate(gridSizeKey),
+          onGridChosen: commandToCreateRefreshKey,
+        }}
+      />
     </div>
   );
 };

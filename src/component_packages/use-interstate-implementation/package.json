@@ -1,16 +1,15 @@
 {
   "name": "@compare-react-state-management-solutions/use-interstate-component",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "private": "true",
   "main": "App.tsx",
   "dependencies": {
-    "@compare-react-state-management-solutions/control-components": "^0.2.0",
+    "@compare-react-state-management-solutions/control-panel": "^0.1.0",
     "@compare-react-state-management-solutions/draw-pixels": "^0.1.0",
     "@compare-react-state-management-solutions/get-next-key": "^0.1.0",
     "@compare-react-state-management-solutions/performance-info": "^0.3.0",
     "@compare-react-state-management-solutions/random-color": "^0.1.0",
     "@compare-react-state-management-solutions/use-perf-observer": "^0.2.0",
-    "@types/react": "^17.0.0",
     "react": "^17.0.0",
     "use-interstate": "*"
   }
