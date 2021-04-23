@@ -9,7 +9,7 @@
   ],
   "dependencies": {
     "@compare-react-state-management-solutions/build-component": "^0.1.0",
-    "@compare-react-state-management-solutions/control-panel": "^1.0.0",
+    "@compare-react-state-management-solutions/control-panel": "^2.0.0",
     "@compare-react-state-management-solutions/draw-pixels": "^0.1.0",
     "@compare-react-state-management-solutions/get-next-key": "^0.1.0",
     "@compare-react-state-management-solutions/performance-info": "^0.3.0",

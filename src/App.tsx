@@ -2,11 +2,11 @@ import { ControlPanel } from '@compare-react-state-management-solutions/control-
 import type { FC } from 'react';
 import React from 'react';
 import {
-  disableRow,
-  enableRow,
   paintRandomPixels,
   paintRandomSinglePixel,
   repaintRow,
+  useDisableRows,
+  useEnableRows,
 } from './controlStage';
 import { PixelsStage } from './pixels-components/PixelsStage';
 import { readInterstate, useRefreshApp } from './State/State';
@@ -31,8 +31,8 @@ export const App: FC = () => {
         {...{
           headline: 'Implemented using "use-interstate" library',
           repaintRow,
-          enableRow,
-          disableRow,
+          useDisableRows,
+          useEnableRows,
           paintRandomSinglePixel,
           paintRandomPixels,
           gridSize: readInterstate(gridSizeKey),

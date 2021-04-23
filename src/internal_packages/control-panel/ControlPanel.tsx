@@ -2,15 +2,18 @@ import type { FC } from 'react';
 import React from 'react';
 import type { ChooseGridProps } from './ChooseGrid';
 import { ChooseGrid } from './ChooseGrid';
+import { DisableOrEnableRowsButton, DisableOrEnableRowsHook } from './DisableOrEnableRowsButton';
 import type { HookOrNotProp } from './HookOrNotProp';
 import type { PaintRandomPixels } from './MassivePaintButton';
 import { MassivePaintButton } from './MassivePaintButton';
 import { MeasuredControlButton } from './MeasuredControlButton';
 
 export const DEF_GRID_SIZE = 32;
-type ControlPanelProps = { headline: string } & HookOrNotProp<'repaintRow'> &
-  HookOrNotProp<'disableRow'> &
-  HookOrNotProp<'enableRow'> &
+type ControlPanelProps = {
+  headline: string;
+  useDisableRows: DisableOrEnableRowsHook;
+  useEnableRows: DisableOrEnableRowsHook;
+} & HookOrNotProp<'repaintRow'> &
   HookOrNotProp<'paintRandomSinglePixel'> &
   PaintRandomPixels &
   ChooseGridProps;
@@ -29,20 +32,16 @@ export const ControlPanel: FC<ControlPanelProps> = (props) => {
             : { useOnPushButton: props.useRepaintRow }),
         }}
       />
-      <MeasuredControlButton
+      <DisableOrEnableRowsButton
         {...{
           name: 'disable odd rows',
-          ...(props.disableRow
-            ? { onPushButton: props.disableRow }
-            : { useOnPushButton: props.useDisableRow }),
+          useOnPushButton: props.useDisableRows,
         }}
       />
-      <MeasuredControlButton
+      <DisableOrEnableRowsButton
         {...{
           name: 'enable odd rows',
-          ...(props.enableRow
-            ? { onPushButton: props.enableRow }
-            : { useOnPushButton: props.useEnableRow }),
+          useOnPushButton: props.useEnableRows,
         }}
       />
       <MeasuredControlButton
