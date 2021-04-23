@@ -3,9 +3,9 @@ import type { CSSProperties, FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewPixelEntryAction } from '../State/actions';
-import { getAlternativeForChoice, getChoiceForPixel } from '../State/selectors';
+import { createSelector } from '../State/selectors';
 import { alternativeForChoiceKeys } from '../State/State';
-import type { ChoiceForPixel, PixelChoice, State } from '../State/StateInterface';
+import type { ChoiceForPixel, PixelChoice } from '../State/StateInterface';
 import { choiceForPixelPlaceholderKey } from '../State/StateInterface';
 import { storeKeysMethods } from '../State/storeKeysMethods';
 import { Pixel } from './Pixel';
@@ -20,10 +20,8 @@ export const ControlPixel: FC<{
     choiceForPixelPlaceholderKey
   );
 
-  const choice = useSelector((state: State) => getChoiceForPixel(state, choiceForPixel));
-  const possibleAltControl = useSelector((state: State) =>
-    getAlternativeForChoice(state, alternativeForChoiceKeys[choice])
-  );
+  const choice = useSelector(createSelector(choiceForPixel));
+  const possibleAltControl = useSelector(createSelector(alternativeForChoiceKeys[choice]));
   const dispatch = useDispatch();
 
   useEffect(() => {

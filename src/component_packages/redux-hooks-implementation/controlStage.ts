@@ -8,9 +8,8 @@ import {
   switchMultiplePixelsAction,
   switchPixelChoiceAction,
 } from './State/actions';
-import { getAlternativeForChoice, getGridSize } from './State/selectors';
+import { createSelector, getGridSize } from './State/selectors';
 import { alternativeForChoiceKeys } from './State/State';
-import type { State } from './State/StateInterface';
 import { storeKeysMethods } from './State/storeKeysMethods';
 
 const ONE_HUNDRED_PERCENT = 100;
@@ -26,9 +25,7 @@ export const useRepaintRow = (): (() => void) => {
 export const useDisableRows = (): (() => void) | undefined => {
   const dispatch = useDispatch();
 
-  const possibleColor = useSelector((state: State) =>
-    getAlternativeForChoice(state, alternativeForChoiceKeys[1])
-  );
+  const possibleColor = useSelector(createSelector(alternativeForChoiceKeys[1]));
 
   return possibleColor === null
     ? undefined
@@ -40,9 +37,7 @@ export const useDisableRows = (): (() => void) | undefined => {
 export const useEnableRows = (): (() => void) | undefined => {
   const dispatch = useDispatch();
 
-  const possibleColor = useSelector((state: State) =>
-    getAlternativeForChoice(state, alternativeForChoiceKeys[1])
-  );
+  const possibleColor = useSelector(createSelector(alternativeForChoiceKeys[1]));
 
   return possibleColor === null
     ? () => {
