@@ -35,28 +35,24 @@ export const repaintRow = (): void => {
   });
 };
 
-export const switchRows = [0, 1].map((row) => (): void => {
+export const disableRow = (): void => {
   setInterstate((state) => {
-    const altForChoiceKey = alternativeForChoiceKeys[row];
-    const colorForAltKey = state[altForChoiceKey];
+    const altForChoiceKey = alternativeForChoiceKeys[1];
 
-    if (colorForAltKey) {
-      return {
-        [altForChoiceKey]: null,
-        [rememberActiveChoiceKey]: (1 - row) as PixelChoice,
-      } as ColorForAlternativeState & AlternativeForChoiceState & RememberActiveChoiceState;
-    }
-
-    const colorForAlternativeForChoiceEntry = createColorForAlternativeForChoiceEntry(
-      row as PixelChoice
-    );
-
-    return {
-      ...colorForAlternativeForChoiceEntry,
-      [rememberActiveChoiceKey]: row as PixelChoice,
-    };
+    return state[altForChoiceKey] === null
+      ? {}
+      : ({ [altForChoiceKey]: null, [rememberActiveChoiceKey]: 0 } as AlternativeForChoiceState &
+          RememberActiveChoiceState);
   });
-}) as [() => void, () => void];
+};
+
+export const enableRow = (): void => {
+  setInterstate((state) => {
+    const altForChoiceKey = alternativeForChoiceKeys[1];
+
+    return state[altForChoiceKey] === null ? createColorForAlternativeForChoiceEntry(1) : {};
+  });
+};
 
 export const paintRandomSinglePixel = (): void => {
   setInterstate(
