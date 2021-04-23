@@ -50,7 +50,12 @@ export const appReducer = (state = initState, action: ActionReturn): State => {
     }
 
     case ActionType.ENABLE_ROW: {
-      return { ...state, ...createColorForAlternativeForChoiceEntry(1) };
+      return {
+        ...state,
+        ...(state[alternativeForChoiceKeys[1]] === null
+          ? createColorForAlternativeForChoiceEntry(1)
+          : null),
+      };
     }
 
     case ActionType.REPAINT_ROW: {
