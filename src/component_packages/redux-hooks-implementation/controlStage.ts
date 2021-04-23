@@ -8,7 +8,9 @@ import {
   switchMultiplePixelsAction,
   switchPixelChoiceAction,
 } from './State/actions';
-import { getGridSize } from './State/selectors';
+import { getAlternativeForChoice, getGridSize } from './State/selectors';
+import { alternativeForChoiceKeys } from './State/State';
+import type { State } from './State/StateInterface';
 import { storeKeysMethods } from './State/storeKeysMethods';
 
 const ONE_HUNDRED_PERCENT = 100;
@@ -21,20 +23,32 @@ export const useRepaintRow = (): (() => void) => {
   };
 };
 
-export const useDisableRow = (): (() => void) => {
+export const useDisableRows = (): (() => void) | undefined => {
   const dispatch = useDispatch();
 
-  return () => {
-    dispatch(disableRowAction());
-  };
+  const possibleColor = useSelector((state: State) =>
+    getAlternativeForChoice(state, alternativeForChoiceKeys[1])
+  );
+
+  return possibleColor === null
+    ? undefined
+    : () => {
+        dispatch(disableRowAction());
+      };
 };
 
-export const useEnableRow = (): (() => void) => {
+export const useEnableRows = (): (() => void) | undefined => {
   const dispatch = useDispatch();
 
-  return () => {
-    dispatch(enableRowAction());
-  };
+  const possibleColor = useSelector((state: State) =>
+    getAlternativeForChoice(state, alternativeForChoiceKeys[1])
+  );
+
+  return possibleColor === null
+    ? () => {
+        dispatch(enableRowAction());
+      }
+    : undefined;
 };
 
 export const usePaintRandomSinglePixel = (): (() => void) => {

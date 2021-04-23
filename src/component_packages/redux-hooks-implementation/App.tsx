@@ -3,8 +3,8 @@ import type { FC } from 'react';
 import React from 'react';
 import { Provider } from 'react-redux';
 import {
-  useDisableRow,
-  useEnableRow,
+  useDisableRows,
+  useEnableRows,
   useGridSize,
   usePaintRandomPixels,
   usePaintRandomSinglePixel,
@@ -32,8 +32,8 @@ export const App: FC = () => {
           {...{
             headline: 'Implemented using "react-redux" library',
             useRepaintRow,
-            useDisableRow,
-            useEnableRow,
+            useDisableRows,
+            useEnableRows,
             usePaintRandomSinglePixel,
             usePaintRandomPixels,
             useGridSize,
