@@ -1,6 +1,6 @@
 {
   "name": "redux-hooks-implementation",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "private": true,
   "workspaces": [
     "src/internal_packages/*",
@@ -9,12 +9,12 @@
   ],
   "dependencies": {
     "@compare-react-state-management-solutions/build-component": "^0.1.0",
-    "@compare-react-state-management-solutions/control-panel": "^0.1.0",
+    "@compare-react-state-management-solutions/control-panel": "^1.0.0",
     "@compare-react-state-management-solutions/draw-pixels": "^0.1.0",
     "@compare-react-state-management-solutions/get-next-key": "^0.1.0",
     "@compare-react-state-management-solutions/performance-info": "^0.3.0",
     "@compare-react-state-management-solutions/random-color": "^0.1.0",
-    "@compare-react-state-management-solutions/redux-hooks-component": "1.5.0",
+    "@compare-react-state-management-solutions/redux-hooks-component": "2.0.0",
     "@compare-react-state-management-solutions/use-perf-observer": "^0.2.0",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",

@@ -17,7 +17,7 @@ export const MeasuredControlButton: FC<MeasuredControlButtonProps> = (props) => 
     <div {...{ style: buttonContainerStyle }}>
       <Button
         {...{
-          callback: () => {
+          onClick: () => {
             startMeasure();
             onPushButton();
           },

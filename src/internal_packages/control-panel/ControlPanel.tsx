@@ -9,7 +9,8 @@ import { MeasuredControlButton } from './MeasuredControlButton';
 
 export const DEF_GRID_SIZE = 32;
 type ControlPanelProps = { headline: string } & HookOrNotProp<'repaintRow'> &
-  HookOrNotProp<'switchRows', [() => void, () => void], 'switchRowsHooks'> &
+  HookOrNotProp<'disableRow'> &
+  HookOrNotProp<'enableRow'> &
   HookOrNotProp<'paintRandomSinglePixel'> &
   PaintRandomPixels &
   ChooseGridProps;
@@ -28,16 +29,22 @@ export const ControlPanel: FC<ControlPanelProps> = (props) => {
             : { useOnPushButton: props.useRepaintRow }),
         }}
       />
-      {['enable/disable even rows', 'enable/disable odd rows'].map((name, i) =>
-        props.switchRows ? (
-          <MeasuredControlButton {...{ name, onPushButton: props.switchRows[i] }} key={name} />
-        ) : (
-          <MeasuredControlButton
-            {...{ name, useOnPushButton: props.switchRowsHooks[i] }}
-            key={name}
-          />
-        )
-      )}
+      <MeasuredControlButton
+        {...{
+          name: 'disable odd rows',
+          ...(props.disableRow
+            ? { onPushButton: props.disableRow }
+            : { useOnPushButton: props.useDisableRow }),
+        }}
+      />
+      <MeasuredControlButton
+        {...{
+          name: 'enable odd rows',
+          ...(props.enableRow
+            ? { onPushButton: props.enableRow }
+            : { useOnPushButton: props.useEnableRow }),
+        }}
+      />
       <MeasuredControlButton
         {...{
           name: 'paint random pixel',
