@@ -62,11 +62,13 @@ function useColorState(alt: HoldColorForAlternativeAtom | null): ManageColorStat
 export const useDisableRows = (): (() => void) | undefined => {
   const alternativeForChoiceAtoms = getAlternativeForChoiceAtoms();
   const [possibleAlternative, setAlternative] = useRecoilState(alternativeForChoiceAtoms[1]);
+  const setActiveChoice = useSetRecoilState(rememberActiveChoiceAtom);
 
   return possibleAlternative === null
     ? undefined
     : () => {
         setAlternative(null);
+        setActiveChoice(0);
       };
 };
 
