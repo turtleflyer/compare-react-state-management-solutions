@@ -11,6 +11,7 @@ const DEF_PIXELS_PERCENT_TO_PAINT = 30;
 const renderInfoContainerStyle: CSSProperties = { margin: '-5px 0 0 5px', height: 20 };
 
 type MassivePaintCallback = (percentage: number) => void;
+
 export type PaintRandomPixels =
   | {
       paintRandomPixels: MassivePaintCallback;
@@ -30,11 +31,11 @@ export const MassivePaintButton: FC<PaintRandomPixels> = (props) => {
   if (props.paintRandomPixels) {
     [paintRandomPixels, painterComponents] = [props.paintRandomPixels, []];
   } else {
-    const usePaintRandomPixelsResult = props.usePaintRandomPixels();
+    const checkResultForPaintRandomPixels = props.usePaintRandomPixels();
 
-    [paintRandomPixels, painterComponents] = Array.isArray(usePaintRandomPixelsResult)
-      ? usePaintRandomPixelsResult
-      : [usePaintRandomPixelsResult, []];
+    [paintRandomPixels, painterComponents] = Array.isArray(checkResultForPaintRandomPixels)
+      ? checkResultForPaintRandomPixels
+      : [checkResultForPaintRandomPixels, []];
   }
 
   const [percentsInput, setPercentsInput] = useState(`${DEF_PIXELS_PERCENT_TO_PAINT}`);
@@ -56,10 +57,17 @@ export const MassivePaintButton: FC<PaintRandomPixels> = (props) => {
   return (
     <>
       <div>
-        <div {...{ style: buttonContainerStyle }}>
-          <Button {...{ callback: startPaint, name: 'paint n% random pixels' }} />
-          <InputField {...{ label: 'n: ', value: percentsInput, onChange: percentCallback }} />
-        </div>
+        <InputField
+          {...{
+            label: 'n: ',
+            value: percentsInput,
+            onChange: percentCallback,
+            onSubmit: startPaint,
+            width: 40,
+            addStyle: buttonContainerStyle,
+            insertElementBefore: <Button {...{ type: 'submit', name: 'paint n% random pixels' }} />,
+          }}
+        />
         <div {...{ style: renderInfoContainerStyle }}>
           <WrapDisplay>
             <PerformanceInfo {...{ data: null }} />

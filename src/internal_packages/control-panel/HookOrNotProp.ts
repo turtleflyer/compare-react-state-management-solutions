@@ -13,5 +13,5 @@ export type HookOrNotProp<
       [P in PropName]?: undefined;
     } &
       {
-        [P in HookName]: T extends any[] ? { [I in keyof T]: () => T[I] } : () => T;
+        [P in HookName]: () => T;
       });
