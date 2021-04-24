@@ -3,7 +3,8 @@ import type { FC } from 'react';
 import React from 'react';
 import { RecoilRoot } from 'recoil';
 import {
-  switchRowsHooks,
+  useDisableRows,
+  useEnableRows,
   useGridSize,
   usePaintRandomPixels,
   usePaintRandomSinglePixel,
@@ -32,7 +33,8 @@ export const App: FC = () => {
           {...{
             headline: 'Implemented using "recoil" library',
             useRepaintRow,
-            switchRowsHooks,
+            useDisableRows,
+            useEnableRows,
             usePaintRandomSinglePixel,
             usePaintRandomPixels,
             useGridSize,

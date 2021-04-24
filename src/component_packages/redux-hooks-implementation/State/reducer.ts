@@ -45,28 +45,16 @@ export const appReducer = (state = initState, action: ActionReturn): State => {
       return { ...state, ...stateUpdate };
     }
 
-    case ActionType.SWITCH_ALTERNATIVES: {
-      const {
-        payload: { choice },
-      } = action;
+    case ActionType.DISABLE_ROW: {
+      return { ...state, [alternativeForChoiceKeys[1]]: null, rememberActiveChoice: 0 };
+    }
 
-      const altForChoiceKey = alternativeForChoiceKeys[choice];
-      const colorForAltKey = state[altForChoiceKey];
-
-      if (colorForAltKey) {
-        return {
-          ...state,
-          [altForChoiceKey]: null,
-          rememberActiveChoice: (1 - choice) as PixelChoice,
-        };
-      }
-
-      const colorForAlternativeForChoiceEntry = createColorForAlternativeForChoiceEntry(choice);
-
+    case ActionType.ENABLE_ROW: {
       return {
         ...state,
-        ...colorForAlternativeForChoiceEntry,
-        rememberActiveChoice: choice,
+        ...(state[alternativeForChoiceKeys[1]] === null
+          ? createColorForAlternativeForChoiceEntry(1)
+          : null),
       };
     }
 

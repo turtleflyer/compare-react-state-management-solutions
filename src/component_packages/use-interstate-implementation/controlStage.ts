@@ -6,9 +6,9 @@ import {
   createColorForAlternativeForChoiceEntry,
   readInterstate,
   setInterstate,
+  useInterstate,
 } from './State/State';
 import type {
-  AlternativeForChoiceState,
   ColorForAlternativeState,
   PixelChoice,
   RememberActiveChoiceState,
@@ -35,28 +35,26 @@ export const repaintRow = (): void => {
   });
 };
 
-export const switchRows = [0, 1].map((row) => (): void => {
-  setInterstate((state) => {
-    const altForChoiceKey = alternativeForChoiceKeys[row];
-    const colorForAltKey = state[altForChoiceKey];
+export const useDisableRows = (): (() => void) | undefined =>
+  useInterstate.acceptSelector(({ [alternativeForChoiceKeys[1]]: possibleColor }) =>
+    possibleColor === null
+      ? undefined
+      : () => {
+          setInterstate(() => ({
+            [alternativeForChoiceKeys[1]]: null,
+            [rememberActiveChoiceKey]: 0,
+          }));
+        }
+  );
 
-    if (colorForAltKey) {
-      return {
-        [altForChoiceKey]: null,
-        [rememberActiveChoiceKey]: (1 - row) as PixelChoice,
-      } as ColorForAlternativeState & AlternativeForChoiceState & RememberActiveChoiceState;
-    }
-
-    const colorForAlternativeForChoiceEntry = createColorForAlternativeForChoiceEntry(
-      row as PixelChoice
-    );
-
-    return {
-      ...colorForAlternativeForChoiceEntry,
-      [rememberActiveChoiceKey]: row as PixelChoice,
-    };
-  });
-}) as [() => void, () => void];
+export const useEnableRows = (): (() => void) | undefined =>
+  useInterstate.acceptSelector(({ [alternativeForChoiceKeys[1]]: possibleColor }) =>
+    possibleColor === null
+      ? () => {
+          setInterstate(() => createColorForAlternativeForChoiceEntry(1));
+        }
+      : undefined
+  );
 
 export const paintRandomSinglePixel = (): void => {
   setInterstate(

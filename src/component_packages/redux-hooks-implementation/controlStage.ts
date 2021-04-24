@@ -2,13 +2,14 @@ import { drawPixels } from '@compare-react-state-management-solutions/draw-pixel
 import { useDispatch, useSelector } from 'react-redux';
 import { drawPixelToPaint } from './helpers/drawPixelToPaint';
 import {
+  disableRowAction,
+  enableRowAction,
   repaintRowAction,
-  switchAlternativeAction,
   switchMultiplePixelsAction,
   switchPixelChoiceAction,
 } from './State/actions';
-import { getGridSize } from './State/selectors';
-import type { PixelChoice } from './State/StateInterface';
+import { createSelector, getGridSize } from './State/selectors';
+import { alternativeForChoiceKeys } from './State/State';
 import { storeKeysMethods } from './State/storeKeysMethods';
 
 const ONE_HUNDRED_PERCENT = 100;
@@ -21,13 +22,29 @@ export const useRepaintRow = (): (() => void) => {
   };
 };
 
-export const switchRowsHooks = [0, 1].map((row) => () => {
+export const useDisableRows = (): (() => void) | undefined => {
   const dispatch = useDispatch();
 
-  return () => {
-    dispatch(switchAlternativeAction(row as PixelChoice));
-  };
-}) as [() => () => void, () => () => void];
+  const possibleColor = useSelector(createSelector(alternativeForChoiceKeys[1]));
+
+  return possibleColor === null
+    ? undefined
+    : () => {
+        dispatch(disableRowAction());
+      };
+};
+
+export const useEnableRows = (): (() => void) | undefined => {
+  const dispatch = useDispatch();
+
+  const possibleColor = useSelector(createSelector(alternativeForChoiceKeys[1]));
+
+  return possibleColor === null
+    ? () => {
+        dispatch(enableRowAction());
+      }
+    : undefined;
+};
 
 export const usePaintRandomSinglePixel = (): (() => void) => {
   const dispatch = useDispatch();

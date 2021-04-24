@@ -1,6 +1,6 @@
 {
-  "name": "compare-two-implementations",
-  "version": "1.5.0",
+  "name": "compare-react-state-management-solutions",
+  "version": "2.0.0",
   "private": true,
   "homepage": "http://turtleflyer.github.io/compare-react-state-management-solutions",
   "workspaces": [

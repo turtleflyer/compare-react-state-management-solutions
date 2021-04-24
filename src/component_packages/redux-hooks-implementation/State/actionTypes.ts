@@ -4,7 +4,8 @@ export enum ActionType {
   CREATE_NEW_PIXEL_ENTRY = 'pixels/createNewPixelEntry',
   SWITCH_PIXEL_CHOICE = 'pixels/switchPixelChoice',
   SWITCH_MULTIPLE_PIXELS = 'pixels/switchMultiplePixels',
-  SWITCH_ALTERNATIVES = 'alternatives/switchAlternatives',
+  DISABLE_ROW = 'alternatives/disableRow',
+  ENABLE_ROW = 'alternatives/enableRow',
   REPAINT_ROW = 'alternatives/repaintRow',
 }
 
@@ -24,9 +25,6 @@ export type ActionReturn<T extends ActionType = ActionType> =
   | (T extends ActionType.SWITCH_MULTIPLE_PIXELS
       ? { type: T; payload: { pixels: ChoiceForPixel[] } }
       : never)
-  | (T extends ActionType.SWITCH_ALTERNATIVES ? { type: T; payload: AlternativesPayloads } : never)
+  | (T extends ActionType.DISABLE_ROW ? { type: T } : never)
+  | (T extends ActionType.ENABLE_ROW ? { type: T } : never)
   | (T extends ActionType.REPAINT_ROW ? { type: T } : never);
-
-interface AlternativesPayloads {
-  choice: PixelChoice;
-}

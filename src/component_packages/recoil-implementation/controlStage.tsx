@@ -59,35 +59,29 @@ function useColorState(alt: HoldColorForAlternativeAtom | null): ManageColorStat
   return useRecoilState(alt?.atom ?? colorForAlternativePlaceholderAtom);
 }
 
-export const switchRowsHooks = [0, 1].map((row) => () => {
-  const setActiveChoice = useSetRecoilState(rememberActiveChoiceAtom);
+export const useDisableRows = (): (() => void) | undefined => {
   const alternativeForChoiceAtoms = getAlternativeForChoiceAtoms();
+  const [possibleAlternative, setAlternative] = useRecoilState(alternativeForChoiceAtoms[1]);
 
-  type ManageAlternativesState = [
-    HoldColorForAlternativeAtom,
-    SetterOrUpdater<HoldColorForAlternativeAtom | null>
-  ];
+  return possibleAlternative === null
+    ? undefined
+    : () => {
+        setAlternative(null);
+      };
+};
 
-  const manageAlternativesState = alternativeForChoiceAtoms.map((atom) => useRecoilState(atom)) as [
-    ManageAlternativesState,
-    ManageAlternativesState
-  ];
+export const useEnableRows = (): (() => void) | undefined => {
+  const alternativeForChoiceAtoms = getAlternativeForChoiceAtoms();
+  const [possibleAlternative, setAlternative] = useRecoilState(alternativeForChoiceAtoms[1]);
 
-  return (): void => {
-    const prevAtom = manageAlternativesState[row][0];
-
-    if (prevAtom) {
-      manageAlternativesState[row][1](null);
-      setActiveChoice((1 - row) as PixelChoice);
-    } else {
-      manageAlternativesState[row][1]({
-        atom: createColorForAlternativeAtom(row as PixelChoice),
-      });
-
-      setActiveChoice(row);
-    }
-  };
-}) as [() => () => void, () => () => void];
+  return possibleAlternative === null
+    ? () => {
+        setAlternative({
+          atom: createColorForAlternativeAtom(1),
+        });
+      }
+    : undefined;
+};
 
 export const usePaintRandomSinglePixel = (): (() => void) => {
   const gridSizeAtom = getGridSizeAtom();

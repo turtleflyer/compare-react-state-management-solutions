@@ -24,11 +24,12 @@ export const switchMultiplePixelsAction = (
   payload: { pixels },
 });
 
-export const switchAlternativeAction = (
-  alternativeOfChoice: PixelChoice
-): ActionReturn<ActionType.SWITCH_ALTERNATIVES> => ({
-  type: ActionType.SWITCH_ALTERNATIVES,
-  payload: { choice: alternativeOfChoice },
+export const disableRowAction = (): ActionReturn<ActionType.DISABLE_ROW> => ({
+  type: ActionType.DISABLE_ROW,
+});
+
+export const enableRowAction = (): ActionReturn<ActionType.ENABLE_ROW> => ({
+  type: ActionType.ENABLE_ROW,
 });
 
 export const repaintRowAction = (): ActionReturn<ActionType.REPAINT_ROW> => ({

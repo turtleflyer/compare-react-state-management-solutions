@@ -1,27 +1,30 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { PerformanceInfo } from '@compare-react-state-management-solutions/performance-info';
 import { usePerfObserver } from '@compare-react-state-management-solutions/use-perf-observer';
 import type { FC } from 'react';
 import React from 'react';
 import { Button } from './Button';
-import { HookOrNotProp } from './HookOrNotProp';
 import { buttonContainerStyle } from './styles';
 
-type MeasuredControlButtonProps = { name: string } & HookOrNotProp<'onPushButton'>;
+export type DisableOrEnableRowsHook = () => (() => void) | undefined;
 
-export const MeasuredControlButton: FC<MeasuredControlButtonProps> = (props) => {
-  const onPushButton = props.onPushButton ?? props.useOnPushButton();
+export const DisableOrEnableRowsButton: FC<{
+  useOnPushButton: DisableOrEnableRowsHook;
+  name: 'disable odd rows' | 'enable odd rows';
+}> = ({ useOnPushButton, name }) => {
+  const onPushButton = useOnPushButton();
   const [WrapDisplay, startMeasure] = usePerfObserver();
 
   return (
     <div {...{ style: buttonContainerStyle }}>
       <Button
         {...{
-          onClick: () => {
-            startMeasure();
-            onPushButton();
-          },
-          name: props.name,
+          onClick:
+            onPushButton &&
+            (() => {
+              startMeasure();
+              onPushButton();
+            }),
+          name,
         }}
       />
       <WrapDisplay>
