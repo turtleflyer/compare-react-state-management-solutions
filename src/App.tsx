@@ -13,13 +13,13 @@ export const App: FC = () => (
       <div {...{ style: { margin: '5px 0 0 10px', fontWeight: 'bold' } }}>v.2.0.0</div>
       <div {...{ style: { display: 'flex', flexGrow: 1 } }}>
         <div {...{ style: appsContainerStyle }}>
+          <ReduxHooksApp />
+        </div>
+        <div {...{ style: appsContainerStyle }}>
           <RecoilApp />
         </div>
         <div {...{ style: appsContainerStyle }}>
           <UseInterstateApp />
-        </div>
-        <div {...{ style: appsContainerStyle }}>
-          <ReduxHooksApp />
         </div>
       </div>
     </div>
