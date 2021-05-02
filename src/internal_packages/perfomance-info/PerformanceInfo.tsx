@@ -1,11 +1,12 @@
 import type { MetricsComponentProps } from '@compare-react-state-management-solutions/use-perf-observer';
 import type { FC } from 'react';
-import React from 'react';
+import React, { useEffect } from 'react';
+import type { Tags } from './CollectDataProvider';
 import { DisplayInfo } from './DisplayInfo';
 import { InfoMark } from './InfoMark';
+import { usePerfInfoMethods } from './PerfInfoProvider';
 
 const AcknowledgeTip: FC = () => (
-  /* eslint-disable react/jsx-one-expression-per-line */
   <>
     <strong>TTI (Time to Interactive)</strong> metric measures the time until the main sub-resources
     of the page have rendered and it is capable of reliably responding to user input quickly
@@ -17,13 +18,24 @@ const AcknowledgeTip: FC = () => (
     chunks where the main thread was blocked for long enough to prevent input responsiveness
     (similar to <a {...{ href: 'https://web.dev/tbt/', target: 'blank' }}>that</a>).
   </>
-  /* eslint-enable */
 );
 
-export const PerformanceInfo: FC<MetricsComponentProps> = (props) => {
+export const PerformanceInfo: FC<MetricsComponentProps & { tags?: Tags }> = (props) => {
+  const { addData } = usePerfInfoMethods();
+
+  useEffect(() => {
+    if (props.status === 'done') {
+      const { data, tags = ['none'] } = props;
+      addData({ data, tags });
+    }
+  });
+
   switch (props.status) {
     case 'done': {
-      const { TTI, TBT } = props.data;
+      const {
+        data: { TTI, TBT },
+      } = props;
+
       return (
         <DisplayInfo
           {...{
@@ -49,10 +61,16 @@ export const PerformanceInfo: FC<MetricsComponentProps> = (props) => {
       );
 
     default:
-      break;
+      return <DisplayInfo />;
   }
-
-  return <DisplayInfo />;
 };
 
-export { TipsPoolProvider } from './TipsPoolProvider';
+export type { PerfInfoData } from './CollectDataProvider';
+
+export {
+  PerfInfoProvider,
+  useClearDataPool,
+  useGetDataPool,
+  useProvideModuleNameAndRef,
+  useGetRef,
+} from './PerfInfoProvider';

@@ -1,12 +1,24 @@
-import { TipsPoolProvider } from '@compare-react-state-management-solutions/performance-info';
-import type { FC } from 'react';
+import { PerfInfoProvider } from '@compare-react-state-management-solutions/performance-info';
+import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import { App } from './App';
+import { InfoPanel } from './internal_packages/info-panel/InfoPanel';
+
+const mainContainerStyle: CSSProperties = {
+  display: 'flex',
+  height: '100vh',
+  flexDirection: 'column',
+};
+
+const appContainerStyle: CSSProperties = { display: 'flex', flexGrow: 1 };
 
 export const AppInFlexBox: FC = () => (
-  <div {...{ style: { display: 'flex', height: '100vh' } }}>
-    <TipsPoolProvider>
-      <App />
-    </TipsPoolProvider>
+  <div {...{ style: mainContainerStyle }}>
+    <PerfInfoProvider>
+      <div {...{ style: appContainerStyle }}>
+        <App />
+      </div>
+      <InfoPanel />
+    </PerfInfoProvider>
   </div>
 );
