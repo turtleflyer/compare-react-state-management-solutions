@@ -29,7 +29,7 @@ const Inner: FC<{ settings: UsePerfMetricsSettings; retrieve: Retrieve }> = ({
 
   return (
     <Wrap>
-      <Display {...{ data: null, retrieve }} />
+      <Display {...{ retrieve }} />
     </Wrap>
   );
 };
