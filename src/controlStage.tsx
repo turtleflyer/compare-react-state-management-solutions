@@ -126,7 +126,6 @@ export const usePaintRandomPixels = (): [(percentage: number) => void, JSX.Eleme
 
       setPixelsToPaint(
         drawPixels(allPixelsNumber, pixelsNumberToPaint).map((p) => (
-          // eslint-disable-next-line react/jsx-key
           <PixelToPaint
             {...{
               pixelChoiceAtom:
@@ -135,6 +134,7 @@ export const usePaintRandomPixels = (): [(percentage: number) => void, JSX.Eleme
                   throw Error('It must be defined');
                 })(),
             }}
+            key={p}
           />
         ))
       );
