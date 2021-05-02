@@ -10,7 +10,8 @@ export type DisableOrEnableRowsHook = () => (() => void) | undefined;
 export const DisableOrEnableRowsButton: FC<{
   useOnPushButton: DisableOrEnableRowsHook;
   name: 'disable odd rows' | 'enable odd rows';
-}> = ({ useOnPushButton, name }) => {
+  moduleName: string;
+}> = ({ useOnPushButton, name, moduleName }) => {
   const onPushButton = useOnPushButton();
   const [WrapDisplay, startMeasure] = usePerfObserver();
 
@@ -28,7 +29,7 @@ export const DisableOrEnableRowsButton: FC<{
         }}
       />
       <WrapDisplay>
-        <PerformanceInfo {...{ data: null }} />
+        <PerformanceInfo {...{ tags: [moduleName, name] }} />
       </WrapDisplay>
     </div>
   );

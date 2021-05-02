@@ -6,7 +6,7 @@ import type { PixelChoice } from '../State/StateInterface';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
 import { PixelsLine } from './PixelsLine';
 
-export const PixelsStage: FC = () => {
+export const PixelsStage: FC<{ provideRef: (ref: HTMLElement) => void }> = ({ provideRef }) => {
   const gridSizeAtom = getGridSizeAtom();
   const gridSize = useRecoilValue(gridSizeAtom);
   const [lines, setLines] = useState<ReactElement | null>(null);
@@ -33,6 +33,7 @@ export const PixelsStage: FC = () => {
 
       storeAtomsMethods.reset();
       setLines(currentLine);
+      provideRef(e);
     }
   };
 

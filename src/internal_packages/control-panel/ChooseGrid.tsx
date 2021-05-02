@@ -9,9 +9,11 @@ import { buttonContainerStyle } from './styles';
 
 export type ChooseGridProps = HookOrNotProp<'gridSize', number> & {
   onGridChosen: (p: { gridSize: number }) => void;
+  moduleName: string;
 };
 
 export const ChooseGrid: FC<ChooseGridProps> = (props) => {
+  const { moduleName } = props;
   const gridSize = props.gridSize ?? props.useGridSize();
   const [inputValue, setInputValue] = useState(`${gridSize}`);
   const [WrapDisplay, startMeasure] = usePerfObserver({ measureFromCreating: true });
@@ -47,7 +49,7 @@ export const ChooseGrid: FC<ChooseGridProps> = (props) => {
         }}
       />
       <WrapDisplay>
-        <PerformanceInfo {...{ data: null }} />
+        <PerformanceInfo {...{ tags: [moduleName, gridSize] }} />
       </WrapDisplay>
     </div>
   );
