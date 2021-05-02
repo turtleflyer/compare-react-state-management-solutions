@@ -1,5 +1,6 @@
 import { ControlPanel } from '@compare-react-state-management-solutions/control-panel';
-import type { FC } from 'react';
+import { useProvideModuleNameAndRef } from '@compare-react-state-management-solutions/performance-info';
+import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import { Provider } from 'react-redux';
 import {
@@ -13,21 +14,26 @@ import {
 import { PixelsStage } from './pixels-components/PixelsStage';
 import { useCreateStore } from './State/store';
 
+export const MODULE_NAME = 'react-redux';
+
+const containerStyle: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  margin: '10px auto 1px 10px',
+};
+
 export const App: FC = () => {
   const [store, refreshKey, commandToCreateFreshStore] = useCreateStore();
+  const { provideModuleNameAndRef } = useProvideModuleNameAndRef();
+
+  const provideRef = (e: HTMLElement): void => {
+    provideModuleNameAndRef([MODULE_NAME, e]);
+  };
 
   return (
     <Provider {...{ store, key: refreshKey }}>
-      <div
-        {...{
-          style: {
-            display: 'flex',
-            flexDirection: 'column',
-            margin: '10px auto 10px 10px',
-          },
-        }}
-      >
-        <PixelsStage />
+      <div {...{ style: containerStyle }}>
+        <PixelsStage {...{ provideRef }} />
         <ControlPanel
           {...{
             headline: 'Implemented using "react-redux" library',
@@ -38,6 +44,7 @@ export const App: FC = () => {
             usePaintRandomPixels,
             useGridSize,
             onGridChosen: commandToCreateFreshStore,
+            moduleName: MODULE_NAME,
           }}
         />
       </div>

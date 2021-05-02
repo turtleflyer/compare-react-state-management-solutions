@@ -12,7 +12,7 @@ const renderInfoContainerStyle: CSSProperties = { margin: '-5px 0 0 5px', height
 
 type MassivePaintCallback = (percentage: number) => void;
 
-export type PaintRandomPixels =
+export type PaintRandomPixels = (
   | {
       paintRandomPixels: MassivePaintCallback;
       usePaintRandomPixels?: undefined;
@@ -22,9 +22,11 @@ export type PaintRandomPixels =
         | (() => MassivePaintCallback)
         | (() => [MassivePaintCallback, JSX.Element[]]);
       paintRandomPixels?: undefined;
-    };
+    }
+) & { moduleName: string };
 
 export const MassivePaintButton: FC<PaintRandomPixels> = (props) => {
+  const { moduleName } = props;
   let paintRandomPixels: MassivePaintCallback;
   let painterComponents: JSX.Element[];
 
@@ -42,12 +44,14 @@ export const MassivePaintButton: FC<PaintRandomPixels> = (props) => {
   const [WrapDisplay, startMeasure] = usePerfObserver();
 
   const startPaint = (): void => {
-    startMeasure();
     const percentsNumber = parseInt(percentsInput, 10);
 
-    percentsNumber >= 0 && percentsNumber <= ONE_HUNDRED_PERCENT
-      ? paintRandomPixels(percentsNumber)
-      : setPercentsInput('0');
+    if (percentsNumber >= 0 && percentsNumber <= ONE_HUNDRED_PERCENT) {
+      startMeasure();
+      paintRandomPixels(percentsNumber);
+    } else {
+      setPercentsInput('0');
+    }
   };
 
   const percentCallback = ({ target: { value: input } }: ChangeEvent<HTMLInputElement>): void => {
@@ -65,12 +69,15 @@ export const MassivePaintButton: FC<PaintRandomPixels> = (props) => {
             onSubmit: startPaint,
             width: 40,
             addStyle: buttonContainerStyle,
-            insertElementBefore: <Button {...{ type: 'submit', name: 'paint n% random pixels' }} />,
+            insertElementBefore: <Button {...{ type: 'submit', name: createName('n') }} />,
           }}
         />
         <div {...{ style: renderInfoContainerStyle }}>
           <WrapDisplay>
-            <PerformanceInfo {...{ data: null }} />
+            <PerformanceInfo
+              // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+              {...{ tags: [moduleName, createName(percentsInput.padStart(3, '0'))] }}
+            />
           </WrapDisplay>
         </div>
       </div>
@@ -78,3 +85,7 @@ export const MassivePaintButton: FC<PaintRandomPixels> = (props) => {
     </>
   );
 };
+
+function createName(insert: string | number): string {
+  return `paint ${insert}% random pixels`;
+}
