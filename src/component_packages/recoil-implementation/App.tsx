@@ -31,8 +31,8 @@ export const App: FC = () => {
   };
 
   return (
-    <RecoilRoot>
-      <div {...{ style: containerStyle, key: refreshKey }}>
+    <RecoilRoot {...{ key: refreshKey }}>
+      <div {...{ style: containerStyle }}>
         <PixelsStage {...{ provideRef }} />
         <ControlPanel
           {...{
