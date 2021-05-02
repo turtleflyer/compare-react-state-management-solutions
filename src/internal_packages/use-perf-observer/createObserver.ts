@@ -1,6 +1,11 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { MIN_LONG_TASK_DURATION, MIN_QUIET_WINDOW_DURATION } from './constParameters';
-import type { CreateObserverResult, Measures, MetricsComponentProps } from './PerfMetricsTypes';
+import type {
+  CreateObserverResult,
+  Measures,
+  MetricsComponentProps,
+  StartMeasure,
+} from './PerfMetricsTypes';
 
 function clearScheduledTimeout(
   tID: NodeJS.Timeout | undefined,
@@ -48,7 +53,7 @@ function calculateResult(
 export function createObserver(
   perfMarkName: string,
   updateChildrenProps: Dispatch<SetStateAction<MetricsComponentProps>>,
-  updateStartMeasureCallback: (startMeasureCallback: () => void) => void
+  updateStartMeasureCallback: (startMeasureCallback: StartMeasure) => void
 ): CreateObserverResult {
   let initRun = true;
   let evalTBT = 0;

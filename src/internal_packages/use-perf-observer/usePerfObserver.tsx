@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { MeasureComponent } from './MeasureComponent';
 import type {
-  EventTimingType,
   Measures,
   MetricsComponentProps,
+  StartMeasure,
   Status,
   UsePerfMetricsReturn,
   UsePerfMetricsSettings,
@@ -18,7 +18,7 @@ export function usePerfObserver(
   settings: Partial<UsePerfMetricsSettings> = {}
 ): UsePerfMetricsReturn {
   const actualSettings = { ...defSettings, ...settings };
-  const startMeasureRec = useRef<(event?: EventTimingType) => void>(() => undefined);
+  const startMeasureRec = useRef<StartMeasure>(() => undefined);
 
   const [usePerfObserverReturn] = useState<UsePerfMetricsReturn>([
     function WrapMetrics({ children }: WrapMetricsComponentChildren) {
