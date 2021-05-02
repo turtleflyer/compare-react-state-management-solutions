@@ -42,5 +42,14 @@ module.exports = {
     'no-param-reassign': ['error', { props: true }],
     '@typescript-eslint/no-shadow': 'error',
     'react/prop-types': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        ignoreRestSiblings: true,
+        args: 'after-used',
+        varsIgnorePattern: '^_',
+        argsIgnorePattern: '^_',
+      },
+    ],
   },
 };
