@@ -10,8 +10,12 @@ const mainContainerStyle: CSSProperties = {
   flexDirection: 'column',
 };
 
-const appContainerStyle: CSSProperties = { display: 'flex', flexGrow: 1 };
-
+const appContainerStyle: CSSProperties = {
+  display: 'flex',
+  flexGrow: 1,
+  justifyContent: 'space-between',
+  marginRight: 30,
+};
 export const AppInFlexBox: FC = () => (
   <div {...{ style: mainContainerStyle }}>
     <PerfInfoProvider>

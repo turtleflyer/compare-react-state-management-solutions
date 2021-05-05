@@ -18,7 +18,7 @@ export const MODULE_NAME = 'use-interstate';
 const containerStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  margin: '10px auto 1px 10px',
+  margin: '10px 10px 0',
 };
 
 export const App: FC = () => {
