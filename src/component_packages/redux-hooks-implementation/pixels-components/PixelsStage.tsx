@@ -6,7 +6,7 @@ import type { PixelChoice } from '../State/StateInterface';
 import { storeKeysMethods } from '../State/storeKeysMethods';
 import { PixelsLine } from './PixelsLine';
 
-export const PixelsStage: FC = () => {
+export const PixelsStage: FC<{ provideRef: (ref: HTMLElement) => void }> = ({ provideRef }) => {
   const gridSize = useSelector(getGridSize);
   const [lines, setLines] = useState<ReactElement | null>(null);
 
@@ -32,6 +32,7 @@ export const PixelsStage: FC = () => {
 
       storeKeysMethods.reset();
       setLines(currentLine);
+      provideRef(e);
     }
   };
 

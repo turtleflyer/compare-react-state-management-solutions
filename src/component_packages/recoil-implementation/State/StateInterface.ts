@@ -13,22 +13,21 @@ export type ColorForAlternativeState = Record<ColorForAlternative, ColorValue>;
 export type ColorForAlternative = typeof colorForAlternativeKeyPrefix;
 export type ColorValue = string;
 
-export const alternativeForChoiceKeyPrefix = 'alternative-for-choice';
+export const alternativeForChoiceKeyPrefixBase = 'alternative-for-choice';
 
 export type AlternativeForChoiceState = Record<
   AlternativeForChoice,
   HoldColorForAlternativeAtom | null
 >;
-export type AlternativeForChoice = typeof alternativeForChoiceKeyPrefix;
+export type AlternativeForChoice = typeof alternativeForChoiceKeyPrefixBase;
 export type HoldColorForAlternativeAtom = {
   atom: Atom<ColorForAlternative>;
 };
 
 export const gridSizeKey = 'grid-size';
 
-export interface GridSizeState {
-  [gridSizeKey]: number;
-}
+export type GridSizeState = Record<GridSize, number>;
+export type GridSize = typeof gridSizeKey;
 
 export const rememberActiveChoiceKey = 'remember-active-choice';
 

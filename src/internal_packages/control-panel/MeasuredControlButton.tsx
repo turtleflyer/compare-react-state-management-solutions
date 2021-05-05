@@ -7,9 +7,13 @@ import { Button } from './Button';
 import { HookOrNotProp } from './HookOrNotProp';
 import { buttonContainerStyle } from './styles';
 
-type MeasuredControlButtonProps = { name: string } & HookOrNotProp<'onPushButton'>;
+type MeasuredControlButtonProps = {
+  name: string;
+  moduleName: string;
+} & HookOrNotProp<'onPushButton'>;
 
 export const MeasuredControlButton: FC<MeasuredControlButtonProps> = (props) => {
+  const { name, moduleName } = props;
   const onPushButton = props.onPushButton ?? props.useOnPushButton();
   const [WrapDisplay, startMeasure] = usePerfObserver();
 
@@ -21,11 +25,11 @@ export const MeasuredControlButton: FC<MeasuredControlButtonProps> = (props) => 
             startMeasure();
             onPushButton();
           },
-          name: props.name,
+          name,
         }}
       />
       <WrapDisplay>
-        <PerformanceInfo {...{ data: null }} />
+        <PerformanceInfo {...{ tags: [moduleName, name] }} />
       </WrapDisplay>
     </div>
   );

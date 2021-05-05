@@ -1,5 +1,6 @@
 import { ControlPanel } from '@compare-react-state-management-solutions/control-panel';
-import type { FC } from 'react';
+import { useProvideModuleNameAndRef } from '@compare-react-state-management-solutions/performance-info';
+import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import { RecoilRoot } from 'recoil';
 import {
@@ -13,22 +14,26 @@ import {
 import { PixelsStage } from './pixels-components/PixelsStage';
 import { useRefreshApp } from './State/State';
 
+export const MODULE_NAME = 'recoil';
+
+const containerStyle: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  margin: '10px 10px 0',
+};
+
 export const App: FC = () => {
   const [refreshKey, commandToCreateRefreshKey] = useRefreshApp();
+  const { provideModuleNameAndRef } = useProvideModuleNameAndRef();
+
+  const provideRef = (e: HTMLElement): void => {
+    provideModuleNameAndRef([MODULE_NAME, e]);
+  };
 
   return (
-    <RecoilRoot>
-      <div
-        {...{
-          style: {
-            display: 'flex',
-            flexDirection: 'column',
-            margin: '10px auto 10px 10px',
-          },
-          key: refreshKey,
-        }}
-      >
-        <PixelsStage />
+    <RecoilRoot {...{ key: refreshKey }}>
+      <div {...{ style: containerStyle }}>
+        <PixelsStage {...{ provideRef }} />
         <ControlPanel
           {...{
             headline: 'Implemented using "recoil" library',
@@ -39,6 +44,7 @@ export const App: FC = () => {
             usePaintRandomPixels,
             useGridSize,
             onGridChosen: commandToCreateRefreshKey,
+            moduleName: MODULE_NAME,
           }}
         />
       </div>

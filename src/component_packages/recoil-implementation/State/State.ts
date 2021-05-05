@@ -6,6 +6,7 @@ import type { RecoilState } from 'recoil';
 import { atom } from 'recoil';
 import { getNextAtom } from '../helpers/getNextAtom';
 import type {
+  AlternativeForChoice,
   AlternativeForChoiceAtom,
   Atom,
   ChoiceForPixelAtom,
@@ -14,7 +15,7 @@ import type {
   PixelChoice,
 } from './StateInterface';
 import {
-  alternativeForChoiceKeyPrefix,
+  alternativeForChoiceKeyPrefixBase,
   choiceForPixelPlaceholderKey,
   colorForAlternativeKeyPrefix,
   gridSizeKey,
@@ -39,20 +40,20 @@ export const colorForAlternativePlaceholderAtom = atom({
   default: DEF_COLOR,
 }) as ColorForAlternativeAtom;
 
-let gridSizeAtom = atom({ key: gridSizeKey, default: DEF_GRID_SIZE });
+let gridSizeAtom = getNextAtom(gridSizeKey, DEF_GRID_SIZE);
 export const getGridSizeAtom = (): RecoilState<number> => gridSizeAtom;
 export const rememberActiveChoiceAtom = atom({ key: rememberActiveChoiceKey, default: 0 });
 
-const alternativeForChoiceKeys = ([0, 1] as const).map(
-  (c) => `${alternativeForChoiceKeyPrefix}-${c}`
-) as [string, string];
+const alternativeForChoiceKeyPrefixes = ([0, 1] as const).map(
+  (c) => `${alternativeForChoiceKeyPrefixBase}-${c}`
+) as [AlternativeForChoice, AlternativeForChoice];
 
 export const createAlternativeForChoiceAtoms = (): [
   AlternativeForChoiceAtom,
   AlternativeForChoiceAtom
 ] =>
-  alternativeForChoiceKeys.map((key, i) =>
-    atom({ key: key, default: { atom: createColorForAlternativeAtom(i as PixelChoice) } })
+  alternativeForChoiceKeyPrefixes.map((key, i) =>
+    getNextAtom(key, { atom: createColorForAlternativeAtom(i as PixelChoice) })
   ) as [AlternativeForChoiceAtom, AlternativeForChoiceAtom];
 
 let alternativeForChoiceAtoms = createAlternativeForChoiceAtoms();
@@ -69,7 +70,7 @@ export const useRefreshApp = (): [string, ({ gridSize }: { gridSize: number }) =
 
   const commandToCreateRefreshKey = ({ gridSize }: { gridSize: number }) => {
     alternativeForChoiceAtoms = createAlternativeForChoiceAtoms();
-    gridSizeAtom = atom({ key: gridSizeKey, default: gridSize });
+    gridSizeAtom = getNextAtom(gridSizeKey, gridSize);
     createKey(createFreshKey);
   };
 

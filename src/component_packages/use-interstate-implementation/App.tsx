@@ -1,5 +1,6 @@
 import { ControlPanel } from '@compare-react-state-management-solutions/control-panel';
-import type { FC } from 'react';
+import { useProvideModuleNameAndRef } from '@compare-react-state-management-solutions/performance-info';
+import type { CSSProperties, FC } from 'react';
 import React from 'react';
 import {
   paintRandomPixels,
@@ -12,21 +13,25 @@ import { PixelsStage } from './pixels-components/PixelsStage';
 import { readInterstate, useRefreshApp } from './State/State';
 import { gridSizeKey } from './State/StateInterface';
 
+export const MODULE_NAME = 'use-interstate';
+
+const containerStyle: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  margin: '10px 10px 0',
+};
+
 export const App: FC = () => {
   const [refreshKey, commandToCreateRefreshKey] = useRefreshApp();
+  const { provideModuleNameAndRef } = useProvideModuleNameAndRef();
+
+  const provideRef = (e: HTMLElement): void => {
+    provideModuleNameAndRef([MODULE_NAME, e]);
+  };
 
   return (
-    <div
-      {...{
-        style: {
-          display: 'flex',
-          flexDirection: 'column',
-          margin: '10px auto 10px 10px',
-        },
-        key: refreshKey,
-      }}
-    >
-      <PixelsStage />
+    <div {...{ style: containerStyle, key: refreshKey }}>
+      <PixelsStage {...{ provideRef }} />
       <ControlPanel
         {...{
           headline: 'Implemented using "use-interstate" library',
@@ -37,6 +42,7 @@ export const App: FC = () => {
           paintRandomPixels,
           gridSize: readInterstate(gridSizeKey),
           onGridChosen: commandToCreateRefreshKey,
+          moduleName: MODULE_NAME,
         }}
       />
     </div>

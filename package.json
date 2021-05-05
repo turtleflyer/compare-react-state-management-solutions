@@ -8,10 +8,11 @@
     "src/component_packages/*"
   ],
   "dependencies": {
+    "@compare-react-state-management-solutions/info-panel": "^1.0.0",
     "@compare-react-state-management-solutions/performance-info": "^0.3.0",
-    "@compare-react-state-management-solutions/recoil-component": "1.5.0",
-    "@compare-react-state-management-solutions/redux-hooks-component": "1.5.0",
-    "@compare-react-state-management-solutions/use-interstate-component": "1.5.0",
+    "@compare-react-state-management-solutions/recoil-component": "2.0.0",
+    "@compare-react-state-management-solutions/redux-hooks-component": "2.0.0",
+    "@compare-react-state-management-solutions/use-interstate-component": "2.0.0",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^13.1.3",

@@ -6,7 +6,7 @@ import { gridSizeKey } from '../State/StateInterface';
 import { storeKeysMethods } from '../State/storeKeysMethods';
 import { PixelsLine } from './PixelsLine';
 
-export const PixelsStage: FC = () => {
+export const PixelsStage: FC<{ provideRef: (ref: HTMLElement) => void }> = ({ provideRef }) => {
   const [lines, setLines] = useState<ReactElement | null>(null);
 
   const ref = (e: HTMLDivElement | null) => {
@@ -32,6 +32,7 @@ export const PixelsStage: FC = () => {
 
       storeKeysMethods.reset();
       setLines(currentLine);
+      provideRef(e);
     }
   };
 

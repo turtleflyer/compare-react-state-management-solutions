@@ -1,0 +1,11 @@
+{
+  "name": "@compare-react-state-management-solutions/info-panel",
+  "private": "true",
+  "version": "1.0.1",
+  "main": "InfoPanel.tsx",
+  "dependencies": {
+    "@compare-react-state-management-solutions/control-panel": "^3.0.0",
+    "@compare-react-state-management-solutions/performance-info": "^0.3.0",
+    "react": "^17.0.1"
+  }
+}

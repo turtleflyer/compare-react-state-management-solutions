@@ -9,23 +9,28 @@ import { MassivePaintButton } from './MassivePaintButton';
 import { MeasuredControlButton } from './MeasuredControlButton';
 
 export const DEF_GRID_SIZE = 32;
+
 type ControlPanelProps = {
   headline: string;
   useDisableRows: DisableOrEnableRowsHook;
   useEnableRows: DisableOrEnableRowsHook;
+  moduleName: string;
 } & HookOrNotProp<'repaintRow'> &
   HookOrNotProp<'paintRandomSinglePixel'> &
   PaintRandomPixels &
   ChooseGridProps;
 
 export const ControlPanel: FC<ControlPanelProps> = (props) => {
+  const { headline, moduleName, useDisableRows, useEnableRows } = props;
+
   return (
-    <div {...{ style: { margin: '10px 0 auto 5px' } }}>
+    <div {...{ style: { margin: '10px 0 0 5px' } }}>
       <div {...{ style: { margin: '0 0 10px' } }}>
-        <strong>{props.headline}</strong>
+        <strong>{headline}</strong>
       </div>
       <MeasuredControlButton
         {...{
+          moduleName,
           name: 're-paint',
           ...(props.repaintRow
             ? { onPushButton: props.repaintRow }
@@ -35,13 +40,15 @@ export const ControlPanel: FC<ControlPanelProps> = (props) => {
       <DisableOrEnableRowsButton
         {...{
           name: 'disable odd rows',
-          useOnPushButton: props.useDisableRows,
+          useOnPushButton: useDisableRows,
+          moduleName,
         }}
       />
       <DisableOrEnableRowsButton
         {...{
           name: 'enable odd rows',
-          useOnPushButton: props.useEnableRows,
+          useOnPushButton: useEnableRows,
+          moduleName,
         }}
       />
       <MeasuredControlButton
@@ -50,12 +57,16 @@ export const ControlPanel: FC<ControlPanelProps> = (props) => {
           ...(props.paintRandomSinglePixel
             ? { onPushButton: props.paintRandomSinglePixel }
             : { useOnPushButton: props.usePaintRandomSinglePixel }),
+          moduleName,
         }}
       />
       <MassivePaintButton
-        {...(props.paintRandomPixels
-          ? { paintRandomPixels: props.paintRandomPixels }
-          : { usePaintRandomPixels: props.usePaintRandomPixels })}
+        {...{
+          ...(props.paintRandomPixels
+            ? { paintRandomPixels: props.paintRandomPixels }
+            : { usePaintRandomPixels: props.usePaintRandomPixels }),
+          moduleName,
+        }}
       />
       <div {...{ style: { borderTop: '0.5px solid gray', margin: '15px 0' } }} />
       <ChooseGrid
@@ -64,8 +75,17 @@ export const ControlPanel: FC<ControlPanelProps> = (props) => {
           ...(props.gridSize === undefined
             ? { useGridSize: props.useGridSize }
             : { gridSize: props.gridSize }),
+          moduleName,
         }}
       />
     </div>
   );
 };
+
+export const CONTROL_ACTIONS_ORDER = [
+  'change grid',
+  're-paint',
+  'disable odd rows',
+  'enable odd rows',
+  'paint \\d+% random pixels',
+];
