@@ -87,5 +87,6 @@ export const CONTROL_ACTIONS_ORDER = [
   're-paint',
   'disable odd rows',
   'enable odd rows',
+  'paint random pixel',
   'paint \\d+% random pixels',
 ];
