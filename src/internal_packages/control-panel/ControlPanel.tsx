@@ -24,7 +24,7 @@ export const ControlPanel: FC<ControlPanelProps> = (props) => {
   const { headline, moduleName, useDisableRows, useEnableRows } = props;
 
   return (
-    <div {...{ style: { margin: '10px 0 25px 5px' } }}>
+    <div {...{ style: { margin: '10px 0 0 5px' } }}>
       <div {...{ style: { margin: '0 0 10px' } }}>
         <strong>{headline}</strong>
       </div>
