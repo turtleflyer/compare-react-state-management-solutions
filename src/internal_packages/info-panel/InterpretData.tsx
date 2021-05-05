@@ -1,6 +1,8 @@
-import { useGetRef } from '@compare-react-state-management-solutions/performance-info';
 import type { CSSProperties, FC } from 'react';
 import React from 'react';
+import { GridTitleRow } from './TableComponents/GridTitleRow';
+import { ModulesRow } from './TableComponents/ModulesRow';
+import { RecordRow } from './TableComponents/RecordRow';
 
 export type DataTable<
   M extends string = never,
@@ -32,121 +34,52 @@ export interface Data {
   avTBT: number;
 }
 
-const mainContainerStyle: CSSProperties = {
-  display: 'flex',
-};
-
-const columnContainerStyle: CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  borderRight: 'solid 0.5px',
-  width: 470,
-};
-
-const moduleNameStyle: CSSProperties = {
-  fontWeight: 200,
-  fontVariantCaps: 'small-caps',
-  fontSize: '1.2em',
-};
-
-const rowStyle: CSSProperties = { display: 'flex', borderBottom: 'solid 0.5px', paddingBottom: 3 };
-
-const headlineRowStyle: CSSProperties = {
-  ...rowStyle,
-  marginTop: 20,
-  fontStyle: 'italic',
-  fontWeight: 600,
-  fontSize: '0.9em',
-};
-
-const ulStyle: CSSProperties = { listStyleType: 'none', padding: 0, marginBlockStart: 0 };
-const recordStyle: CSSProperties = { width: '100%', paddingRight: 5 };
-const recordNameStyle: CSSProperties = { ...recordStyle, fontSize: '0.8em', lineHeight: '1.8em' };
-const recordNumbersStyle: CSSProperties = { ...recordStyle, textAlign: 'right' };
+const recordsContainerStyle: CSSProperties = { padding: 0, margin: '0 0 15px' };
 
 export const InterpretData: FC<{ data: DataTable; recordsOrder: string[] }> = ({
   data,
   recordsOrder,
 }) => {
   const moduleNames = Object.keys(data);
-  const { getRef } = useGetRef();
 
   const gridSizesTable = moduleNames.reduce((gridSizesT, m) => {
-    const respData = data as DataTable<string>;
-    const gSInModule = Object.keys(respData[m]);
+    const moduleTable = (data as DataTable<string>)[m];
 
-    return gSInModule.reduce((gST, g) => {
-      const respD = respData as DataTable<string, number>;
-      return {
+    return Object.keys(moduleTable).reduce(
+      (gST, g) => ({
         ...gST,
         [g]: eliminateDuplicates(
           ...(gST[g] ?? []),
-          ...Object.keys(respD[m][(g as unknown) as number])
+          ...Object.keys((moduleTable as ModuleEntry<number>)[(g as unknown) as number])
         ),
-      };
-    }, gridSizesT);
+      }),
+      gridSizesT
+    );
   }, {} as { [P in string]?: string[] });
 
   return (
-    <div {...{ style: mainContainerStyle }}>
-      {moduleNames.map((moduleN) => {
-        const column = (data as DataTable<string, number, string>)[moduleN];
+    <div {...{ style: { display: 'flex', flexDirection: 'column' } }}>
+      <ModulesRow {...{ moduleNames }} />
+      {Object.entries(gridSizesTable as { [P in string]: string[] }).map(
+        ([gridTitle, entryTitles]) => [
+          <GridTitleRow {...{ moduleNames, gridTitle }} key={gridTitle} />,
 
-        return (
-          <div
-            {...{
-              style: {
-                ...columnContainerStyle,
-                width: getRef(moduleN).getBoundingClientRect().width,
-              },
-            }}
-            key={moduleN}
-          >
-            <div {...{ style: moduleNameStyle }}>{moduleN}</div>
-            {Object.entries(gridSizesTable as { [P in string]: string[] }).map(
-              ([gridTitle, entryTitles]) => [
-                <div
-                  {...{
-                    style: headlineRowStyle,
-                  }}
-                  key={`headline-${gridTitle}`}
-                >
-                  <div {...{ style: recordStyle }}>{`Grid size: ${gridTitle}`}</div>
-                  <div {...{ style: recordNumbersStyle }}>average TTI (ms)</div>
-                  <div {...{ style: recordNumbersStyle }}>average TBT (ms)</div>
-                </div>,
-                <ul {...{ style: ulStyle }} key={`list-${gridTitle}`}>
-                  {(recordsOrder.length
-                    ? recordsOrder.reduce(
-                        (ordered, gauge) => [
-                          ...ordered,
-                          ...entryTitles.filter((t) => RegExp(gauge).test(t)).sort(),
-                        ],
-                        [] as string[]
-                      )
-                    : entryTitles.sort()
-                  ).map((t) => {
-                    const record = column[(gridTitle as unknown) as number][t];
-
-                    return (
-                      <li {...{ style: rowStyle }} key={`${t}`}>
-                        <div {...{ style: recordNameStyle }}>
-                          {`${t} `}
-                          <span
-                            {...{ style: { fontStyle: 'italic' } }}
-                          >{`(${record.TTIs.length} tries)`}</span>
-                        </div>
-                        <div {...{ style: recordNumbersStyle }}>{record.avTTI.toFixed(0)}</div>
-                        <div {...{ style: recordNumbersStyle }}>{record.avTBT.toFixed(0)}</div>
-                      </li>
-                    );
-                  })}
-                </ul>,
-              ]
-            )}
-          </div>
-        );
-      })}
+          <div {...{ style: recordsContainerStyle }} key={`list-${gridTitle}`}>
+            {(recordsOrder.length
+              ? recordsOrder.reduce(
+                  (ordered, gauge) => [
+                    ...ordered,
+                    ...entryTitles.filter((t) => RegExp(gauge).test(t)).sort(),
+                  ],
+                  [] as string[]
+                )
+              : entryTitles.sort()
+            ).map((entryTitle) => (
+              <RecordRow {...{ moduleNames, data, gridTitle, entryTitle }} key={entryTitle} />
+            ))}
+          </div>,
+        ]
+      )}
     </div>
   );
 };

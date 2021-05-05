@@ -7,16 +7,20 @@ import { InterpretData } from './InterpretData';
 import { TabHeader } from './TabHeader';
 
 const PANEL_COLOR = 'yellow';
-const mainContainerBaseStyle: CSSProperties = { position: 'fixed', bottom: -20 };
 
-const commonBoxBaseStyle: CSSProperties = {
-  backgroundColor: PANEL_COLOR,
-  overflow: 'auto',
-  padding: 10,
+const mainContainerBaseStyle: CSSProperties = {
+  position: 'relative',
 };
 
-const collapsedBoxStyle: CSSProperties = { ...commonBoxBaseStyle, height: 0 };
-const expandedBoxStyle: CSSProperties = { ...commonBoxBaseStyle, height: '50vh' };
+const commonBoxBaseStyle: CSSProperties = { backgroundColor: PANEL_COLOR };
+const collapsedBoxStyle: CSSProperties = { ...commonBoxBaseStyle, height: 0, overflow: 'hidden' };
+
+const expandedBoxStyle: CSSProperties = {
+  ...commonBoxBaseStyle,
+  padding: '10px 0',
+  height: '50vh',
+  overflow: 'auto',
+};
 
 export const InfoPanel: FC<{ recordsOrder?: string[] }> = ({
   recordsOrder = CONTROL_ACTIONS_ORDER,
@@ -25,18 +29,21 @@ export const InfoPanel: FC<{ recordsOrder?: string[] }> = ({
   const { getDataPool } = useGetDataPool();
   const [{ processData }] = useState(createProcessData);
   const processedData = processData(getDataPool());
+  const scrollWidth = document.documentElement.scrollWidth;
+  const clientWidth = document.documentElement.clientWidth;
+  const calcWidth = scrollWidth > clientWidth ? scrollWidth : '100%';
 
   return (
     <div
       {...{
-        style: { ...mainContainerBaseStyle, width: document.documentElement.scrollWidth },
+        style: { ...mainContainerBaseStyle, width: calcWidth, bottom: collapsed ? 1 : '50%' },
       }}
     >
       <TabHeader
         {...{
           name: 'stat',
           color: PANEL_COLOR,
-          addStyle: { margin: 'auto' },
+          addStyle: { margin: '0 auto', transform: 'translateY(1px)' },
           onClick: () => {
             setCollapsed((prevState) => !prevState);
           },
