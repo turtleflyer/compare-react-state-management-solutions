@@ -1,5 +1,5 @@
 import type { PerfInfoData } from '@compare-react-state-management-solutions/performance-info';
-import type { Data, DataTable, GridEntry, ModuleEntry } from './InterpretData';
+import type { Data, DataTable, GridEntry, ModuleEntry, PickRequired } from './InterpretData';
 
 export const createProcessData = (): {
   processData: (newData: PerfInfoData[]) => DataTable;
@@ -57,11 +57,13 @@ export const createProcessData = (): {
   function assureMethodsCreated<M extends string>(
     moduleName: M,
     dataMethodsT: DataMethodsTable
-  ): DataMethodsTable & { [P in M]: {} } {
+  ): PickRequired<DataMethodsTable, M> {
     return (dataMethodsT[moduleName]
       ? dataMethodsT
-      : { ...dataMethodsT, [moduleName]: createDataMethods(moduleName) }) as DataMethodsTable &
-      { [P in M]: {} };
+      : { ...dataMethodsT, [moduleName]: createDataMethods(moduleName) }) as PickRequired<
+      DataMethodsTable,
+      M
+    >;
   }
 
   function createDataMethods(moduleName: string): DataMethods {
