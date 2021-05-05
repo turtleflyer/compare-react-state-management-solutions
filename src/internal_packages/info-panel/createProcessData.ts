@@ -1,8 +1,17 @@
 import type { PerfInfoData } from '@compare-react-state-management-solutions/performance-info';
 import type { Data, DataTable, GridEntry, ModuleEntry, PickRequired } from './InterpretData';
 
+export interface NotCountFirstMeasureOptions {
+  notCountFirstMeasure: boolean;
+}
+
+export type ProcessData = (
+  newData: PerfInfoData[],
+  options: NotCountFirstMeasureOptions
+) => DataTable;
+
 export const createProcessData = (): {
-  processData: (newData: PerfInfoData[]) => DataTable;
+  processData: ProcessData;
 } => {
   type DataMethodsTable = { [P in string]?: DataMethods };
 
@@ -18,13 +27,13 @@ export const createProcessData = (): {
   initTable();
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  const processData = (newData: PerfInfoData[]): DataTable => {
+  const processData: ProcessData = (newData, options) => {
     newData.length === 0 && initTable();
     const newSlice = newData.slice(positionIndex);
     positionIndex = newData.length;
 
     newSlice.forEach((data) => {
-      [dataTable, dataMethodsTable] = dataPipeline(data, [dataTable, dataMethodsTable]);
+      [dataTable, dataMethodsTable] = dataPipeline(data, [dataTable, dataMethodsTable], options);
     });
 
     return dataTable;
@@ -40,13 +49,14 @@ export const createProcessData = (): {
 
   function dataPipeline(
     data: PerfInfoData,
-    [dataT, dataMethodsT]: [DataTable, DataMethodsTable]
+    [dataT, dataMethodsT]: [DataTable, DataMethodsTable],
+    options: NotCountFirstMeasureOptions
   ): [DataTable, DataMethodsTable] {
     const {
       tags: [moduleName],
     } = data;
 
-    const nextDataMethT = assureMethodsCreated(moduleName, dataMethodsT);
+    const nextDataMethT = assureMethodsCreated(moduleName, dataMethodsT, options);
     const {
       [moduleName]: { addData },
     } = nextDataMethT;
@@ -56,18 +66,23 @@ export const createProcessData = (): {
 
   function assureMethodsCreated<M extends string>(
     moduleName: M,
-    dataMethodsT: DataMethodsTable
+    dataMethodsT: DataMethodsTable,
+    options: NotCountFirstMeasureOptions
   ): PickRequired<DataMethodsTable, M> {
     return (dataMethodsT[moduleName]
       ? dataMethodsT
-      : { ...dataMethodsT, [moduleName]: createDataMethods(moduleName) }) as PickRequired<
+      : { ...dataMethodsT, [moduleName]: createDataMethods(moduleName, options) }) as PickRequired<
       DataMethodsTable,
       M
     >;
   }
 
-  function createDataMethods(moduleName: string): DataMethods {
+  function createDataMethods(
+    moduleName: string,
+    { notCountFirstMeasure }: NotCountFirstMeasureOptions
+  ): DataMethods {
     let currentGrid: number | null = null;
+    let firstRun = true;
 
     const addData: AddData = (data, dataT) => {
       const {
@@ -90,6 +105,12 @@ export const createProcessData = (): {
 
       if (currentGrid === null) {
         throw Error('there is no information about the current grid size');
+      }
+
+      if (firstRun && notCountFirstMeasure) {
+        firstRun = false;
+
+        return { ...dataT, [moduleName]: {} };
       }
 
       const { [moduleName]: moduleEntry = {} as ModuleEntry } = dataT;

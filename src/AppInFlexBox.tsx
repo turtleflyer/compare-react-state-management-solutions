@@ -30,7 +30,7 @@ export const AppInFlexBox: FC = () => (
         <RecoilApp />
         <UseInterstateApp />
       </div>
-      <InfoPanel />
+      <InfoPanel {...{ options: { notCountFirstMeasure: true } }} />
     </PerfInfoProvider>
   </div>
 );

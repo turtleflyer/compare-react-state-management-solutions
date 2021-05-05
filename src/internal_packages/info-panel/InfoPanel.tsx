@@ -2,7 +2,7 @@ import { CONTROL_ACTIONS_ORDER } from '@compare-react-state-management-solutions
 import { useGetDataPool } from '@compare-react-state-management-solutions/performance-info';
 import type { CSSProperties, FC } from 'react';
 import React, { useState } from 'react';
-import { createProcessData } from './createProcessData';
+import { createProcessData, NotCountFirstMeasureOptions } from './createProcessData';
 import { InterpretData } from './InterpretData';
 import { TabHeader } from './TabHeader';
 
@@ -22,13 +22,16 @@ const expandedBoxStyle: CSSProperties = {
   overflow: 'auto',
 };
 
-export const InfoPanel: FC<{ recordsOrder?: string[] }> = ({
+export type InfoPanelOptions = NotCountFirstMeasureOptions;
+
+export const InfoPanel: FC<{ recordsOrder?: string[]; options?: InfoPanelOptions }> = ({
   recordsOrder = CONTROL_ACTIONS_ORDER,
+  options = { notCountFirstMeasure: false },
 }) => {
   const [collapsed, setCollapsed] = useState(true);
   const { getDataPool } = useGetDataPool();
   const [{ processData }] = useState(createProcessData);
-  const processedData = processData(getDataPool());
+  const processedData = processData(getDataPool(), options);
   const scrollWidth = document.documentElement.scrollWidth;
   const clientWidth = document.documentElement.clientWidth;
   const calcWidth = scrollWidth > clientWidth ? scrollWidth : '100%';
