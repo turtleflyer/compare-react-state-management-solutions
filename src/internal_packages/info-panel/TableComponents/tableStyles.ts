@@ -2,7 +2,6 @@ import type { CSSProperties } from 'react';
 
 export const rowContainerStyle: CSSProperties = {
   display: 'flex',
-  justifyContent: 'space-between',
   marginRight: 30,
 };
 

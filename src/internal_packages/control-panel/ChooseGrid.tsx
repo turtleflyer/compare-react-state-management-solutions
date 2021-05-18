@@ -1,4 +1,7 @@
-import { PerformanceInfo } from '@compare-react-state-management-solutions/performance-info';
+import {
+  PerformanceInfo,
+  useAddRef,
+} from '@compare-react-state-management-solutions/performance-info';
 import { usePerfObserver } from '@compare-react-state-management-solutions/use-perf-observer';
 import type { ChangeEventHandler, FC } from 'react';
 import React, { useState } from 'react';
@@ -17,6 +20,7 @@ export const ChooseGrid: FC<ChooseGridProps> = (props) => {
   const gridSize = props.gridSize ?? props.useGridSize();
   const [inputValue, setInputValue] = useState(`${gridSize}`);
   const [WrapDisplay, startMeasure] = usePerfObserver({ measureFromCreating: true });
+  const addRef = useAddRef();
 
   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setInputValue(e.target.value);
@@ -29,7 +33,7 @@ export const ChooseGrid: FC<ChooseGridProps> = (props) => {
   };
 
   return (
-    <div>
+    <div {...{ ref: addRef }}>
       <InputField
         {...{
           label: 'input grid size: ',
