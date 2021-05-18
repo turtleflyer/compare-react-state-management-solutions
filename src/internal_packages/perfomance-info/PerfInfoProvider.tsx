@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import React, { useContext } from 'react';
+import { BlockingParametersProvider } from './BlockingParametersProvider';
 import type { GetDataPoolContextValue, PerfInfoDataMethods } from './CollectDataProvider';
 import {
   CollectDataProvider,
@@ -14,7 +15,9 @@ import { RefsContext, RefsDataProvider } from './RefsDataProvider';
 export const PerfInfoProvider: FC<{ popupDelay?: number }> = ({ popupDelay = 100, children }) => (
   <InfotipsProvider {...{ popupDelay }}>
     <CollectDataProvider>
-      <RefsDataProvider>{children}</RefsDataProvider>
+      <RefsDataProvider>
+        <BlockingParametersProvider>{children}</BlockingParametersProvider>
+      </RefsDataProvider>
     </CollectDataProvider>
   </InfotipsProvider>
 );

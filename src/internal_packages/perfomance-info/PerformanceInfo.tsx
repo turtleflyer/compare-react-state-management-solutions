@@ -1,6 +1,7 @@
 import type { MetricsComponentProps } from '@compare-react-state-management-solutions/use-perf-observer';
 import type { FC } from 'react';
 import React, { useEffect } from 'react';
+import { useSetToBlock } from './BlockingParametersProvider';
 import type { Tags } from './CollectDataProvider';
 import { DisplayInfo } from './DisplayInfo';
 import { InfoMark } from './InfoMark';
@@ -22,11 +23,32 @@ const AcknowledgeTip: FC = () => (
 
 export const PerformanceInfo: FC<MetricsComponentProps & { tags?: Tags }> = (props) => {
   const { addData } = usePerfInfoMethods();
+  const setToBlock = useSetToBlock();
 
   useEffect(() => {
-    if (props.status === 'done') {
-      const { data, tags = ['none'] } = props;
-      addData({ data, tags });
+    switch (props.status) {
+      case 'done':
+        {
+          const { data, tags = ['none'] } = props;
+          addData({ data, tags });
+        }
+
+        setToBlock(false);
+
+        break;
+
+      case 'pending':
+        setToBlock(true);
+
+        break;
+
+      case 'error':
+        setToBlock(false);
+
+        break;
+
+      default:
+        setToBlock(false);
     }
   });
 
@@ -65,12 +87,13 @@ export const PerformanceInfo: FC<MetricsComponentProps & { tags?: Tags }> = (pro
   }
 };
 
+export { useAddRef, useToBlock } from './BlockingParametersProvider';
+export { BlockingSpinner } from './BlockingSpinner';
 export type { PerfInfoData } from './CollectDataProvider';
-
 export {
   PerfInfoProvider,
   useClearDataPool,
   useGetDataPool,
-  useProvideModuleNameAndRef,
   useGetRef,
+  useProvideModuleNameAndRef,
 } from './PerfInfoProvider';
