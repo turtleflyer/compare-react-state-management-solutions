@@ -1,4 +1,7 @@
-import { PerformanceInfo } from '@compare-react-state-management-solutions/performance-info';
+import {
+  PerformanceInfo,
+  useAddRef,
+} from '@compare-react-state-management-solutions/performance-info';
 import { usePerfObserver } from '@compare-react-state-management-solutions/use-perf-observer';
 import type { FC } from 'react';
 import React from 'react';
@@ -14,9 +17,10 @@ export const DisableOrEnableRowsButton: FC<{
 }> = ({ useOnPushButton, name, moduleName }) => {
   const onPushButton = useOnPushButton();
   const [WrapDisplay, startMeasure] = usePerfObserver();
+  const addRef = useAddRef();
 
   return (
-    <div {...{ style: buttonContainerStyle }}>
+    <div {...{ style: buttonContainerStyle, ref: addRef }}>
       <Button
         {...{
           onClick:

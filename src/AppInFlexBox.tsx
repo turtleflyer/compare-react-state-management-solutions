@@ -1,15 +1,26 @@
-import { PerfInfoProvider } from '@compare-react-state-management-solutions/performance-info';
+import {
+  BlockingSpinner,
+  PerfInfoProvider,
+} from '@compare-react-state-management-solutions/performance-info';
 import { App as RecoilApp } from '@compare-react-state-management-solutions/recoil-component';
 import { App as ReduxHooksApp } from '@compare-react-state-management-solutions/redux-hooks-component';
 import { App as UseInterstateApp } from '@compare-react-state-management-solutions/use-interstate-component';
 import type { CSSProperties, FC } from 'react';
-import React from 'react';
-import { InfoPanel } from './internal_packages/info-panel/InfoPanel';
+import React, { useState } from 'react';
+import { InfoPanel, TAB_HEADER_HEIGHT } from './internal_packages/info-panel/InfoPanel';
+import { version } from '../package.json';
+
+const outerContainerStyle: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+};
 
 const mainContainerStyle: CSSProperties = {
+  position: 'relative',
   display: 'flex',
-  height: 'calc(100vh - 0px)',
   flexDirection: 'column',
+  paddingBottom: TAB_HEADER_HEIGHT,
 };
 
 const versionInfoStyle: CSSProperties = { margin: '5px 0 0 10px', fontWeight: 'bold' };
@@ -17,20 +28,49 @@ const versionInfoStyle: CSSProperties = { margin: '5px 0 0 10px', fontWeight: 'b
 const appContainerStyle: CSSProperties = {
   display: 'flex',
   flexGrow: 1,
-  justifyContent: 'space-between',
   marginRight: 30,
 };
 
-export const AppInFlexBox: FC = () => (
-  <div {...{ style: mainContainerStyle }}>
-    <div {...{ style: versionInfoStyle }}>v.2.0.0</div>
+export const AppInFlexBox: FC = () => {
+  const [viewportHeight, setViewportHeight] = useState<number | null>(null);
+
+  const calculateViewportHeight = (element: HTMLDivElement | null) => {
+    if (viewportHeight === null && element) {
+      const { documentElement } = document;
+      documentElement.style.overflowX = 'scroll';
+      setViewportHeight(documentElement.clientHeight);
+      documentElement.style.overflowX = 'auto';
+    }
+  };
+
+  return viewportHeight === null ? (
+    <div {...{ style: { visibility: 'hidden' }, ref: calculateViewportHeight }} />
+  ) : (
     <PerfInfoProvider>
-      <div {...{ style: appContainerStyle }}>
-        <ReduxHooksApp />
-        <RecoilApp />
-        <UseInterstateApp />
+      <div {...{ style: outerContainerStyle }}>
+        <div
+          {...{
+            style: { ...mainContainerStyle, height: viewportHeight },
+          }}
+        >
+          <div {...{ style: versionInfoStyle }}>{`v.${version}`}</div>
+
+          <div {...{ style: appContainerStyle }}>
+            <ReduxHooksApp />
+            <RecoilApp />
+            <UseInterstateApp />
+          </div>
+
+          <BlockingSpinner {...{ zIndex: 10 }} />
+        </div>
+
+        <InfoPanel
+          {...{
+            options: { notCountFirstMeasure: true },
+            zIndex: 20,
+          }}
+        />
       </div>
-      <InfoPanel {...{ options: { notCountFirstMeasure: true } }} />
     </PerfInfoProvider>
-  </div>
-);
+  );
+};
