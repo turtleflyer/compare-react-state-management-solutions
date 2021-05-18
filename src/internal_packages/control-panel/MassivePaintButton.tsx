@@ -1,4 +1,7 @@
-import { PerformanceInfo } from '@compare-react-state-management-solutions/performance-info';
+import {
+  PerformanceInfo,
+  useAddRef,
+} from '@compare-react-state-management-solutions/performance-info';
 import { usePerfObserver } from '@compare-react-state-management-solutions/use-perf-observer';
 import type { ChangeEvent, CSSProperties, FC } from 'react';
 import React, { useState } from 'react';
@@ -29,6 +32,7 @@ export const MassivePaintButton: FC<PaintRandomPixels> = (props) => {
   const { moduleName } = props;
   let paintRandomPixels: MassivePaintCallback;
   let painterComponents: JSX.Element[];
+  const addRef = useAddRef();
 
   if (props.paintRandomPixels) {
     [paintRandomPixels, painterComponents] = [props.paintRandomPixels, []];
@@ -60,7 +64,7 @@ export const MassivePaintButton: FC<PaintRandomPixels> = (props) => {
 
   return (
     <>
-      <div>
+      <div {...{ ref: addRef }}>
         <InputField
           {...{
             label: 'n: ',

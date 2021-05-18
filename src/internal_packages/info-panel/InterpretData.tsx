@@ -8,24 +8,28 @@ export type DataTable<
   M extends string = never,
   G extends number = never,
   D extends string = never
-> = {
-  [P in M]: ModuleEntry<G, D>;
-} &
+> = PickRequired<
   {
-    [P in string]?: ModuleEntry;
-  };
+    [P in string]?: ModuleEntry<G, D>;
+  },
+  M
+>;
 
-export type ModuleEntry<G extends number = never, D extends string = never> = {
-  [P in G]: GridEntry<D>;
-} &
+export type ModuleEntry<G extends number = never, D extends string = never> = PickRequired<
   {
-    [P in number]?: GridEntry;
-  };
+    [P in number]?: GridEntry<D>;
+  },
+  G
+>;
 
-export type GridEntry<D extends string = never> = { [P in D]: Data } &
+export type GridEntry<D extends string = never> = PickRequired<
   {
     [P in string]?: Data;
-  };
+  },
+  D
+>;
+
+export type PickRequired<T, K> = T & { [P in keyof T & K]: {} };
 
 export interface Data {
   TTIs: number[];
