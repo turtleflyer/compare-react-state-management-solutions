@@ -1,6 +1,6 @@
 import { getNextKey } from '@compare-react-state-management-solutions/get-next-key';
 import type { FC } from 'react';
-import { cloneElement, useEffect, useMemo, useState } from 'react';
+import { cloneElement, useEffect, useState } from 'react';
 import { createObserverCallback } from './createObserverCallback';
 import type {
   EffectPayload,
@@ -134,12 +134,7 @@ const createUsePerfMetricReturn = (
       }
     });
 
-    const nestedComponentWithProps = useMemo(
-      () => cloneElement(nestedComponent, childrenProps),
-      [childrenProps] // eslint-disable-line react-hooks/exhaustive-deps
-    );
-
-    return nestedComponentWithProps;
+    return cloneElement(nestedComponent, childrenProps);
   };
 
   const perfMetricReturn = { WrapMetricConsumer, measurePerformance };
@@ -171,4 +166,5 @@ export type {
   MeasurePerformanceSettings,
   EffectPayload,
   MeasurePerformance,
+  WrapMetricConsumerProps,
 };
