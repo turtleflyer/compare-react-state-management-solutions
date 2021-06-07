@@ -2,7 +2,7 @@ import {
   PerformanceInfo,
   useAddRef,
 } from '@compare-react-state-management-solutions/performance-info';
-import { usePerfObserver } from '@compare-react-state-management-solutions/use-perf-observer';
+import { usePerfMetric } from '@compare-react-state-management-solutions/use-perf-metric';
 import type { ChangeEvent, CSSProperties, FC } from 'react';
 import React, { useState } from 'react';
 import { Button } from './Button';
@@ -45,13 +45,13 @@ export const MassivePaintButton: FC<PaintRandomPixels> = (props) => {
   }
 
   const [percentsInput, setPercentsInput] = useState(`${DEF_PIXELS_PERCENT_TO_PAINT}`);
-  const [WrapDisplay, startMeasure] = usePerfObserver();
+  const { WrapMetricConsumer, measurePerformance } = usePerfMetric();
 
   const startPaint = (): void => {
     const percentsNumber = parseInt(percentsInput, 10);
 
     if (percentsNumber >= 0 && percentsNumber <= ONE_HUNDRED_PERCENT) {
-      startMeasure();
+      measurePerformance();
       paintRandomPixels(percentsNumber);
     } else {
       setPercentsInput('0');
@@ -77,12 +77,12 @@ export const MassivePaintButton: FC<PaintRandomPixels> = (props) => {
           }}
         />
         <div {...{ style: renderInfoContainerStyle }}>
-          <WrapDisplay>
+          <WrapMetricConsumer>
             <PerformanceInfo
               // eslint-disable-next-line @typescript-eslint/no-magic-numbers
               {...{ tags: [moduleName, createName(percentsInput.padStart(3, '0'))] }}
             />
-          </WrapDisplay>
+          </WrapMetricConsumer>
         </div>
       </div>
       {painterComponents}

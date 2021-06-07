@@ -5,14 +5,14 @@ import './PerformanceObserver.unsupported.mock';
 import type { Retrieve } from './TestComponent';
 import { TestComponent } from './TestComponent';
 
-describe('Test usePerfObserver', () => {
+describe('Test usePerMetric', () => {
   test('unsupported browser throw an error', () => {
     const retrieve: Retrieve = {};
 
-    const { unmount } = render(<TestComponent measureFromCreating {...{ retrieve }} />);
+    const { unmount } = render(<TestComponent measureFromCreated {...{ retrieve }} />);
     expect(retrieve.status).toBe('error');
 
-    retrieve.startMeasure!();
+    retrieve.measurePerformance!();
     expect(retrieve.status).toBe('error');
 
     unmount();
