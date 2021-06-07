@@ -20,12 +20,14 @@ const SetBlockingParametersMethodsContext = createContext<SetBlockingParametersM
   null
 );
 
+const nullArea = { top: 0, left: 0, bottom: 0, right: 0 };
+
 const createSetBlockingParametersMethods = (): {
   useBlockingArea: () => Area;
   useToBlock: () => boolean;
   setBlockingParametersMethods: SetBlockingParametersMethods;
 } => {
-  let setParamToShow: (toShow: boolean) => void;
+  let setParamToBlock: (toShow: boolean) => void;
   let currArea: Area | null;
   let setArea: (area: Area) => void;
 
@@ -33,17 +35,17 @@ const createSetBlockingParametersMethods = (): {
     const [area, _setArea] = useState<Area | null>(null);
     setArea = _setArea;
 
-    return area ?? { top: 0, left: 0, bottom: 0, right: 0 };
+    return area ?? nullArea;
   };
 
   const useToBlock = (): boolean => {
-    const [toShow, _setParamToShow] = useState(false);
-    setParamToShow = _setParamToShow;
+    const [toBlock, _setParamToBlock] = useState(true);
+    setParamToBlock = _setParamToBlock;
 
-    return toShow;
+    return toBlock;
   };
 
-  const setToBlock = (toBlock: boolean): void => setParamToShow(toBlock);
+  const setToBlock = (toBlock: boolean): void => setParamToBlock(toBlock);
 
   const addRef = (ref: HTMLElement): void => {
     const { top, left, bottom, right } = ref.getBoundingClientRect();

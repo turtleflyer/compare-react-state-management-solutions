@@ -49,7 +49,6 @@ export const PerformanceInfo: FC<(MetricConsumerProps | { status?: undefined }) 
           break;
 
         default:
-          setToBlock(false);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.status]);
@@ -89,7 +88,7 @@ export const PerformanceInfo: FC<(MetricConsumerProps | { status?: undefined }) 
     }
   };
 
-export { useAddRef, useToBlock } from './BlockingParametersProvider';
+export { useAddRef, useSetToBlock, useToBlock } from './BlockingParametersProvider';
 export { BlockingSpinner } from './BlockingSpinner';
 export type { PerfInfoData } from './CollectDataProvider';
 export {
