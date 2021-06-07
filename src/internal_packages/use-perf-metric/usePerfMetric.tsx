@@ -134,6 +134,13 @@ const createUsePerfMetricReturn = (
       }
     });
 
+    useEffect(
+      () => () => {
+        setChildrenProps = () => undefined;
+      },
+      []
+    );
+
     return cloneElement(nestedComponent, childrenProps);
   };
 
