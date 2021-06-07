@@ -2,7 +2,7 @@ import {
   PerformanceInfo,
   useAddRef,
 } from '@compare-react-state-management-solutions/performance-info';
-import { usePerfObserver } from '@compare-react-state-management-solutions/use-perf-observer';
+import { usePerfMetric } from '@compare-react-state-management-solutions/use-perf-metric';
 import type { FC } from 'react';
 import React from 'react';
 import { Button } from './Button';
@@ -16,7 +16,7 @@ export const DisableOrEnableRowsButton: FC<{
   moduleName: string;
 }> = ({ useOnPushButton, name, moduleName }) => {
   const onPushButton = useOnPushButton();
-  const [WrapDisplay, startMeasure] = usePerfObserver();
+  const { WrapMetricConsumer, measurePerformance } = usePerfMetric();
   const addRef = useAddRef();
 
   return (
@@ -26,15 +26,15 @@ export const DisableOrEnableRowsButton: FC<{
           onClick:
             onPushButton &&
             (() => {
-              startMeasure();
+              measurePerformance();
               onPushButton();
             }),
           name,
         }}
       />
-      <WrapDisplay>
+      <WrapMetricConsumer>
         <PerformanceInfo {...{ tags: [moduleName, name] }} />
-      </WrapDisplay>
+      </WrapMetricConsumer>
     </div>
   );
 };

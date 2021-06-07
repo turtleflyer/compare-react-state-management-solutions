@@ -1,6 +1,6 @@
 {
   "name": "compare-react-state-management-solutions",
-  "version": "2.1.1",
+  "version": "2.2.1",
   "private": true,
   "homepage": "http://turtleflyer.github.io/compare-react-state-management-solutions",
   "workspaces": [
@@ -10,9 +10,9 @@
   "dependencies": {
     "@compare-react-state-management-solutions/info-panel": "^1.0.0",
     "@compare-react-state-management-solutions/performance-info": "^0.4.0",
-    "@compare-react-state-management-solutions/recoil-component": "2.1.1",
-    "@compare-react-state-management-solutions/redux-hooks-component": "2.1.1",
-    "@compare-react-state-management-solutions/use-interstate-component": "2.1.1",
+    "@compare-react-state-management-solutions/recoil-component": "2.2.1",
+    "@compare-react-state-management-solutions/redux-hooks-component": "2.2.1",
+    "@compare-react-state-management-solutions/use-interstate-component": "2.2.1",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^13.1.3",
@@ -33,8 +33,8 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
-    "typescript": "^4.2.4",
-    "web-vitals": "^1.1.1"
+    "typescript": "^4.3.2",
+    "web-vitals": "^2.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

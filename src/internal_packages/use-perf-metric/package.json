@@ -1,8 +1,8 @@
 {
-  "name": "@compare-react-state-management-solutions/use-perf-observer",
+  "name": "@compare-react-state-management-solutions/use-perf-metric",
   "private": "true",
-  "version": "0.2.1",
-  "main": "usePerfObserver.tsx",
+  "version": "0.3.1",
+  "main": "usePerfMetric.tsx",
   "dependencies": {
     "@compare-react-state-management-solutions/get-next-key": "^0.1.0",
     "react": "^17.0.0"
