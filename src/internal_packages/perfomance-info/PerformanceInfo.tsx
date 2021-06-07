@@ -51,7 +51,8 @@ export const PerformanceInfo: FC<(MetricConsumerProps | { status?: undefined }) 
         default:
           setToBlock(false);
       }
-    });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.status]);
 
     switch (props.status) {
       case 'done': {
