@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { render } from '@testing-library/react';
 import React from 'react';
-import './PerformanceObserver.unsupported.mock';
-import type { Retrieve } from './TestComponent';
-import { TestComponent } from './TestComponent';
+import './assets/PerformanceObserver.unsupported.mock';
+import type { Retrieve } from './assets/TestComponent';
+import { TestComponent } from './assets/TestComponent';
 
 describe('Test usePerMetric', () => {
   test('unsupported browser throw an error', () => {
@@ -19,4 +19,5 @@ describe('Test usePerMetric', () => {
   });
 });
 
-export {};
+export { };
+
