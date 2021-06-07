@@ -7,10 +7,9 @@
     "@compare-react-state-management-solutions/control-panel": "^3.0.0",
     "@compare-react-state-management-solutions/draw-pixels": "^0.1.0",
     "@compare-react-state-management-solutions/get-next-key": "^0.1.0",
-    "@compare-react-state-management-solutions/info-panel": "^1.0.0",
-    "@compare-react-state-management-solutions/performance-info": "^0.4.0",
+    "@compare-react-state-management-solutions/performance-info": "^0.5.0",
     "@compare-react-state-management-solutions/random-color": "^0.1.0",
-    "@compare-react-state-management-solutions/use-perf-observer": "^0.2.0",
+    "@compare-react-state-management-solutions/use-perf-metric": "^0.3.0",
     "react": "^17.0.0",
     "recoil": "^0.2.0"
   }

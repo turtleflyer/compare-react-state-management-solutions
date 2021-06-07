@@ -2,7 +2,7 @@ import {
   PerformanceInfo,
   useAddRef,
 } from '@compare-react-state-management-solutions/performance-info';
-import { usePerfObserver } from '@compare-react-state-management-solutions/use-perf-observer';
+import { usePerfMetric } from '@compare-react-state-management-solutions/use-perf-metric';
 import type { ChangeEventHandler, FC } from 'react';
 import React, { useState } from 'react';
 import { Button } from './Button';
@@ -19,7 +19,7 @@ export const ChooseGrid: FC<ChooseGridProps> = (props) => {
   const { moduleName } = props;
   const gridSize = props.gridSize ?? props.useGridSize();
   const [inputValue, setInputValue] = useState(`${gridSize}`);
-  const [WrapDisplay, startMeasure] = usePerfObserver({ measureFromCreating: true });
+  const { WrapMetricConsumer, measurePerformance } = usePerfMetric({ measureFromCreated: true });
   const addRef = useAddRef();
 
   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -27,7 +27,7 @@ export const ChooseGrid: FC<ChooseGridProps> = (props) => {
   };
 
   const onSubmit = (): void => {
-    startMeasure();
+    measurePerformance();
     const nextGridSize = parseInt(inputValue, 10);
     props.onGridChosen({ gridSize: nextGridSize > 0 ? nextGridSize : gridSize });
   };
@@ -52,9 +52,9 @@ export const ChooseGrid: FC<ChooseGridProps> = (props) => {
           ),
         }}
       />
-      <WrapDisplay>
+      <WrapMetricConsumer>
         <PerformanceInfo {...{ tags: [moduleName, gridSize] }} />
-      </WrapDisplay>
+      </WrapMetricConsumer>
     </div>
   );
 };

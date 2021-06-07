@@ -1,4 +1,4 @@
-import { Measures } from '@compare-react-state-management-solutions/use-perf-observer';
+import type { PerfMetric } from '@compare-react-state-management-solutions/use-perf-metric';
 import type { Dispatch, FC, SetStateAction } from 'react';
 import React, { createContext, useState } from 'react';
 
@@ -6,7 +6,8 @@ export type Tags = [string, ...(string | number)[]];
 
 export interface PerfInfoData {
   tags: Tags;
-  data: Measures;
+
+  data: PerfMetric;
 }
 
 export interface GetDataPoolContextValue {
