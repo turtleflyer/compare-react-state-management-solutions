@@ -1,6 +1,6 @@
 {
   "name": "@compare-react-state-management-solutions/recoil-component",
-  "version": "2.1.1",
+  "version": "2.2.1",
   "private": "true",
   "main": "App.tsx",
   "dependencies": {
@@ -11,6 +11,6 @@
     "@compare-react-state-management-solutions/random-color": "^0.1.0",
     "@compare-react-state-management-solutions/use-perf-metric": "^0.3.0",
     "react": "^17.0.0",
-    "recoil": "^0.2.0"
+    "recoil": "^0.3.1"
   }
 }
