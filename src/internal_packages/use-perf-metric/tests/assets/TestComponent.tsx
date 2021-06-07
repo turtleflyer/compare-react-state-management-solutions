@@ -6,9 +6,9 @@ import type {
   MeasurePerformance,
   MetricConsumerProps,
   PerfMetric,
-  PerfMetricSettings,
-} from '../usePerfMetric';
-import { usePerfMetric } from '../usePerfMetric';
+  PerfMetricSettings
+} from '../../usePerfMetric';
+import { usePerfMetric } from '../../usePerfMetric';
 
 export interface Retrieve {
   measurePerformance?: MeasurePerformance;
@@ -21,15 +21,21 @@ export interface Retrieve {
 }
 
 type DisplayComponent = FC<MetricConsumerProps | { [P in keyof MetricConsumerProps]?: undefined }>;
-type UseBody = (param: { retrieve: Retrieve; settings: PerfMetricSettings }) => void;
+
+type UseBody = (param: {
+  retrieve: Retrieve;
+  settings: PerfMetricSettings;
+  freshRemount: boolean;
+}) => { ReleaseUsePerMetric: FC };
 
 const createNestedComponents = (): {
-  ReleaseUsePerMetric: FC;
   useBody: UseBody;
 } => {
   let effectStage: boolean;
   let relayingSettings: PerfMetricSettings;
   let retrieve: Retrieve;
+  let freshRemount: boolean;
+  let isUnmount: boolean;
 
   const Display: DisplayComponent = ({ data, status }) => {
     Object.assign(retrieve, { data, status });
@@ -59,13 +65,33 @@ const createNestedComponents = (): {
     );
   };
 
-  const useBody: UseBody = ({ retrieve: _retrieve, settings }) => {
+  const useBody: UseBody = ({ retrieve: _retrieve, settings, freshRemount: _freshRemount }) => {
     retrieve = _retrieve;
+    freshRemount = _freshRemount;
     retrieve.lunchedAtEffectStage = effectStage = false;
     relayingSettings = alterPayloadToCatchEffectStage(settings);
+
+    const [_isUnmount, setUnmount] = useState(false);
+    isUnmount = _isUnmount;
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+      if (isUnmount) {
+        setUnmount(false);
+
+        return;
+      }
+
+      // eslint-disable-next-line consistent-return
+      return () => {
+        freshRemount && setUnmount(true);
+      };
+    });
+
+    return { ReleaseUsePerMetric: isUnmount ? () => null : ReleaseUsePerMetric };
   };
 
-  return { ReleaseUsePerMetric, useBody };
+  return { useBody };
 
   function alterPayloadToCatchEffectStage<P extends PerfMetricSettings>(settings: P): P {
     return {
@@ -89,30 +115,21 @@ export const TestComponent: FC<{
     | { measureAtEffectStage?: false };
   id?: string;
   retrieve: Retrieve;
+  freshRemount?: boolean;
 }> = ({
   measureFromCreated = false,
   effectSettings = { measureAtEffectStage: false },
   id,
   retrieve,
+  freshRemount = true,
 }) => {
-  const [start, getStarted] = useState(true);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (!start) {
-      getStarted(true);
-      return;
-    }
-
-    // eslint-disable-next-line consistent-return
-    return () => {
-      getStarted(false);
-    };
-  });
-
   const settings: PerfMetricSettings = { id, measureFromCreated, ...effectSettings };
-  const [{ ReleaseUsePerMetric, useBody }] = useState(createNestedComponents);
-  useBody({ retrieve, settings });
+  const [{ useBody }] = useState(createNestedComponents);
+  const { ReleaseUsePerMetric } = useBody({ retrieve, settings, freshRemount });
 
-  return <StrictMode>{start ? <ReleaseUsePerMetric /> : null}</StrictMode>;
+  return (
+    <StrictMode>
+      <ReleaseUsePerMetric />
+    </StrictMode>
+  );
 };
