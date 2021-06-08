@@ -3,11 +3,11 @@ import { storeKeysMethods } from '../State/storeKeysMethods';
 
 export function drawPixelToPaint(totalNumber: number): ChoiceForPixel {
   const randomIndex = Math.floor(Math.random() * totalNumber);
-  const atomToSet = storeKeysMethods.get(randomIndex);
+  const pixelKey = storeKeysMethods.get(randomIndex);
 
-  if (!atomToSet) {
+  if (!pixelKey) {
     throw Error('It should be defined');
   }
 
-  return atomToSet;
+  return pixelKey;
 }

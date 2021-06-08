@@ -1,4 +1,3 @@
-import { DEF_GRID_SIZE } from '@compare-react-state-management-solutions/control-panel';
 import { getNextKey } from '@compare-react-state-management-solutions/get-next-key';
 import { getRandomColor } from '@compare-react-state-management-solutions/random-color';
 import { useState } from 'react';
@@ -25,9 +24,8 @@ export const alternativeForChoiceKeys = [0, 1].map(
   (c) => `${alternativeForChoicePlaceholderKey}-${c}`
 ) as [AlternativeForChoice, AlternativeForChoice];
 
-export const { initInterstate, useInterstate, readInterstate, setInterstate } = goInterstate<
-  State & Interstate
->();
+export const { initInterstate, useInterstate, readInterstate, setInterstate } =
+  goInterstate<State & Interstate>();
 
 export const createColorForAlternativeForChoiceEntry = (
   choice: PixelChoice
@@ -45,32 +43,34 @@ export const createColorForAlternativeForChoiceEntry = (
 
 const initialState = {
   [choiceForPixelPlaceholderKey]: 0,
-  [gridSizeKey]: DEF_GRID_SIZE,
   [rememberActiveChoiceKey]: 0,
 } as State;
 
-initInterstate({ ...initialState, ...createColorForChoiceDefState() });
 const createFreshKey = (): string => getNextKey('refresh-key');
 
-export const useRefreshApp = (): [string, ({ gridSize }: { gridSize: number }) => void] => {
+export const useRefreshApp = ({
+  defGridSize,
+}: {
+  defGridSize: number;
+}): [string, ({ gridSize }: { gridSize: number }) => void] => {
+  useState(() => initAppInterstate(defGridSize));
   const [key, setKey] = useState(createFreshKey);
 
   const commandToCreateFreshKey = ({ gridSize }: { gridSize: number }): void => {
-    initInterstate({
-      ...initialState,
-      ...createColorForChoiceDefState(),
-      [gridSizeKey]: gridSize,
-    });
-
+    initAppInterstate(gridSize);
     setKey(createFreshKey);
   };
 
   return [key, commandToCreateFreshKey];
 };
 
-function createColorForChoiceDefState(): ColorForAlternativeState & AlternativeForChoiceState {
-  return ([0, 1] as const).reduce(
-    (entries, c) => ({ ...entries, ...createColorForAlternativeForChoiceEntry(c) }),
-    {} as ColorForAlternativeState & AlternativeForChoiceState
-  );
+function initAppInterstate(gridSize: number) {
+  initInterstate({
+    ...initialState,
+    ...([0, 1] as const).reduce(
+      (entries, c) => ({ ...entries, ...createColorForAlternativeForChoiceEntry(c) }),
+      {} as ColorForAlternativeState & AlternativeForChoiceState
+    ),
+    [gridSizeKey]: gridSize,
+  });
 }

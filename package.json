@@ -1,6 +1,6 @@
 {
   "name": "use-interstate-implementation",
-  "version": "2.2.1",
+  "version": "3.0.0",
   "private": true,
   "workspaces": [
     "src/internal_packages/*",
@@ -9,13 +9,13 @@
   ],
   "dependencies": {
     "@compare-react-state-management-solutions/build-component": "^0.1.0",
-    "@compare-react-state-management-solutions/control-panel": "^3.0.0",
+    "@compare-react-state-management-solutions/control-panel": "^4.0.0",
     "@compare-react-state-management-solutions/draw-pixels": "^0.1.0",
     "@compare-react-state-management-solutions/get-next-key": "^0.1.0",
     "@compare-react-state-management-solutions/info-panel": "^1.0.0",
-    "@compare-react-state-management-solutions/performance-info": "^0.5.0",
+    "@compare-react-state-management-solutions/performance-info": "^1.0.0",
     "@compare-react-state-management-solutions/random-color": "^0.1.0",
-    "@compare-react-state-management-solutions/use-interstate-component": "2.2.1",
+    "@compare-react-state-management-solutions/use-interstate-component": "3.0.0",
     "@compare-react-state-management-solutions/use-perf-metric": "^0.3.0",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",

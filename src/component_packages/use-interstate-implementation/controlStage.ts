@@ -35,10 +35,10 @@ export const repaintRow = (): void => {
   });
 };
 
-export const useDisableRows = (): (() => void) | undefined =>
+export const useDisableRows = (): (() => void) | null =>
   useInterstate.acceptSelector(({ [alternativeForChoiceKeys[1]]: possibleColor }) =>
     possibleColor === null
-      ? undefined
+      ? null
       : () => {
           setInterstate(() => ({
             [alternativeForChoiceKeys[1]]: null,
@@ -47,13 +47,13 @@ export const useDisableRows = (): (() => void) | undefined =>
         }
   );
 
-export const useEnableRows = (): (() => void) | undefined =>
+export const useEnableRows = (): (() => void) | null =>
   useInterstate.acceptSelector(({ [alternativeForChoiceKeys[1]]: possibleColor }) =>
     possibleColor === null
       ? () => {
           setInterstate(() => createColorForAlternativeForChoiceEntry(1));
         }
-      : undefined
+      : null
   );
 
 export const paintRandomSinglePixel = (): void => {

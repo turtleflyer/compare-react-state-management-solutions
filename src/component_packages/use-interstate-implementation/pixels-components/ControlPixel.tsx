@@ -8,7 +8,7 @@ import { storeKeysMethods } from '../State/storeKeysMethods';
 import { Pixel } from './Pixel';
 
 export const ControlPixel: FC<{
-  pixelSize: string;
+  pixelSize: number;
   defChoice: PixelChoice;
 }> = ({ pixelSize, defChoice }) => {
   const style: CSSProperties = { height: pixelSize, width: pixelSize };

@@ -1,26 +1,25 @@
 import {
   PerformanceInfo,
-  useAddRef,
+  useAddRefToCalculateArea,
 } from '@compare-react-state-management-solutions/performance-info';
 import { usePerfMetric } from '@compare-react-state-management-solutions/use-perf-metric';
 import type { ChangeEventHandler, FC } from 'react';
 import React, { useState } from 'react';
 import { Button } from './Button';
-import { HookOrNotProp } from './HookOrNotProp';
 import { InputField } from './InputField';
 import { buttonContainerStyle } from './styles';
 
-export type ChooseGridProps = HookOrNotProp<'gridSize', number> & {
+export type ChooseGridProps = {
+  gridSize: number;
   onGridChosen: (p: { gridSize: number }) => void;
   moduleName: string;
 };
 
 export const ChooseGrid: FC<ChooseGridProps> = (props) => {
-  const { moduleName } = props;
-  const gridSize = props.gridSize ?? props.useGridSize();
+  const { moduleName, gridSize } = props;
   const [inputValue, setInputValue] = useState(`${gridSize}`);
   const { WrapMetricConsumer, measurePerformance } = usePerfMetric({ measureFromCreated: true });
-  const addRef = useAddRef();
+  const addRef = useAddRefToCalculateArea();
 
   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setInputValue(e.target.value);

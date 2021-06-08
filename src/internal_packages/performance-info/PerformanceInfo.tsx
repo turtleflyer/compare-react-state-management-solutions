@@ -1,7 +1,7 @@
 import type { MetricConsumerProps } from '@compare-react-state-management-solutions/use-perf-metric';
 import type { FC } from 'react';
 import React, { useEffect } from 'react';
-import { useSetToBlock } from './BlockingParametersProvider';
+import { useBlockingState, useSetStateToBlock } from './BlockingParametersProvider';
 import type { Tags } from './CollectDataProvider';
 import { DisplayInfo } from './DisplayInfo';
 import { InfoMark } from './InfoMark';
@@ -24,7 +24,8 @@ const AcknowledgeTip: FC = () => (
 export const PerformanceInfo: FC<(MetricConsumerProps | { status?: undefined }) & { tags?: Tags }> =
   (props) => {
     const { addData } = usePerfInfoMethods();
-    const setToBlock = useSetToBlock();
+    const blockingState = useBlockingState();
+    const setStateToBlock = useSetStateToBlock();
 
     useEffect(() => {
       switch (props.status) {
@@ -34,17 +35,17 @@ export const PerformanceInfo: FC<(MetricConsumerProps | { status?: undefined }) 
             addData({ data, tags });
           }
 
-          setToBlock(false);
+          blockingState.toBlock && blockingState.resetBlockingState();
 
           break;
 
         case 'pending':
-          setToBlock(true);
+          setStateToBlock();
 
           break;
 
         case 'error':
-          setToBlock(false);
+          blockingState.toBlock && blockingState.resetBlockingState();
 
           break;
 
@@ -88,7 +89,13 @@ export const PerformanceInfo: FC<(MetricConsumerProps | { status?: undefined }) 
     }
   };
 
-export { useAddRef, useSetToBlock, useToBlock } from './BlockingParametersProvider';
+export {
+  useAddRefToCalculateArea,
+  useResetArea,
+  useBlockingArea,
+  useBlockingState,
+  useSetStateToBlock,
+} from './BlockingParametersProvider';
 export { BlockingSpinner } from './BlockingSpinner';
 export type { PerfInfoData } from './CollectDataProvider';
 export {

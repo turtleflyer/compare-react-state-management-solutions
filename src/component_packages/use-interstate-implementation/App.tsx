@@ -1,6 +1,4 @@
-import { ControlPanel } from '@compare-react-state-management-solutions/control-panel';
-import { useProvideModuleNameAndRef } from '@compare-react-state-management-solutions/performance-info';
-import type { CSSProperties, FC } from 'react';
+import type { CSSProperties, FC, ReactElement } from 'react';
 import React from 'react';
 import {
   paintRandomPixels,
@@ -21,17 +19,27 @@ const containerStyle: CSSProperties = {
   margin: '10px 10px 0',
 };
 
-export const App: FC = () => {
-  const [refreshKey, commandToCreateRefreshKey] = useRefreshApp();
-  const { provideModuleNameAndRef } = useProvideModuleNameAndRef();
+interface ControlPanelProps {
+  headline: string;
+  repaintRow: () => void;
+  useDisableRows: () => (() => void) | null;
+  useEnableRows: () => (() => void) | null;
+  paintRandomSinglePixel: () => void;
+  paintRandomPixels: (percentage: number) => void;
+  gridSize: number;
+  onGridChosen: (v: { gridSize: number }) => void;
+  moduleName: string;
+  children: ReactElement;
+}
 
-  const provideRef = (e: HTMLElement): void => {
-    provideModuleNameAndRef([MODULE_NAME, e]);
-  };
+export const App: FC<{
+  defGridSize: number;
+  ControlPanel: (props: ControlPanelProps) => ReactElement | null;
+}> = ({ defGridSize, ControlPanel }) => {
+  const [refreshKey, commandToCreateRefreshKey] = useRefreshApp({ defGridSize });
 
   return (
     <div {...{ style: containerStyle, key: refreshKey }}>
-      <PixelsStage {...{ provideRef }} />
       <ControlPanel
         {...{
           headline: 'Implemented using "use-interstate" library',
@@ -44,7 +52,9 @@ export const App: FC = () => {
           onGridChosen: commandToCreateRefreshKey,
           moduleName: MODULE_NAME,
         }}
-      />
+      >
+        <PixelsStage />
+      </ControlPanel>
     </div>
   );
 };

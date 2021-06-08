@@ -1,6 +1,6 @@
 import {
   PerformanceInfo,
-  useAddRef,
+  useAddRefToCalculateArea,
 } from '@compare-react-state-management-solutions/performance-info';
 import { usePerfMetric } from '@compare-react-state-management-solutions/use-perf-metric';
 import type { FC } from 'react';
@@ -8,7 +8,7 @@ import React from 'react';
 import { Button } from './Button';
 import { buttonContainerStyle } from './styles';
 
-export type DisableOrEnableRowsHook = () => (() => void) | undefined;
+export type DisableOrEnableRowsHook = () => (() => void) | null;
 
 export const DisableOrEnableRowsButton: FC<{
   useOnPushButton: DisableOrEnableRowsHook;
@@ -17,7 +17,7 @@ export const DisableOrEnableRowsButton: FC<{
 }> = ({ useOnPushButton, name, moduleName }) => {
   const onPushButton = useOnPushButton();
   const { WrapMetricConsumer, measurePerformance } = usePerfMetric();
-  const addRef = useAddRef();
+  const addRef = useAddRefToCalculateArea();
 
   return (
     <div {...{ style: buttonContainerStyle, ref: addRef }}>
