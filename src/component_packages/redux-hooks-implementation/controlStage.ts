@@ -22,19 +22,19 @@ export const useRepaintRow = (): (() => void) => {
   };
 };
 
-export const useDisableRows = (): (() => void) | undefined => {
+export const useDisableRows = (): (() => void) | null => {
   const dispatch = useDispatch();
 
   const possibleColor = useSelector(createSelector(alternativeForChoiceKeys[1]));
 
   return possibleColor === null
-    ? undefined
+    ? null
     : () => {
         dispatch(disableRowAction());
       };
 };
 
-export const useEnableRows = (): (() => void) | undefined => {
+export const useEnableRows = (): (() => void) | null => {
   const dispatch = useDispatch();
 
   const possibleColor = useSelector(createSelector(alternativeForChoiceKeys[1]));
@@ -43,7 +43,7 @@ export const useEnableRows = (): (() => void) | undefined => {
     ? () => {
         dispatch(enableRowAction());
       }
-    : undefined;
+    : null;
 };
 
 export const usePaintRandomSinglePixel = (): (() => void) => {

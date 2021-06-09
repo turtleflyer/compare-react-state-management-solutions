@@ -1,6 +1,4 @@
-import { ControlPanel } from '@compare-react-state-management-solutions/control-panel';
-import { useProvideModuleNameAndRef } from '@compare-react-state-management-solutions/performance-info';
-import type { CSSProperties, FC } from 'react';
+import type { CSSProperties, FC, ReactElement } from 'react';
 import React from 'react';
 import { Provider } from 'react-redux';
 import {
@@ -22,18 +20,28 @@ const containerStyle: CSSProperties = {
   margin: '10px 10px 0',
 };
 
-export const App: FC = () => {
-  const [store, refreshKey, commandToCreateFreshStore] = useCreateStore();
-  const { provideModuleNameAndRef } = useProvideModuleNameAndRef();
+interface ControlPanelProps {
+  headline: string;
+  useRepaintRow: () => () => void;
+  useDisableRows: () => (() => void) | null;
+  useEnableRows: () => (() => void) | null;
+  usePaintRandomSinglePixel: () => () => void;
+  usePaintRandomPixels: () => (percentage: number) => void;
+  useGridSize: () => number;
+  onGridChosen: (v: { gridSize: number }) => void;
+  moduleName: string;
+  children: ReactElement;
+}
 
-  const provideRef = (e: HTMLElement): void => {
-    provideModuleNameAndRef([MODULE_NAME, e]);
-  };
+export const App: FC<{
+  defGridSize: number;
+  ControlPanel: (props: ControlPanelProps) => ReactElement | null;
+}> = ({ defGridSize, ControlPanel }) => {
+  const [store, refreshKey, commandToCreateFreshStore] = useCreateStore({ defGridSize });
 
   return (
     <Provider {...{ store, key: refreshKey }}>
       <div {...{ style: containerStyle }}>
-        <PixelsStage {...{ provideRef }} />
         <ControlPanel
           {...{
             headline: 'Implemented using "react-redux" library',
@@ -46,7 +54,9 @@ export const App: FC = () => {
             onGridChosen: commandToCreateFreshStore,
             moduleName: MODULE_NAME,
           }}
-        />
+        >
+          <PixelsStage />
+        </ControlPanel>
       </div>
     </Provider>
   );

@@ -1,6 +1,6 @@
 import {
   PerformanceInfo,
-  useAddRef,
+  useAddRefToCalculateArea,
 } from '@compare-react-state-management-solutions/performance-info';
 import { usePerfMetric } from '@compare-react-state-management-solutions/use-perf-metric';
 import type { ChangeEvent, CSSProperties, FC } from 'react';
@@ -32,7 +32,7 @@ export const MassivePaintButton: FC<PaintRandomPixels> = (props) => {
   const { moduleName } = props;
   let paintRandomPixels: MassivePaintCallback;
   let painterComponents: JSX.Element[];
-  const addRef = useAddRef();
+  const addRef = useAddRefToCalculateArea();
 
   if (props.paintRandomPixels) {
     [paintRandomPixels, painterComponents] = [props.paintRandomPixels, []];

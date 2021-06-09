@@ -9,43 +9,78 @@ export interface Area {
 }
 
 const BlockingAreaContext = createContext<Area | null>(null);
-const ToBlockContext = createContext<boolean | null>(null);
 
-export interface SetBlockingParametersMethods {
-  setToBlock: (toBlock: boolean) => void;
-  addRef: (ref: HTMLElement) => void;
+export type BlockingState =
+  | ({
+      toBlock: true;
+      resetBlockingState: () => void;
+    } & (
+      | {
+          readyToRender: false;
+          setReadyState: () => void;
+        }
+      | {
+          readyToRender: true;
+        }
+    ))
+  | { toBlock: false };
+
+const notBlockingState = { toBlock: false } as BlockingState;
+
+const BlockingStateContext = createContext(notBlockingState);
+
+export interface SetBlockingStateAndCalculateAreaMethods {
+  setStateToBlock: () => void;
+
+  addRefToCalculateArea: (ref: HTMLElement) => void;
+
+  resetArea: () => void;
 }
 
-const SetBlockingParametersMethodsContext = createContext<SetBlockingParametersMethods | null>(
-  null
-);
+const SetBlockingStateAndCalculateAreaMethodsContext =
+  createContext<SetBlockingStateAndCalculateAreaMethods | null>(null);
 
-const createSetBlockingParametersMethods = (): {
-  useBlockingArea: () => Area;
-  useToBlock: () => boolean;
-  setBlockingParametersMethods: SetBlockingParametersMethods;
+const createBlockingStateAndCalculateArea = (): {
+  useBlockingArea: () => Area | null;
+  useBlockingState: () => BlockingState;
+  setBlockingStateAndCalculateAreaMethods: SetBlockingStateAndCalculateAreaMethods;
 } => {
-  let setParamToShow: (toShow: boolean) => void;
+  let setBlockingState: (v: BlockingState) => void;
   let currArea: Area | null;
-  let setArea: (area: Area) => void;
+  let setArea: (area: Area | null) => void;
 
-  const useBlockingArea = (): Area => {
+  const useBlockingArea = (): Area | null => {
     const [area, _setArea] = useState<Area | null>(null);
     setArea = _setArea;
 
-    return area ?? { top: 0, left: 0, bottom: 0, right: 0 };
+    return area;
   };
 
-  const useToBlock = (): boolean => {
-    const [toShow, _setParamToShow] = useState(false);
-    setParamToShow = _setParamToShow;
-
-    return toShow;
+  const resetBlockingState = (): void => {
+    setBlockingState(notBlockingState);
   };
 
-  const setToBlock = (toBlock: boolean): void => setParamToShow(toBlock);
+  const defBlockingState = {
+    toBlock: true,
+    readyToRender: false,
+    resetBlockingState,
 
-  const addRef = (ref: HTMLElement): void => {
+    setReadyState(): void {
+      setBlockingState({ toBlock: true, readyToRender: true, resetBlockingState });
+    },
+  } as BlockingState;
+
+  const useBlockingState = (): BlockingState => {
+    const [blockingState, _setBlockingState] = useState(defBlockingState);
+
+    setBlockingState = _setBlockingState;
+
+    return blockingState;
+  };
+
+  const setStateToBlock = (): void => setBlockingState(defBlockingState);
+
+  const addRefToCalculateArea = (ref: HTMLElement): void => {
     const { top, left, bottom, right } = ref.getBoundingClientRect();
 
     if (!currArea) {
@@ -60,9 +95,21 @@ const createSetBlockingParametersMethods = (): {
     setArea(currArea);
   };
 
-  const setBlockingParametersMethods = { setToBlock, addRef };
+  const resetArea = (): void => {
+    setArea(null);
+  };
 
-  return { useBlockingArea, useToBlock, setBlockingParametersMethods };
+  const setBlockingStateAndCalculateAreaMethods: SetBlockingStateAndCalculateAreaMethods = {
+    setStateToBlock,
+    addRefToCalculateArea,
+    resetArea,
+  };
+
+  return {
+    useBlockingArea,
+    useBlockingState,
+    setBlockingStateAndCalculateAreaMethods,
+  };
 
   type DimensionSet = [begin: number, end: number];
 
@@ -75,36 +122,42 @@ const createSetBlockingParametersMethods = (): {
 };
 
 export const BlockingParametersProvider: FC = ({ children }) => {
-  const [{ useBlockingArea, useToBlock, setBlockingParametersMethods }] = useState(
-    createSetBlockingParametersMethods
+  const [{ useBlockingArea, useBlockingState, setBlockingStateAndCalculateAreaMethods }] = useState(
+    createBlockingStateAndCalculateArea
   );
 
   const blockingArea = useBlockingArea();
-  const toBlock = useToBlock();
+  const blockingState = useBlockingState();
 
   return (
     <BlockingAreaContext.Provider {...{ value: blockingArea }}>
-      <ToBlockContext.Provider {...{ value: toBlock }}>
-        <SetBlockingParametersMethodsContext.Provider {...{ value: setBlockingParametersMethods }}>
+      <BlockingStateContext.Provider {...{ value: blockingState }}>
+        <SetBlockingStateAndCalculateAreaMethodsContext.Provider
+          {...{ value: setBlockingStateAndCalculateAreaMethods }}
+        >
           {children}
-        </SetBlockingParametersMethodsContext.Provider>
-      </ToBlockContext.Provider>
+        </SetBlockingStateAndCalculateAreaMethodsContext.Provider>
+      </BlockingStateContext.Provider>
     </BlockingAreaContext.Provider>
   );
 };
 
-export const useBlockingArea = (): Area => useContext(BlockingAreaContext) ?? throwError();
+export const useBlockingState = (): BlockingState => useContext(BlockingStateContext);
 
-export const useToBlock = (): boolean => useContext(ToBlockContext) ?? throwError();
+export const useSetStateToBlock = (): (() => void) =>
+  (useContext(SetBlockingStateAndCalculateAreaMethodsContext) ?? throwError()).setStateToBlock;
 
-export const useSetToBlock = (): SetBlockingParametersMethods['setToBlock'] =>
-  (useContext(SetBlockingParametersMethodsContext) ?? throwError()).setToBlock;
+export const useBlockingArea = (): Area | null => useContext(BlockingAreaContext);
 
-export const useAddRef = (): ((e: HTMLElement | null) => void) => {
-  const { addRef } = useContext(SetBlockingParametersMethodsContext) ?? throwError();
+export const useAddRefToCalculateArea = (): ((e: HTMLElement | null) => void) => {
+  const { addRefToCalculateArea } =
+    useContext(SetBlockingStateAndCalculateAreaMethodsContext) ?? throwError();
 
-  return (e: HTMLElement | null) => e && addRef(e);
+  return (element: HTMLElement | null) => element && addRefToCalculateArea(element);
 };
+
+export const useResetArea = (): (() => void) =>
+  (useContext(SetBlockingStateAndCalculateAreaMethodsContext) ?? throwError()).resetArea;
 
 function throwError(): never {
   throw Error('blocking parameters context provider is missing');
