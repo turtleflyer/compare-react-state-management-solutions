@@ -1,20 +1,17 @@
 import type { FC, ReactElement } from 'react';
-import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { getGridSizeAtom } from '../State/State';
+import React, { useEffect, useState } from 'react';
 import type { PixelChoice } from '../State/StateInterface';
 import { storeAtomsMethods } from '../State/storeAtomsMethods';
 import { PixelsLine } from './PixelsLine';
 
-export const PixelsStage: FC<{ provideRef: (ref: HTMLElement) => void }> = ({ provideRef }) => {
-  const gridSizeAtom = getGridSizeAtom();
-  const gridSize = useRecoilValue(gridSizeAtom);
+export const PixelsStage: FC<{ pixelSize?: number | null; gridSize?: number | null }> = ({
+  pixelSize = null,
+  gridSize = null,
+}) => {
   const [lines, setLines] = useState<ReactElement | null>(null);
 
-  const ref = (e: HTMLDivElement | null) => {
-    if (e && !lines) {
-      const { height } = e.getBoundingClientRect();
-      const pixelSize = `${height / gridSize}px`;
+  useEffect(() => {
+    if (pixelSize !== null && gridSize !== null) {
       let currentLine: ReactElement | null = null;
 
       for (let i = 0; i < gridSize; i++) {
@@ -33,9 +30,8 @@ export const PixelsStage: FC<{ provideRef: (ref: HTMLElement) => void }> = ({ pr
 
       storeAtomsMethods.reset();
       setLines(currentLine);
-      provideRef(e);
     }
-  };
+  }, [gridSize, pixelSize]);
 
-  return <div {...{ style: { flexGrow: 1 }, ref }}>{lines}</div>;
+  return <>{lines}</>;
 };

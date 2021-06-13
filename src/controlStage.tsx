@@ -1,15 +1,15 @@
 import { drawPixels } from '@compare-react-state-management-solutions/draw-pixels';
 import { getRandomColor } from '@compare-react-state-management-solutions/random-color';
-import type { FC } from 'react';
+import type { FC, ReactElement } from 'react';
 import React, { useEffect, useState } from 'react';
 import { SetterOrUpdater, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { drawPixelToPaint } from './helpers/drawPixelToPaint';
 import {
+  alternativeForChoiceAtoms,
   choiceForPixelPlaceholderAtom,
   colorForAlternativePlaceholderAtom,
   createColorForAlternativeAtom,
-  getAlternativeForChoiceAtoms,
-  getGridSizeAtom,
+  gridSizeAtom,
   rememberActiveChoiceAtom,
 } from './State/State';
 import type {
@@ -26,7 +26,6 @@ const ONE_HUNDRED_PERCENT = 100;
 type ManageColorState = [ColorValue, SetterOrUpdater<ColorValue>];
 
 export const useRepaintRow = (): (() => void) => {
-  const alternativeForChoiceAtoms = getAlternativeForChoiceAtoms();
   const alternatives = alternativeForChoiceAtoms.map(useAlternative) as [
     HoldColorForAlternativeAtom | null,
     HoldColorForAlternativeAtom | null
@@ -59,21 +58,19 @@ function useColorState(alt: HoldColorForAlternativeAtom | null): ManageColorStat
   return useRecoilState(alt?.atom ?? colorForAlternativePlaceholderAtom);
 }
 
-export const useDisableRows = (): (() => void) | undefined => {
-  const alternativeForChoiceAtoms = getAlternativeForChoiceAtoms();
+export const useDisableRows = (): (() => void) | null => {
   const [possibleAlternative, setAlternative] = useRecoilState(alternativeForChoiceAtoms[1]);
   const setActiveChoice = useSetRecoilState(rememberActiveChoiceAtom);
 
   return possibleAlternative === null
-    ? undefined
+    ? null
     : () => {
         setAlternative(null);
         setActiveChoice(0);
       };
 };
 
-export const useEnableRows = (): (() => void) | undefined => {
-  const alternativeForChoiceAtoms = getAlternativeForChoiceAtoms();
+export const useEnableRows = (): (() => void) | null => {
   const [possibleAlternative, setAlternative] = useRecoilState(alternativeForChoiceAtoms[1]);
 
   return possibleAlternative === null
@@ -82,11 +79,10 @@ export const useEnableRows = (): (() => void) | undefined => {
           atom: createColorForAlternativeAtom(1),
         });
       }
-    : undefined;
+    : null;
 };
 
 export const usePaintRandomSinglePixel = (): (() => void) => {
-  const gridSizeAtom = getGridSizeAtom();
   const gridSize = useRecoilValue(gridSizeAtom);
   const [atomToPaint, setAtomToPaint] = useState({ atom: choiceForPixelPlaceholderAtom });
   const paintRandomPixel = useSetRecoilState(atomToPaint.atom);
@@ -110,14 +106,14 @@ const PixelToPaint: FC<{ pixelChoiceAtom: ChoiceForPixelAtom }> = ({ pixelChoice
   return <></>;
 };
 
-export const usePaintRandomPixels = (): [(percentage: number) => void, JSX.Element[]] => {
-  const gridSizeAtom = getGridSizeAtom();
+export const usePaintRandomPixels = (): [(percentage: number) => void, ReactElement[]] => {
   const gridSize = useRecoilValue(gridSizeAtom);
-  const [pixelsToPaint, setPixelsToPaint] = useState<JSX.Element[]>([]);
+  const [pixelsToPaint, setPixelsToPaint] = useState<ReactElement[]>([]);
 
-  useEffect(() => setPixelsToPaint((prevPixels) => (prevPixels.length > 0 ? [] : prevPixels)), [
-    pixelsToPaint,
-  ]);
+  useEffect(
+    () => setPixelsToPaint((prevPixels) => (prevPixels.length > 0 ? [] : prevPixels)),
+    [pixelsToPaint]
+  );
 
   return [
     (percentage: number): void => {
@@ -141,10 +137,4 @@ export const usePaintRandomPixels = (): [(percentage: number) => void, JSX.Eleme
     },
     pixelsToPaint,
   ];
-};
-
-export const useGridSize = (): number => {
-  const gridSizeAtom = getGridSizeAtom();
-
-  return useRecoilValue(gridSizeAtom);
 };

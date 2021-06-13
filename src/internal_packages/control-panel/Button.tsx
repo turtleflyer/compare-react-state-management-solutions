@@ -4,7 +4,7 @@ import React from 'react';
 const style: CSSProperties = { width: 200, height: 20, display: 'block', marginRight: 5 };
 
 export const Button: FC<{
-  onClick?: MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement> | null;
   addStyle?: CSSProperties;
   type?: ButtonHTMLAttributes<HTMLButtonElement>['type'];
   name?: string;

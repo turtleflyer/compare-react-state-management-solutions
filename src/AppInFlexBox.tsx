@@ -1,3 +1,4 @@
+import { ControlPanel } from '@compare-react-state-management-solutions/control-panel';
 import {
   BlockingSpinner,
   PerfInfoProvider,
@@ -7,6 +8,8 @@ import React, { useState } from 'react';
 import { version } from '../package.json';
 import { App } from './App';
 import { InfoPanel, TAB_HEADER_HEIGHT } from './internal_packages/info-panel/InfoPanel';
+
+const DEF_GRID_SIZE = 32;
 
 const outerContainerStyle: CSSProperties = {
   display: 'flex',
@@ -54,7 +57,7 @@ export const AppInFlexBox: FC = () => {
           <div {...{ style: versionInfoStyle }}>{`v.${version}`}</div>
 
           <div {...{ style: appContainerStyle }}>
-            <App />
+            <App {...{ defGridSize: DEF_GRID_SIZE, ControlPanel }} />
           </div>
 
           <BlockingSpinner {...{ zIndex: 10 }} />
