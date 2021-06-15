@@ -1,5 +1,5 @@
-import type { CSSProperties, FC, ReactElement } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
+import type { CSSProperties, FC } from 'react';
+import React, { useEffect } from 'react';
 import { useBlockingArea, useBlockingState } from './BlockingParametersProvider';
 
 const NUMBER_OF_CIRCLES = 8;
@@ -35,7 +35,7 @@ const outerContainerStyle: CSSProperties = {
 };
 
 const spinnerContainerStyle: CSSProperties = {
-  position: 'relative',
+  position: 'absolute',
   backgroundColor: 'rgba(255,255,255,50%)',
   display: 'flex',
   justifyContent: 'space-around',
@@ -72,41 +72,29 @@ const PendingEffect: FC = () => {
 export const BlockingSpinner: FC<{ zIndex?: number }> = ({ zIndex = 0 }) => {
   const area = useBlockingArea();
   const blockingState = useBlockingState();
-  const [spinnerElement, setSpinnerElement] = useState<ReactElement | null>(null);
-  const outerContainerRefElement = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    blockingState.toBlock
-      ? area &&
-        !spinnerElement &&
-        outerContainerRefElement.current &&
-        setSpinnerElement(
-          <div
-            {...{
-              style: {
-                ...spinnerContainerStyle,
-                zIndex,
-                top: area.top - outerContainerRefElement.current.getBoundingClientRect().top,
-                left: area.left - outerContainerRefElement.current.getBoundingClientRect().left,
-                height: area.bottom - area.top,
-                width: area.right - area.left,
-              },
-            }}
-          >
-            <PendingEffect />
-          </div>
-        )
-      : setSpinnerElement(null);
-  }, [area, blockingState.toBlock, spinnerElement, zIndex]);
-
-  useEffect(() => {
-    spinnerElement &&
-      blockingState.toBlock &&
-      !blockingState.readyToRender &&
-      blockingState.setReadyState();
-  }, [blockingState, spinnerElement]);
+    blockingState.toBlock && !blockingState.readyToRender && area && blockingState.setReadyState();
+  }, [area, blockingState]);
 
   return blockingState.toBlock ? (
-    <div {...{ style: outerContainerStyle, ref: outerContainerRefElement }}>{spinnerElement}</div>
+    <div {...{ style: outerContainerStyle }}>
+      {area && (
+        <div
+          {...{
+            style: {
+              ...spinnerContainerStyle,
+              zIndex,
+              top: area.top,
+              left: area.left,
+              height: area.bottom - area.top,
+              width: area.right - area.left,
+            },
+          }}
+        >
+          <PendingEffect />
+        </div>
+      )}
+    </div>
   ) : null;
 };
