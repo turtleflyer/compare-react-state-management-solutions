@@ -25,9 +25,9 @@ export type BlockingState =
     ))
   | { toBlock: false };
 
-const notBlockingState = { toBlock: false } as BlockingState;
+const notBlocked = { toBlock: false } as const;
 
-const BlockingStateContext = createContext(notBlockingState);
+const BlockingStateContext = createContext<BlockingState>(notBlocked);
 
 export interface SetBlockingStateAndCalculateAreaMethods {
   setStateToBlock: () => void;
@@ -51,53 +51,66 @@ const createBlockingStateAndCalculateArea = (): {
 
   const useBlockingArea = (): Area | null => {
     const [area, _setArea] = useState<Area | null>(null);
-    setArea = _setArea;
+
+    setArea =
+      setArea ??
+      ((a: Area | null) => {
+        currArea = a;
+        _setArea(a);
+      });
 
     return area;
   };
 
   const resetBlockingState = (): void => {
-    setBlockingState(notBlockingState);
+    setBlockingState(notBlocked);
   };
 
-  const defBlockingState = {
+  const blockedAndReadyToRender = {
+    toBlock: true,
+    readyToRender: true,
+    resetBlockingState,
+  } as const;
+
+  const blockedNotReadyToRender = {
     toBlock: true,
     readyToRender: false,
     resetBlockingState,
 
     setReadyState(): void {
-      setBlockingState({ toBlock: true, readyToRender: true, resetBlockingState });
+      setBlockingState(blockedAndReadyToRender);
     },
-  } as BlockingState;
+  } as const;
 
   const useBlockingState = (): BlockingState => {
-    const [blockingState, _setBlockingState] = useState(defBlockingState);
+    const [blockingState, _setBlockingState] = useState<BlockingState>(notBlocked);
 
     setBlockingState = _setBlockingState;
 
     return blockingState;
   };
 
-  const setStateToBlock = (): void => setBlockingState(defBlockingState);
+  const setStateToBlock = (): void => setBlockingState(blockedNotReadyToRender);
 
   const addRefToCalculateArea = (ref: HTMLElement): void => {
     const { top, left, bottom, right } = ref.getBoundingClientRect();
+    let nextArea: Area;
 
     if (!currArea) {
-      currArea = { top, left, bottom, right };
+      nextArea = { top, left, bottom, right };
     } else {
       const { top: curTop, left: curLeft, bottom: curBottom, right: curRight } = currArea;
       const [nextTop, nextBottom] = processDimension([curTop, curBottom], [top, bottom]);
       const [nextLeft, nextRight] = processDimension([curLeft, curRight], [left, right]);
-      currArea = { top: nextTop, left: nextLeft, bottom: nextBottom, right: nextRight };
+      nextArea = { top: nextTop, left: nextLeft, bottom: nextBottom, right: nextRight };
     }
 
-    setArea(currArea);
+    (!currArea ||
+      Object.entries(currArea).some(([key, value]) => value !== nextArea[key as keyof Area])) &&
+      setArea(nextArea);
   };
 
-  const resetArea = (): void => {
-    setArea(null);
-  };
+  const resetArea = (): void => setArea(null);
 
   const setBlockingStateAndCalculateAreaMethods: SetBlockingStateAndCalculateAreaMethods = {
     setStateToBlock,
@@ -149,11 +162,43 @@ export const useSetStateToBlock = (): (() => void) =>
 
 export const useBlockingArea = (): Area | null => useContext(BlockingAreaContext);
 
-export const useAddRefToCalculateArea = (): ((e: HTMLElement | null) => void) => {
-  const { addRefToCalculateArea } =
-    useContext(SetBlockingStateAndCalculateAreaMethodsContext) ?? throwError();
+interface UseBodyInUseAddRefToCalculateAreaReturn {
+  addRefToCalculateArea: AddRefToCalculateArea;
+}
 
-  return (element: HTMLElement | null) => element && addRefToCalculateArea(element);
+type AddRefToCalculateArea = (e: HTMLElement | null) => void;
+
+const createAddRefToCalculateArea = (): {
+  useBody: () => UseBodyInUseAddRefToCalculateAreaReturn;
+} => {
+  let addRefToCalculateAreaFromContext: (ref: HTMLElement) => void;
+  let currRefElement: HTMLElement;
+  let addRefToCalculateArea: AddRefToCalculateArea;
+
+  const useBody = (): UseBodyInUseAddRefToCalculateAreaReturn => {
+    ({ addRefToCalculateArea: addRefToCalculateAreaFromContext } =
+      useContext(SetBlockingStateAndCalculateAreaMethodsContext) ?? throwError());
+
+    addRefToCalculateArea =
+      addRefToCalculateArea ??
+      ((ref) => {
+        if (ref && ref !== currRefElement) {
+          currRefElement = ref;
+          addRefToCalculateAreaFromContext(ref);
+        }
+      });
+
+    return { addRefToCalculateArea };
+  };
+
+  return { useBody };
+};
+
+export const useAddRefToCalculateArea = (): ((e: HTMLElement | null) => void) => {
+  const [{ useBody }] = useState(createAddRefToCalculateArea);
+  const { addRefToCalculateArea } = useBody();
+
+  return addRefToCalculateArea;
 };
 
 export const useResetArea = (): (() => void) =>

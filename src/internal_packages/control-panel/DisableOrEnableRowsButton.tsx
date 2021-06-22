@@ -1,6 +1,7 @@
 import {
   PerformanceInfo,
   useAddRefToCalculateArea,
+  useSetStateToBlock,
 } from '@compare-react-state-management-solutions/performance-info';
 import { usePerfMetric } from '@compare-react-state-management-solutions/use-perf-metric';
 import type { FC } from 'react';
@@ -12,12 +13,13 @@ export type DisableOrEnableRowsHook = () => (() => void) | null;
 
 export const DisableOrEnableRowsButton: FC<{
   useOnPushButton: DisableOrEnableRowsHook;
-  name: 'disable odd rows' | 'enable odd rows';
+  name: 'disable rows' | 'enable rows';
   moduleName: string;
 }> = ({ useOnPushButton, name, moduleName }) => {
   const onPushButton = useOnPushButton();
   const { WrapMetricConsumer, measurePerformance } = usePerfMetric();
   const addRef = useAddRefToCalculateArea();
+  const setStateToBlock = useSetStateToBlock();
 
   return (
     <div {...{ style: buttonContainerStyle, ref: addRef }}>
@@ -26,8 +28,15 @@ export const DisableOrEnableRowsButton: FC<{
           onClick:
             onPushButton &&
             (() => {
-              measurePerformance();
-              onPushButton();
+              setStateToBlock();
+
+              measurePerformance({
+                measureAtEffectStage: true,
+
+                callback: () => {
+                  onPushButton();
+                },
+              });
             }),
           name,
         }}

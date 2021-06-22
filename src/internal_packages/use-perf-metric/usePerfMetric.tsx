@@ -3,7 +3,7 @@ import type { FC } from 'react';
 import { cloneElement, useEffect, useState } from 'react';
 import { createObserverCallback } from './createObserverCallback';
 import type {
-  EffectPayload,
+  EffectCallback,
   MeasurementStatus,
   MeasurePerformance,
   MeasurePerformanceSettings,
@@ -30,13 +30,14 @@ const pendingStatus: MetricConsumerProps & { status: 'pending' } = {
 
 const errorStatus: Omit<MetricConsumerProps & { status: 'error' }, 'error'> = {
   status: 'error',
-  data: null,
 };
+
+const errorDoesNotSupport = Error('(usePerfMetrics) The browser does not support the library');
 
 const createUsePerfMetricReturn = (
   settings: PerfMetricSettings
 ): { perfMetricReturn: PerfMetricReturn; useBody: () => void } => {
-  const { supportedEntryTypes = false } = global.PerformanceObserver ?? {};
+  const { supportedEntryTypes = null } = global.PerformanceObserver ?? null;
 
   const isSupported =
     supportedEntryTypes &&
@@ -77,35 +78,37 @@ const createUsePerfMetricReturn = (
     return result;
   };
 
-  const measurePerformance = isSupported
-    ? (measureSettings: MeasurePerformanceSettings = {}) => {
-        const { id } = { id: mainDefinedID, ...measureSettings };
-        const perfMarkName = getNextKey(id);
+  const measurePerformance = (measureSettings: MeasurePerformanceSettings = {}) => {
+    const { id } = { id: mainDefinedID, ...measureSettings };
+    const perfMarkName = getNextKey(id);
 
-        const observer = new PerformanceObserver(
-          createObserverCallback(
-            perfMarkName,
-            postErrorStatus,
-            postCalculatedData,
-            isFirstRunOrUseEffectRegistered
-          )
-        );
+    const observer =
+      isSupported &&
+      new PerformanceObserver(
+        createObserverCallback(
+          perfMarkName,
+          postErrorStatus,
+          postCalculatedData,
+          isFirstRunOrUseEffectRegistered
+        )
+      );
 
-        setChildrenProps(pendingStatus);
+    isSupported && setChildrenProps(pendingStatus);
 
-        measureSettings.measureAtEffectStage
-          ? (startOnEffect = () => {
-              startMeasurement();
-              measureSettings.payload?.();
-            })
-          : startMeasurement();
+    measureSettings.measureAtEffectStage
+      ? (startOnEffect = () => {
+          startMeasurement();
+          measureSettings.callback?.();
+        })
+      : startMeasurement();
 
-        function startMeasurement() {
-          observer.observe({ entryTypes: ['mark', 'longtask'] });
-          performance.mark(perfMarkName);
-        }
+    function startMeasurement() {
+      if (observer) {
+        observer.observe({ entryTypes: ['mark', 'longtask'] });
+        performance.mark(perfMarkName);
       }
-    : () => undefined;
+    }
+  };
 
   const WrapMetricConsumer: FC<WrapMetricConsumerProps> = ({ children: nestedComponent }) => {
     const [childrenProps, _setChildrenProps] = useState((): MetricConsumerProps => {
@@ -119,10 +122,7 @@ const createUsePerfMetricReturn = (
         return initialStatus;
       }
 
-      return {
-        ...errorStatus,
-        error: Error('(usePerfMetrics) The browser does not support the library'),
-      };
+      return { ...errorStatus, error: errorDoesNotSupport };
     });
 
     setChildrenProps = _setChildrenProps;
@@ -171,7 +171,7 @@ export type {
   PerfMetricReturn,
   PerfMetricSettings,
   MeasurePerformanceSettings,
-  EffectPayload,
+  EffectCallback,
   MeasurePerformance,
   WrapMetricConsumerProps,
 };

@@ -2,6 +2,7 @@
 import {
   PerformanceInfo,
   useAddRefToCalculateArea,
+  useSetStateToBlock,
 } from '@compare-react-state-management-solutions/performance-info';
 import { usePerfMetric } from '@compare-react-state-management-solutions/use-perf-metric';
 import type { FC } from 'react';
@@ -20,14 +21,22 @@ export const MeasuredControlButton: FC<MeasuredControlButtonProps> = (props) => 
   const onPushButton = props.onPushButton ?? props.useOnPushButton();
   const { WrapMetricConsumer, measurePerformance } = usePerfMetric();
   const addRef = useAddRefToCalculateArea();
+  const setStateToBlock = useSetStateToBlock();
 
   return (
     <div {...{ style: buttonContainerStyle, ref: addRef }}>
       <Button
         {...{
           onClick: () => {
-            measurePerformance();
-            onPushButton();
+            setStateToBlock();
+
+            measurePerformance({
+              measureAtEffectStage: true,
+
+              callback: () => {
+                onPushButton();
+              },
+            });
           },
           name,
         }}

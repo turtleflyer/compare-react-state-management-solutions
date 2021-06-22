@@ -1,26 +1,24 @@
 import type { FC } from 'react';
 import React, { StrictMode, useEffect, useState } from 'react';
 import type {
-  EffectPayload,
+  EffectCallback,
   MeasurementStatus,
   MeasurePerformance,
   MetricConsumerProps,
   PerfMetric,
-  PerfMetricSettings
+  PerfMetricSettings,
 } from '../../usePerfMetric';
 import { usePerfMetric } from '../../usePerfMetric';
 
 export interface Retrieve {
   measurePerformance?: MeasurePerformance;
 
-  data?: PerfMetric | null;
-
   status?: MeasurementStatus;
+
+  data?: PerfMetric | null;
 
   lunchedAtEffectStage?: boolean;
 }
-
-type DisplayComponent = FC<MetricConsumerProps | { [P in keyof MetricConsumerProps]?: undefined }>;
 
 type UseBody = (param: {
   retrieve: Retrieve;
@@ -37,7 +35,10 @@ const createNestedComponents = (): {
   let freshRemount: boolean;
   let isUnmount: boolean;
 
-  const Display: DisplayComponent = ({ data, status }) => {
+  const Display: FC<MetricConsumerProps | { status?: undefined; data?: undefined }> = ({
+    status,
+    data,
+  }) => {
     Object.assign(retrieve, { data, status });
 
     useEffect(() => {
@@ -53,7 +54,7 @@ const createNestedComponents = (): {
 
     const measurePerformance: MeasurePerformance = (settings: PerfMetricSettings = {}) => {
       retrieve.lunchedAtEffectStage = effectStage = false;
-      originalMeasurePerformance(alterPayloadToCatchEffectStage(settings));
+      originalMeasurePerformance(alterCallbackToCatchEffectStage(settings));
     };
 
     Object.assign(retrieve, { measurePerformance });
@@ -69,7 +70,7 @@ const createNestedComponents = (): {
     retrieve = _retrieve;
     freshRemount = _freshRemount;
     retrieve.lunchedAtEffectStage = effectStage = false;
-    relayingSettings = alterPayloadToCatchEffectStage(settings);
+    relayingSettings = alterCallbackToCatchEffectStage(settings);
 
     const [_isUnmount, setUnmount] = useState(false);
     isUnmount = _isUnmount;
@@ -93,14 +94,14 @@ const createNestedComponents = (): {
 
   return { useBody };
 
-  function alterPayloadToCatchEffectStage<P extends PerfMetricSettings>(settings: P): P {
+  function alterCallbackToCatchEffectStage<P extends PerfMetricSettings>(settings: P): P {
     return {
       ...settings,
       ...(settings.measureAtEffectStage
         ? {
-            payload: () => {
+            callback: () => {
               retrieve.lunchedAtEffectStage = effectStage;
-              settings.payload?.();
+              settings.callback?.();
             },
           }
         : {}),
@@ -111,7 +112,7 @@ const createNestedComponents = (): {
 export const TestComponent: FC<{
   measureFromCreated?: boolean;
   effectSettings?:
-    | { measureAtEffectStage: true; payload: EffectPayload }
+    | { measureAtEffectStage: true; callback: EffectCallback }
     | { measureAtEffectStage?: false };
   id?: string;
   retrieve: Retrieve;
