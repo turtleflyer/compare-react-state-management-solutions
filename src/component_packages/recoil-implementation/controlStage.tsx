@@ -9,7 +9,6 @@ import {
   choiceForPixelPlaceholderAtom,
   colorForAlternativePlaceholderAtom,
   createColorForAlternativeAtom,
-  gridSizeAtom,
   rememberActiveChoiceAtom,
 } from './State/State';
 import type {
@@ -35,7 +34,7 @@ export const useRepaintRow = (): (() => void) => {
   const colorsState = alternatives.map(useColorState) as [ManageColorState, ManageColorState];
 
   return (): void => {
-    const prevColor = colorsState[activeChoice][0];
+    const [prevColor, setNextColor] = colorsState[activeChoice];
     const nextPotentialChoice = (1 - activeChoice) as PixelChoice;
 
     if (alternatives[nextPotentialChoice] !== null) {
@@ -43,7 +42,7 @@ export const useRepaintRow = (): (() => void) => {
     }
 
     if (alternatives[activeChoice] !== null) {
-      colorsState[activeChoice][1](getRandomColor(prevColor));
+      setNextColor(getRandomColor(prevColor));
     }
   };
 };
@@ -82,8 +81,11 @@ export const useEnableRows = (): (() => void) | null => {
     : null;
 };
 
-export const usePaintRandomSinglePixel = (): (() => void) => {
-  const gridSize = useRecoilValue(gridSizeAtom);
+export const usePaintRandomSinglePixelDependedOnGridSize = ({
+  gridSize,
+}: {
+  gridSize: number;
+}): (() => void) => {
   const [atomToPaint, setAtomToPaint] = useState({ atom: choiceForPixelPlaceholderAtom });
   const paintRandomPixel = useSetRecoilState(atomToPaint.atom);
 
@@ -106,8 +108,11 @@ const PixelToPaint: FC<{ pixelChoiceAtom: ChoiceForPixelAtom }> = ({ pixelChoice
   return <></>;
 };
 
-export const usePaintRandomPixels = (): [(percentage: number) => void, ReactElement[]] => {
-  const gridSize = useRecoilValue(gridSizeAtom);
+export const usePaintRandomPixelsDependedOnGridSize = ({
+  gridSize,
+}: {
+  gridSize: number;
+}): [(percentage: number) => void, ReactElement[]] => {
   const [pixelsToPaint, setPixelsToPaint] = useState<ReactElement[]>([]);
 
   useEffect(

@@ -24,11 +24,6 @@ export type HoldColorForAlternativeAtom = {
   atom: Atom<ColorForAlternative>;
 };
 
-export const gridSizeKey = 'grid-size';
-
-export type GridSizeState = Record<GridSize, number>;
-export type GridSize = typeof gridSizeKey;
-
 export const rememberActiveChoiceKey = 'remember-active-choice';
 
 export interface RememberActiveChoiceState {
@@ -38,7 +33,6 @@ export interface RememberActiveChoiceState {
 export type State = ChoiceForPixelState &
   ColorForAlternativeState &
   AlternativeForChoiceState &
-  GridSizeState &
   RememberActiveChoiceState;
 
 export type ChoiceForPixelAtom = Atom<ChoiceForPixel>;

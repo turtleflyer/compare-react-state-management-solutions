@@ -77,24 +77,22 @@ export const BlockingSpinner: FC<{ zIndex?: number }> = ({ zIndex = 0 }) => {
     blockingState.toBlock && !blockingState.readyToRender && area && blockingState.setReadyState();
   }, [area, blockingState]);
 
-  return blockingState.toBlock ? (
+  return blockingState.toBlock && area ? (
     <div {...{ style: outerContainerStyle }}>
-      {area && (
-        <div
-          {...{
-            style: {
-              ...spinnerContainerStyle,
-              zIndex,
-              top: area.top,
-              left: area.left,
-              height: area.bottom - area.top,
-              width: area.right - area.left,
-            },
-          }}
-        >
-          <PendingEffect />
-        </div>
-      )}
+      <div
+        {...{
+          style: {
+            ...spinnerContainerStyle,
+            zIndex,
+            top: area.top,
+            left: area.left,
+            height: area.bottom - area.top,
+            width: area.right - area.left,
+          },
+        }}
+      >
+        <PendingEffect />
+      </div>
     </div>
   ) : null;
 };

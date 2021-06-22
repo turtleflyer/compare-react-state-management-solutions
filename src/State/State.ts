@@ -1,8 +1,7 @@
-import { getNextKey } from '@compare-react-state-management-solutions/get-next-key';
 import { getRandomColor } from '@compare-react-state-management-solutions/random-color';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { SetterOrUpdater } from 'recoil';
-import { atom, useRecoilState, useSetRecoilState } from 'recoil';
+import { atom, useSetRecoilState } from 'recoil';
 import { getNextAtom } from '../helpers/getNextAtom';
 import type {
   AlternativeForChoice,
@@ -18,7 +17,6 @@ import {
   alternativeForChoiceKeyPrefixBase,
   choiceForPixelPlaceholderKey,
   colorForAlternativeKeyPrefix,
-  gridSizeKey,
   rememberActiveChoiceKey,
 } from './StateInterface';
 
@@ -40,8 +38,6 @@ export const colorForAlternativePlaceholderAtom = atom({
   default: DEF_COLOR,
 }) as ColorForAlternativeAtom;
 
-export const gridSizeAtom = atom({ key: gridSizeKey, default: 0 });
-
 export const rememberActiveChoiceAtom = atom({ key: rememberActiveChoiceKey, default: 0 });
 
 const alternativeForChoiceKeyPrefixes = ([0, 1] as const).map(
@@ -52,32 +48,26 @@ export const alternativeForChoiceAtoms = alternativeForChoiceKeyPrefixes.map((ke
   getNextAtom(key, { atom: createColorForAlternativeAtom(i as PixelChoice) })
 ) as [AlternativeForChoiceAtom, AlternativeForChoiceAtom];
 
-export const useRefreshApp = ({
+interface UseRefreshStageReturn {
+  gridSize: number;
+  commandToRefreshStage: CommandToRefreshStage;
+}
+
+type CommandToRefreshStage = (arg: { gridSize: number }) => void;
+
+export const useRefreshStage = ({
   defGridSize,
 }: {
   defGridSize: number;
-}): {
-  refreshKey: string;
-  commandToCreateRefreshKey: (arg: { gridSize: number }) => void;
-  gridSize: number;
-} => {
-  const [gridSize, setGridSize] = useRecoilState(gridSizeAtom);
+}): UseRefreshStageReturn => {
+  const [gridSize, setGridSize] = useState(defGridSize);
 
   const setAlternativesForChoice = alternativeForChoiceAtoms.map(useSetRecoilState) as [
     SetterOrUpdater<HoldColorForAlternativeAtom | null>,
     SetterOrUpdater<HoldColorForAlternativeAtom | null>
   ];
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => setGridSize(defGridSize), []);
-
-  const createFreshKey = (): string => getNextKey('refresh-key');
-
-  const [refreshKey, createRefreshKey] = useState(createFreshKey);
-
-  useEffect(() => createRefreshKey(createFreshKey), [gridSize]);
-
-  const commandToCreateRefreshKey = ({ gridSize: nextGridSize }: { gridSize: number }) => {
+  const commandToRefreshStage: CommandToRefreshStage = ({ gridSize: nextGridSize }) => {
     setGridSize(nextGridSize);
 
     setAlternativesForChoice.forEach((setter, i) =>
@@ -85,5 +75,5 @@ export const useRefreshApp = ({
     );
   };
 
-  return { refreshKey, commandToCreateRefreshKey, gridSize };
+  return { commandToRefreshStage, gridSize };
 };

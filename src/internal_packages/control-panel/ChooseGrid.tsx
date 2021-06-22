@@ -1,9 +1,10 @@
+import type { PerformanceInfoProps } from '@compare-react-state-management-solutions/performance-info';
 import {
   PerformanceInfo,
   useAddRefToCalculateArea,
 } from '@compare-react-state-management-solutions/performance-info';
-import { usePerfMetric } from '@compare-react-state-management-solutions/use-perf-metric';
-import type { ChangeEventHandler, FC } from 'react';
+import type { WrapMetricConsumerProps } from '@compare-react-state-management-solutions/use-perf-metric';
+import type { CSSProperties, FC } from 'react';
 import React, { useState } from 'react';
 import { Button } from './Button';
 import { InputField } from './InputField';
@@ -15,20 +16,56 @@ export type ChooseGridProps = {
   moduleName: string;
 };
 
-export const ChooseGrid: FC<ChooseGridProps> = (props) => {
-  const { moduleName, gridSize } = props;
-  const [inputValue, setInputValue] = useState(`${gridSize}`);
-  const { WrapMetricConsumer, measurePerformance } = usePerfMetric({ measureFromCreated: true });
+const perfInfoWithCaptionContainerStyle: CSSProperties = {
+  display: 'flex',
+  marginTop: 1,
+  justifyContent: 'flex-end',
+  maxWidth: '18em',
+};
+
+const captionStyle: CSSProperties = {
+  margin: '0px 10px 0 20px',
+  fontSize: '0.85em',
+};
+
+const PerformanceInfoWithCaption: FC<PerformanceInfoProps & { caption: string }> = (props) => {
+  const { caption, status } = props;
+  const [display, setDisplay] = useState<true | null>(null);
+  !display && status !== 'never' && setDisplay(true);
+
+  return (
+    <div {...{ style: perfInfoWithCaptionContainerStyle }}>
+      <div {...{ style: captionStyle }}>{display && caption}</div>
+      <PerformanceInfo {...props} />
+    </div>
+  );
+};
+
+export const ChooseGrid: FC<
+  ChooseGridProps & {
+    WrapMetricConsumerToBuildGrid: FC<WrapMetricConsumerProps>;
+    WrapMetricConsumerToUnmountGrid: FC<WrapMetricConsumerProps>;
+  }
+> = ({
+  gridSize,
+  onGridChosen,
+  moduleName,
+  WrapMetricConsumerToBuildGrid,
+  WrapMetricConsumerToUnmountGrid,
+}) => {
+  const gridSizeString = `${gridSize}`;
   const addRef = useAddRefToCalculateArea();
 
-  const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setInputValue(e.target.value);
-  };
+  const onSubmit = (value: string, setValue: (v: string) => void): void => {
+    const parseNextGridSize = parseInt(value, 10);
 
-  const onSubmit = (): void => {
-    measurePerformance();
-    const nextGridSize = parseInt(inputValue, 10);
-    props.onGridChosen({ gridSize: nextGridSize > 0 ? nextGridSize : gridSize });
+    if (value === `${parseNextGridSize}` && parseNextGridSize > 0) {
+      onGridChosen({ gridSize: parseNextGridSize });
+
+      return;
+    }
+
+    setValue(gridSizeString);
   };
 
   return (
@@ -36,9 +73,8 @@ export const ChooseGrid: FC<ChooseGridProps> = (props) => {
       <InputField
         {...{
           label: 'input grid size: ',
-          onChange,
           onSubmit,
-          value: inputValue,
+          defValue: gridSizeString,
           addStyle: { ...buttonContainerStyle, marginBottom: '2px' },
           insertElementAfter: (
             <Button
@@ -51,9 +87,16 @@ export const ChooseGrid: FC<ChooseGridProps> = (props) => {
           ),
         }}
       />
-      <WrapMetricConsumer>
-        <PerformanceInfo {...{ tags: [moduleName, gridSize] }} />
-      </WrapMetricConsumer>
+
+      <WrapMetricConsumerToBuildGrid>
+        <PerformanceInfoWithCaption {...{ tags: [moduleName, gridSize], caption: 'build grid:' }} />
+      </WrapMetricConsumerToBuildGrid>
+
+      <WrapMetricConsumerToUnmountGrid>
+        <PerformanceInfoWithCaption
+          {...{ tags: [moduleName, 'unmount grid'], caption: 'unmount grid: ' }}
+        />
+      </WrapMetricConsumerToUnmountGrid>
     </div>
   );
 };

@@ -1,5 +1,7 @@
 import type { CSSProperties, FC } from 'react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useBlockingState } from './BlockingParametersProvider';
+import { createOnFocus } from './createOnFocus';
 import { usePerfInfoMethods } from './PerfInfoProvider';
 
 const infoMarkStyle: CSSProperties = {
@@ -61,9 +63,10 @@ export const InfoMark: FC<{ style?: CSSProperties; popupInfo: JSX.Element | stri
     null
   );
 
-  const tipHandler = useCallback(() => setInfoTipBoxPosition(null), []);
-
   const { popupDelay, addTipHandler, hideOtherTips, removeTipHandler } = usePerfInfoMethods();
+  const tipHandler = (): void => setInfoTipBoxPosition(null);
+
+  const { toBlock } = useBlockingState();
 
   const hideInfoTipOnMouseLeave = () => {
     delayTimeoutID.current = setTimeout(() => setInfoTipBoxPosition(null), popupDelay);
@@ -74,7 +77,7 @@ export const InfoMark: FC<{ style?: CSSProperties; popupInfo: JSX.Element | stri
     delayTimeoutID.current = null;
   };
 
-  const showInfoTip = () => {
+  const showInfoTip = (): void => {
     if (infotipBoxPosition) {
       clearDelay();
 
@@ -90,6 +93,8 @@ export const InfoMark: FC<{ style?: CSSProperties; popupInfo: JSX.Element | stri
     }
   };
 
+  const onFocus = createOnFocus<HTMLDivElement>(toBlock, showInfoTip);
+
   useEffect(() => {
     addTipHandler(tipHandler);
 
@@ -103,7 +108,7 @@ export const InfoMark: FC<{ style?: CSSProperties; popupInfo: JSX.Element | stri
           ref: infoMarkRef,
           style: { ...infoMarkStyle, ...style },
           onMouseOver: showInfoTip,
-          onFocus: showInfoTip,
+          onFocus,
           onMouseLeave: hideInfoTipOnMouseLeave,
           onBlur: hideInfoTipOnMouseLeave,
           role: 'link',
