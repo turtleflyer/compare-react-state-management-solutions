@@ -1,12 +1,13 @@
+import type { CSSProperties, FC, ReactElement } from 'react';
 import React, { cloneElement, useState } from 'react';
-import type { CSSProperties, FC } from 'react';
 
-const boxInnerWidth = 164;
-const initialFontSize = 12;
+const DISPLAY_INFO_CONTAINER_WIDTH = 170;
+const INITIAL_FONT_SIZE = 12;
+const FIT_MARGINS = 15;
 
-const outerBoxStyle: CSSProperties = {
+const displayInfoContainerStyle: CSSProperties = {
   display: 'flex',
-  width: 170,
+  width: DISPLAY_INFO_CONTAINER_WIDTH,
   height: 20,
   color: 'white',
   backgroundColor: 'gray',
@@ -21,41 +22,40 @@ const innerBoxStyle: CSSProperties = {
   whiteSpace: 'nowrap',
 };
 
-const elementStyle: CSSProperties = {
-  margin: '0 5px',
-};
+const elementStyle: CSSProperties = { marginRight: 5 };
 
-export const DisplayInfo: FC<{ info?: (JSX.Element | string)[] }> = ({ info }) => {
-  const [fontSize, setFontSize] = useState<number | null>(null);
+export const DisplayInfo: FC<{ info?: (ReactElement | string)[]; tryToFit?: boolean }> = ({
+  info,
+  tryToFit = false,
+}) => {
+  const [fontSize, setFontSize] = useState<number>(INITIAL_FONT_SIZE);
+  tryToFit || fontSize === INITIAL_FONT_SIZE || setFontSize(INITIAL_FONT_SIZE);
 
   const ref = (e: HTMLDivElement | null) => {
-    if (e && !fontSize) {
+    if (e && tryToFit) {
       const { width } = e.getBoundingClientRect();
-      width > boxInnerWidth && setFontSize((initialFontSize * boxInnerWidth) / width);
+      width > DISPLAY_INFO_CONTAINER_WIDTH - FIT_MARGINS &&
+        setFontSize((fontS) => (fontS * (DISPLAY_INFO_CONTAINER_WIDTH - FIT_MARGINS)) / width);
     }
   };
 
   return info ? (
-    <div
-      {...{
-        ref,
-        style: { ...outerBoxStyle, ...innerBoxStyle, fontSize: fontSize ?? initialFontSize },
-      }}
-    >
-      {info.map((e) =>
-        typeof e === 'string' ? (
-          <span {...{ style: elementStyle }} key={e}>
-            {e}
-          </span>
-        ) : (
-          cloneElement(e, {
-            ...e.props,
-            style: { ...(e.props.style ?? {}), ...elementStyle },
-          })
-        )
-      )}
+    <div {...{ style: displayInfoContainerStyle }}>
+      <div {...{ ref, style: { ...innerBoxStyle, fontSize } }}>
+        {info.map((e) =>
+          typeof e === 'string' ? (
+            <span {...{ style: elementStyle }} key={e}>
+              {e}
+            </span>
+          ) : (
+            cloneElement(e, {
+              style: { ...e.props.style, ...elementStyle },
+            })
+          )
+        )}
+      </div>
     </div>
   ) : (
-    <div {...{ style: { ...outerBoxStyle, backgroundColor: 'transparent' } }} />
+    <div {...{ style: { ...displayInfoContainerStyle, backgroundColor: 'transparent' } }} />
   );
 };

@@ -11,6 +11,7 @@ const style: CSSProperties = {
   textAlign: 'center',
   fontWeight: 500,
   cursor: 'default',
+  userSelect: 'none',
 };
 
 export const TabHeader: FC<{

@@ -98,7 +98,7 @@ export const createProcessData = (): {
 
       if (typeof restTags[0] === 'number') {
         currentGrid = restTags[0];
-        entryName = 'change grid';
+        entryName = 'build grid';
       } else {
         entryName = restTags[0];
       }

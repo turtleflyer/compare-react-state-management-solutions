@@ -32,10 +32,10 @@ describe('Test usePerfMetric', () => {
 
   test('using of option "measureAtEffectStage" is consistent', () => {
     const retrieve: Retrieve = {};
-    let payloadDone = false;
+    let callbackDone = false;
 
-    const payload = () => {
-      payloadDone = true;
+    const callback = () => {
+      callbackDone = true;
     };
 
     jest.useFakeTimers();
@@ -45,7 +45,7 @@ describe('Test usePerfMetric', () => {
         measureFromCreated
         {...{
           retrieve,
-          effectSettings: { measureAtEffectStage: true, payload: null },
+          effectSettings: { measureAtEffectStage: true, callback: null },
           id: 'start',
         }}
       />
@@ -101,7 +101,7 @@ describe('Test usePerfMetric', () => {
     expect(retrieve.data).toEqual({ TTI: 477, TBT: 177 });
     expect(retrieve.lunchedAtEffectStage).toBeFalsy();
 
-    act(() => retrieve.measurePerformance!({ measureAtEffectStage: true, payload: null }));
+    act(() => retrieve.measurePerformance!({ measureAtEffectStage: true, callback: null }));
 
     expect(retrieve.status).toBe('pending');
     expect(retrieve.data).toBeNull();
@@ -145,7 +145,7 @@ describe('Test usePerfMetric', () => {
       retrieve.measurePerformance!({
         id: 'nonsense',
         measureAtEffectStage: true,
-        payload,
+        callback,
       })
     );
 
@@ -163,15 +163,15 @@ describe('Test usePerfMetric', () => {
     expect(retrieve.status).toBe('done');
     expect(retrieve.data).toEqual({ TTI: 1500, TBT: 1500 });
     expect(retrieve.lunchedAtEffectStage).toBeTruthy();
-    expect(payloadDone).toBeTruthy();
-    payloadDone = false;
+    expect(callbackDone).toBeTruthy();
+    callbackDone = false;
 
     rerender(
       <TestComponent
         measureFromCreated
         {...{
           retrieve,
-          effectSettings: { measureAtEffectStage: true, payload },
+          effectSettings: { measureAtEffectStage: true, callback },
           id: 'new-try',
         }}
       />
@@ -195,8 +195,8 @@ describe('Test usePerfMetric', () => {
     expect(retrieve.status).toBe('done');
     expect(retrieve.data).toEqual({ TTI: 0, TBT: 0 });
     expect(retrieve.lunchedAtEffectStage).toBeTruthy();
-    expect(payloadDone).toBeTruthy();
-    payloadDone = false;
+    expect(callbackDone).toBeTruthy();
+    callbackDone = false;
 
     unmount();
   });

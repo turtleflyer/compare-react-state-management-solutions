@@ -1,6 +1,5 @@
 import { getRandomColor } from '@compare-react-state-management-solutions/random-color';
-import type { ActionReturn } from './actionTypes';
-import { ActionType } from './actionTypes';
+import type { Reducer } from 'redux';
 import {
   alternativeForChoiceKeys,
   createColorForAlternativeForChoiceEntry,
@@ -8,15 +7,15 @@ import {
 } from './State';
 import type {
   AlternativeForChoiceState,
+  AppAction,
   ChoiceForPixel,
   ColorForAlternativeState,
   PixelChoice,
   State,
 } from './StateInterface';
+import { ActionType } from './StateInterface';
 
-export const createReducer = (
-  gridSize: number
-): ((state: State | undefined, action: ActionReturn) => State) => {
+export const createReducer = (): Reducer<State, AppAction> => {
   const initState = {
     ...initialState,
 
@@ -24,12 +23,10 @@ export const createReducer = (
       (entries, c) => ({ ...entries, ...createColorForAlternativeForChoiceEntry(c) }),
       {} as ColorForAlternativeState & AlternativeForChoiceState
     ),
-
-    gridSize,
   };
 
   // eslint-disable-next-line @typescript-eslint/default-param-last
-  const reducer = (state = initState, action: ActionReturn): State => {
+  const reducer = (state = initState, action: AppAction): State => {
     switch (action.type) {
       case ActionType.CREATE_NEW_PIXEL_ENTRY: {
         const {
