@@ -15,7 +15,6 @@ import type { PaintRandomPixelsProps } from './MassivePaintButton';
 import { MassivePaintButton } from './MassivePaintButton';
 import { MeasuredControlButton } from './MeasuredControlButton';
 
-const pixelsStageStyle: CSSProperties = { flexGrow: 1 };
 const controlPanelContainerStyle: CSSProperties = { margin: '10px 0 0 5px' };
 const headlineStyle: CSSProperties = { margin: '0 0 10px' };
 const blockedStyle: CSSProperties = { filter: 'blur(0.7px)' };
@@ -33,8 +32,6 @@ type ControlPanelProps = {
   ChooseGridProps;
 
 interface UseBodyReturn {
-  blockingContainerStyle: CSSProperties;
-
   pixelStageWithPropsAdded: ReactElement | null;
 
   WrapMetricConsumerToBuildGrid: FC<WrapMetricConsumerProps>;
@@ -44,6 +41,10 @@ interface UseBodyReturn {
   onGridChosenEnhanced: (arg: { gridSize: number }) => void;
 
   pixelStageContainerRef: (refElement: HTMLDivElement | null) => void;
+
+  pixelStageContainerStyle: CSSProperties;
+
+  controlsContainerStyle: CSSProperties;
 }
 
 const warnToChangeGrid = (): never => {
@@ -127,11 +128,17 @@ const createUseBody = ({
   }): UseBodyReturn => {
     const blockingState = useBlockingState();
 
-    const blockingContainerStyle: CSSProperties = blockingState.toBlock
+    const controlsContainerStyle: CSSProperties = blockingState.toBlock
       ? blockedStyle
       : unblockedStyle;
 
     const [containerHeight, setContainerHeight] = useState<number | null>(null);
+
+    const pixelStageContainerStyle: CSSProperties =
+      containerHeight === null
+        ? { flexGrow: 1 }
+        : { width: containerHeight, height: containerHeight };
+
     const [pixelStageWithPropsAdded, setPixelStage] = useState<ReactElement | null>(null);
     const setStateToBlock = useSetStateToBlock();
 
@@ -329,12 +336,13 @@ const createUseBody = ({
       });
 
     return {
-      blockingContainerStyle,
       pixelStageWithPropsAdded,
       WrapMetricConsumerToBuildGrid,
       WrapMetricConsumerToUnmountGrid,
       onGridChosenEnhanced,
       pixelStageContainerRef,
+      controlsContainerStyle,
+      pixelStageContainerStyle,
     };
   };
 
@@ -361,24 +369,25 @@ export const ControlPanel: FC<ControlPanelProps> = (props) => {
   const [{ useBody }] = useState(() => createUseBody({ moduleName, onGridChosen }));
 
   const {
-    blockingContainerStyle,
     pixelStageWithPropsAdded,
     WrapMetricConsumerToBuildGrid,
     WrapMetricConsumerToUnmountGrid,
     onGridChosenEnhanced,
     pixelStageContainerRef,
+    controlsContainerStyle,
+    pixelStageContainerStyle,
   } = useBody({ gridSize, pixelsStage });
 
   return (
     <div {...{ style: outerContainerStyle }}>
-      <div {...{ style: pixelsStageStyle, ref: pixelStageContainerRef }}>
+      <div {...{ style: pixelStageContainerStyle, ref: pixelStageContainerRef }}>
         {pixelStageWithPropsAdded}
       </div>
       <div {...{ style: controlPanelContainerStyle }}>
         <div {...{ style: headlineStyle }}>
           <strong>{headline}</strong>
         </div>
-        <div {...{ style: blockingContainerStyle }}>
+        <div {...{ style: controlsContainerStyle }}>
           <MeasuredControlButton
             {...{
               moduleName,
