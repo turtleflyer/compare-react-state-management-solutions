@@ -8,12 +8,12 @@ export type MeasurePerformanceSettings = (
   | {
       measureAtEffectStage?: false;
     }
-  | { measureAtEffectStage: true; payload: EffectPayload }
+  | { measureAtEffectStage: true; callback: EffectCallback }
 ) & {
   id?: string;
 };
 
-export type EffectPayload = (() => void) | null;
+export type EffectCallback = (() => void) | null;
 
 export interface PerfMetricReturn {
   WrapMetricConsumer: FC<WrapMetricConsumerProps>;
@@ -23,11 +23,10 @@ export interface PerfMetricReturn {
 
 export type MeasurePerformance = (settings?: MeasurePerformanceSettings) => void;
 
-export type MetricConsumerProps = { status: MeasurementStatus } & (
-  | { status: 'never' | 'pending'; data: null }
-  | { status: 'error'; data: null; error: Error }
-  | { status: 'done'; data: PerfMetric }
-);
+export type MetricConsumerProps =
+  | { status: 'never' | 'pending'; data?: null }
+  | { status: 'error'; data?: null; error: Error }
+  | { status: 'done'; data: PerfMetric };
 
 export interface PerfMetric {
   TTI: number;

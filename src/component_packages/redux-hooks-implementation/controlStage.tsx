@@ -8,7 +8,7 @@ import {
   switchMultiplePixelsAction,
   switchPixelChoiceAction,
 } from './State/actions';
-import { createSelector, getGridSize } from './State/selectors';
+import { createSelector } from './State/selectors';
 import { alternativeForChoiceKeys } from './State/State';
 import { storeKeysMethods } from './State/storeKeysMethods';
 
@@ -22,19 +22,19 @@ export const useRepaintRow = (): (() => void) => {
   };
 };
 
-export const useDisableRows = (): (() => void) | undefined => {
+export const useDisableRows = (): (() => void) | null => {
   const dispatch = useDispatch();
 
   const possibleColor = useSelector(createSelector(alternativeForChoiceKeys[1]));
 
   return possibleColor === null
-    ? undefined
+    ? null
     : () => {
         dispatch(disableRowAction());
       };
 };
 
-export const useEnableRows = (): (() => void) | undefined => {
+export const useEnableRows = (): (() => void) | null => {
   const dispatch = useDispatch();
 
   const possibleColor = useSelector(createSelector(alternativeForChoiceKeys[1]));
@@ -43,21 +43,27 @@ export const useEnableRows = (): (() => void) | undefined => {
     ? () => {
         dispatch(enableRowAction());
       }
-    : undefined;
+    : null;
 };
 
-export const usePaintRandomSinglePixel = (): (() => void) => {
+export const usePaintRandomSinglePixelDependedOnGridSize = ({
+  gridSize,
+}: {
+  gridSize: number;
+}): (() => void) => {
   const dispatch = useDispatch();
-  const gridSize = useSelector(getGridSize);
 
   return () => {
     dispatch(switchPixelChoiceAction(drawPixelToPaint(gridSize ** 2)));
   };
 };
 
-export const usePaintRandomPixels = (): ((percentage: number) => void) => {
+export const usePaintRandomPixelsDependedOnGridSize = ({
+  gridSize,
+}: {
+  gridSize: number;
+}): ((percentage: number) => void) => {
   const dispatch = useDispatch();
-  const gridSize = useSelector(getGridSize);
 
   return (percentage: number) => {
     const allPixelsNumber = gridSize ** 2;
@@ -76,5 +82,3 @@ export const usePaintRandomPixels = (): ((percentage: number) => void) => {
     );
   };
 };
-
-export const useGridSize = (): number => useSelector(getGridSize);

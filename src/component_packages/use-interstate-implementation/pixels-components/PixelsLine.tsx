@@ -7,7 +7,7 @@ import { ControlPixel } from './ControlPixel';
 const style: CSSProperties = { display: 'flex' };
 
 export const PixelsLine: FC<{
-  pixelSize: string;
+  pixelSize: number;
   length: number;
   defChoice: PixelChoice;
 }> = ({ children, length, pixelSize, defChoice }) => {

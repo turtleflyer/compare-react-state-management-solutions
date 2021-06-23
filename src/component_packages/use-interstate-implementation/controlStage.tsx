@@ -4,16 +4,15 @@ import { drawPixelToPaint } from './helpers/drawPixelToPaint';
 import {
   alternativeForChoiceKeys,
   createColorForAlternativeForChoiceEntry,
-  readInterstate,
   setInterstate,
-  useInterstate,
+  useInterstate
 } from './State/State';
 import type {
   ColorForAlternativeState,
   PixelChoice,
-  RememberActiveChoiceState,
+  RememberActiveChoiceState
 } from './State/StateInterface';
-import { gridSizeKey, rememberActiveChoiceKey } from './State/StateInterface';
+import { rememberActiveChoiceKey } from './State/StateInterface';
 import { storeKeysMethods } from './State/storeKeysMethods';
 
 const ONE_HUNDRED_PERCENT = 100;
@@ -35,10 +34,10 @@ export const repaintRow = (): void => {
   });
 };
 
-export const useDisableRows = (): (() => void) | undefined =>
+export const useDisableRows = (): (() => void) | null =>
   useInterstate.acceptSelector(({ [alternativeForChoiceKeys[1]]: possibleColor }) =>
     possibleColor === null
-      ? undefined
+      ? null
       : () => {
           setInterstate(() => ({
             [alternativeForChoiceKeys[1]]: null,
@@ -47,24 +46,31 @@ export const useDisableRows = (): (() => void) | undefined =>
         }
   );
 
-export const useEnableRows = (): (() => void) | undefined =>
+export const useEnableRows = (): (() => void) | null =>
   useInterstate.acceptSelector(({ [alternativeForChoiceKeys[1]]: possibleColor }) =>
     possibleColor === null
       ? () => {
           setInterstate(() => createColorForAlternativeForChoiceEntry(1));
         }
-      : undefined
+      : null
   );
 
-export const paintRandomSinglePixel = (): void => {
-  setInterstate(
-    drawPixelToPaint(readInterstate(gridSizeKey) ** 2),
-    (prev) => (1 - prev) as PixelChoice
-  );
+export const paintRandomSinglePixelDependedOnGridSize = ({
+  gridSize,
+}: {
+  gridSize: number;
+}): void => {
+  setInterstate(drawPixelToPaint(gridSize ** 2), (prev) => (1 - prev) as PixelChoice);
 };
 
-export const paintRandomPixels = (percentage: number): void => {
-  const allPixelsNumber = readInterstate(gridSizeKey) ** 2;
+export const paintRandomPixelsDependedOnGridSize = ({
+  gridSize,
+  percentage,
+}: {
+  gridSize: number;
+  percentage: number;
+}): void => {
+  const allPixelsNumber = gridSize ** 2;
   const pixelsNumberToPaint = (allPixelsNumber * percentage) / ONE_HUNDRED_PERCENT;
 
   drawPixels(allPixelsNumber, pixelsNumberToPaint).map((p) => {

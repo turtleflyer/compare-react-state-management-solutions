@@ -1,10 +1,11 @@
 import {
   PerformanceInfo,
-  useAddRef,
+  useAddRefToCalculateArea,
+  useSetStateToBlock,
 } from '@compare-react-state-management-solutions/performance-info';
 import { usePerfMetric } from '@compare-react-state-management-solutions/use-perf-metric';
-import type { ChangeEvent, CSSProperties, FC } from 'react';
-import React, { useState } from 'react';
+import type { CSSProperties, FC, ReactElement } from 'react';
+import React from 'react';
 import { Button } from './Button';
 import { InputField } from './InputField';
 import { buttonContainerStyle } from './styles';
@@ -15,7 +16,7 @@ const renderInfoContainerStyle: CSSProperties = { margin: '-5px 0 0 5px', height
 
 type MassivePaintCallback = (percentage: number) => void;
 
-export type PaintRandomPixels = (
+export type PaintRandomPixelsProps = (
   | {
       paintRandomPixels: MassivePaintCallback;
       usePaintRandomPixels?: undefined;
@@ -23,43 +24,54 @@ export type PaintRandomPixels = (
   | {
       usePaintRandomPixels:
         | (() => MassivePaintCallback)
-        | (() => [MassivePaintCallback, JSX.Element[]]);
+        | (() => [MassivePaintCallback, ReactElement[]]);
       paintRandomPixels?: undefined;
     }
 ) & { moduleName: string };
 
-export const MassivePaintButton: FC<PaintRandomPixels> = (props) => {
+export const MassivePaintButton: FC<PaintRandomPixelsProps> = (props) => {
   const { moduleName } = props;
   let paintRandomPixels: MassivePaintCallback;
-  let painterComponents: JSX.Element[];
-  const addRef = useAddRef();
+  let painterComponents: ReactElement[] | null;
+  const addRef = useAddRefToCalculateArea();
+  const setStateToBlock = useSetStateToBlock();
 
   if (props.paintRandomPixels) {
-    [paintRandomPixels, painterComponents] = [props.paintRandomPixels, []];
+    [paintRandomPixels, painterComponents] = [props.paintRandomPixels, null];
   } else {
     const checkResultForPaintRandomPixels = props.usePaintRandomPixels();
 
     [paintRandomPixels, painterComponents] = Array.isArray(checkResultForPaintRandomPixels)
       ? checkResultForPaintRandomPixels
-      : [checkResultForPaintRandomPixels, []];
+      : [checkResultForPaintRandomPixels, null];
   }
 
-  const [percentsInput, setPercentsInput] = useState(`${DEF_PIXELS_PERCENT_TO_PAINT}`);
+  const defPercentsInput = `${DEF_PIXELS_PERCENT_TO_PAINT}`;
+
   const { WrapMetricConsumer, measurePerformance } = usePerfMetric();
 
-  const startPaint = (): void => {
-    const percentsNumber = parseInt(percentsInput, 10);
+  const startPaint = (value: string, setValue: (v: string) => void): void => {
+    const parsePercentsNumber = parseInt(value, 10);
 
-    if (percentsNumber >= 0 && percentsNumber <= ONE_HUNDRED_PERCENT) {
-      measurePerformance();
-      paintRandomPixels(percentsNumber);
-    } else {
-      setPercentsInput('0');
+    if (
+      value === `${parsePercentsNumber}` &&
+      parsePercentsNumber >= 0 &&
+      parsePercentsNumber <= ONE_HUNDRED_PERCENT
+    ) {
+      setStateToBlock();
+
+      measurePerformance({
+        measureAtEffectStage: true,
+
+        callback: () => {
+          paintRandomPixels(parsePercentsNumber);
+        },
+      });
+
+      return;
     }
-  };
 
-  const percentCallback = ({ target: { value: input } }: ChangeEvent<HTMLInputElement>): void => {
-    setPercentsInput(input);
+    setValue(defPercentsInput);
   };
 
   return (
@@ -68,8 +80,7 @@ export const MassivePaintButton: FC<PaintRandomPixels> = (props) => {
         <InputField
           {...{
             label: 'n: ',
-            value: percentsInput,
-            onChange: percentCallback,
+            defValue: defPercentsInput,
             onSubmit: startPaint,
             width: 40,
             addStyle: buttonContainerStyle,
@@ -80,7 +91,7 @@ export const MassivePaintButton: FC<PaintRandomPixels> = (props) => {
           <WrapMetricConsumer>
             <PerformanceInfo
               // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-              {...{ tags: [moduleName, createName(percentsInput.padStart(3, '0'))] }}
+              {...{ tags: [moduleName, createName(defPercentsInput.padStart(3, '0'))] }}
             />
           </WrapMetricConsumer>
         </div>

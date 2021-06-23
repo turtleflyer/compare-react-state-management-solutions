@@ -7,8 +7,10 @@ import { App as ReduxHooksApp } from '@compare-react-state-management-solutions/
 import { App as UseInterstateApp } from '@compare-react-state-management-solutions/use-interstate-component';
 import type { CSSProperties, FC } from 'react';
 import React, { useState } from 'react';
-import { InfoPanel, TAB_HEADER_HEIGHT } from './internal_packages/info-panel/InfoPanel';
 import { version } from '../package.json';
+import { InfoPanel, TAB_HEADER_HEIGHT } from './internal_packages/info-panel/InfoPanel';
+
+const DEF_GRID_SIZE = 32;
 
 const outerContainerStyle: CSSProperties = {
   display: 'flex',
@@ -17,7 +19,6 @@ const outerContainerStyle: CSSProperties = {
 };
 
 const mainContainerStyle: CSSProperties = {
-  position: 'relative',
   display: 'flex',
   flexDirection: 'column',
   paddingBottom: TAB_HEADER_HEIGHT,
@@ -56,9 +57,9 @@ export const AppInFlexBox: FC = () => {
           <div {...{ style: versionInfoStyle }}>{`v.${version}`}</div>
 
           <div {...{ style: appContainerStyle }}>
-            <ReduxHooksApp />
-            <RecoilApp />
-            <UseInterstateApp />
+            <ReduxHooksApp {...{ defGridSize: DEF_GRID_SIZE }} />
+            <RecoilApp {...{ defGridSize: DEF_GRID_SIZE }} />
+            <UseInterstateApp {...{ defGridSize: DEF_GRID_SIZE }} />
           </div>
 
           <BlockingSpinner {...{ zIndex: 10 }} />

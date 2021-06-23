@@ -9,60 +9,120 @@ export interface Area {
 }
 
 const BlockingAreaContext = createContext<Area | null>(null);
-const ToBlockContext = createContext<boolean | null>(null);
 
-export interface SetBlockingParametersMethods {
-  setToBlock: (toBlock: boolean) => void;
-  addRef: (ref: HTMLElement) => void;
+export type BlockingState =
+  | ({
+      toBlock: true;
+      resetBlockingState: () => void;
+    } & (
+      | {
+          readyToRender: false;
+          setReadyState: () => void;
+        }
+      | {
+          readyToRender: true;
+        }
+    ))
+  | { toBlock: false };
+
+const notBlocked = { toBlock: false } as const;
+
+const BlockingStateContext = createContext<BlockingState>(notBlocked);
+
+export interface SetBlockingStateAndCalculateAreaMethods {
+  setStateToBlock: () => void;
+
+  addRefToCalculateArea: (ref: HTMLElement) => void;
+
+  resetArea: () => void;
 }
 
-const SetBlockingParametersMethodsContext = createContext<SetBlockingParametersMethods | null>(
-  null
-);
+const SetBlockingStateAndCalculateAreaMethodsContext =
+  createContext<SetBlockingStateAndCalculateAreaMethods | null>(null);
 
-const createSetBlockingParametersMethods = (): {
-  useBlockingArea: () => Area;
-  useToBlock: () => boolean;
-  setBlockingParametersMethods: SetBlockingParametersMethods;
+const createBlockingStateAndCalculateArea = (): {
+  useBlockingArea: () => Area | null;
+  useBlockingState: () => BlockingState;
+  setBlockingStateAndCalculateAreaMethods: SetBlockingStateAndCalculateAreaMethods;
 } => {
-  let setParamToShow: (toShow: boolean) => void;
+  let setBlockingState: (v: BlockingState) => void;
   let currArea: Area | null;
-  let setArea: (area: Area) => void;
+  let setArea: (area: Area | null) => void;
 
-  const useBlockingArea = (): Area => {
+  const useBlockingArea = (): Area | null => {
     const [area, _setArea] = useState<Area | null>(null);
-    setArea = _setArea;
 
-    return area ?? { top: 0, left: 0, bottom: 0, right: 0 };
+    setArea =
+      setArea ??
+      ((a: Area | null) => {
+        currArea = a;
+        _setArea(a);
+      });
+
+    return area;
   };
 
-  const useToBlock = (): boolean => {
-    const [toShow, _setParamToShow] = useState(false);
-    setParamToShow = _setParamToShow;
-
-    return toShow;
+  const resetBlockingState = (): void => {
+    setBlockingState(notBlocked);
   };
 
-  const setToBlock = (toBlock: boolean): void => setParamToShow(toBlock);
+  const blockedAndReadyToRender = {
+    toBlock: true,
+    readyToRender: true,
+    resetBlockingState,
+  } as const;
 
-  const addRef = (ref: HTMLElement): void => {
+  const blockedNotReadyToRender = {
+    toBlock: true,
+    readyToRender: false,
+    resetBlockingState,
+
+    setReadyState(): void {
+      setBlockingState(blockedAndReadyToRender);
+    },
+  } as const;
+
+  const useBlockingState = (): BlockingState => {
+    const [blockingState, _setBlockingState] = useState<BlockingState>(notBlocked);
+
+    setBlockingState = _setBlockingState;
+
+    return blockingState;
+  };
+
+  const setStateToBlock = (): void => setBlockingState(blockedNotReadyToRender);
+
+  const addRefToCalculateArea = (ref: HTMLElement): void => {
     const { top, left, bottom, right } = ref.getBoundingClientRect();
+    let nextArea: Area;
 
     if (!currArea) {
-      currArea = { top, left, bottom, right };
+      nextArea = { top, left, bottom, right };
     } else {
       const { top: curTop, left: curLeft, bottom: curBottom, right: curRight } = currArea;
       const [nextTop, nextBottom] = processDimension([curTop, curBottom], [top, bottom]);
       const [nextLeft, nextRight] = processDimension([curLeft, curRight], [left, right]);
-      currArea = { top: nextTop, left: nextLeft, bottom: nextBottom, right: nextRight };
+      nextArea = { top: nextTop, left: nextLeft, bottom: nextBottom, right: nextRight };
     }
 
-    setArea(currArea);
+    (!currArea ||
+      Object.entries(currArea).some(([key, value]) => value !== nextArea[key as keyof Area])) &&
+      setArea(nextArea);
   };
 
-  const setBlockingParametersMethods = { setToBlock, addRef };
+  const resetArea = (): void => setArea(null);
 
-  return { useBlockingArea, useToBlock, setBlockingParametersMethods };
+  const setBlockingStateAndCalculateAreaMethods: SetBlockingStateAndCalculateAreaMethods = {
+    setStateToBlock,
+    addRefToCalculateArea,
+    resetArea,
+  };
+
+  return {
+    useBlockingArea,
+    useBlockingState,
+    setBlockingStateAndCalculateAreaMethods,
+  };
 
   type DimensionSet = [begin: number, end: number];
 
@@ -75,36 +135,74 @@ const createSetBlockingParametersMethods = (): {
 };
 
 export const BlockingParametersProvider: FC = ({ children }) => {
-  const [{ useBlockingArea, useToBlock, setBlockingParametersMethods }] = useState(
-    createSetBlockingParametersMethods
+  const [{ useBlockingArea, useBlockingState, setBlockingStateAndCalculateAreaMethods }] = useState(
+    createBlockingStateAndCalculateArea
   );
 
   const blockingArea = useBlockingArea();
-  const toBlock = useToBlock();
+  const blockingState = useBlockingState();
 
   return (
     <BlockingAreaContext.Provider {...{ value: blockingArea }}>
-      <ToBlockContext.Provider {...{ value: toBlock }}>
-        <SetBlockingParametersMethodsContext.Provider {...{ value: setBlockingParametersMethods }}>
+      <BlockingStateContext.Provider {...{ value: blockingState }}>
+        <SetBlockingStateAndCalculateAreaMethodsContext.Provider
+          {...{ value: setBlockingStateAndCalculateAreaMethods }}
+        >
           {children}
-        </SetBlockingParametersMethodsContext.Provider>
-      </ToBlockContext.Provider>
+        </SetBlockingStateAndCalculateAreaMethodsContext.Provider>
+      </BlockingStateContext.Provider>
     </BlockingAreaContext.Provider>
   );
 };
 
-export const useBlockingArea = (): Area => useContext(BlockingAreaContext) ?? throwError();
+export const useBlockingState = (): BlockingState => useContext(BlockingStateContext);
 
-export const useToBlock = (): boolean => useContext(ToBlockContext) ?? throwError();
+export const useSetStateToBlock = (): (() => void) =>
+  (useContext(SetBlockingStateAndCalculateAreaMethodsContext) ?? throwError()).setStateToBlock;
 
-export const useSetToBlock = (): SetBlockingParametersMethods['setToBlock'] =>
-  (useContext(SetBlockingParametersMethodsContext) ?? throwError()).setToBlock;
+export const useBlockingArea = (): Area | null => useContext(BlockingAreaContext);
 
-export const useAddRef = (): ((e: HTMLElement | null) => void) => {
-  const { addRef } = useContext(SetBlockingParametersMethodsContext) ?? throwError();
+interface UseBodyInUseAddRefToCalculateAreaReturn {
+  addRefToCalculateArea: AddRefToCalculateArea;
+}
 
-  return (e: HTMLElement | null) => e && addRef(e);
+type AddRefToCalculateArea = (e: HTMLElement | null) => void;
+
+const createAddRefToCalculateArea = (): {
+  useBody: () => UseBodyInUseAddRefToCalculateAreaReturn;
+} => {
+  let addRefToCalculateAreaFromContext: (ref: HTMLElement) => void;
+  let currRefElement: HTMLElement;
+  let addRefToCalculateArea: AddRefToCalculateArea;
+
+  const useBody = (): UseBodyInUseAddRefToCalculateAreaReturn => {
+    ({ addRefToCalculateArea: addRefToCalculateAreaFromContext } =
+      useContext(SetBlockingStateAndCalculateAreaMethodsContext) ?? throwError());
+
+    addRefToCalculateArea =
+      addRefToCalculateArea ??
+      ((ref) => {
+        if (ref && ref !== currRefElement) {
+          currRefElement = ref;
+          addRefToCalculateAreaFromContext(ref);
+        }
+      });
+
+    return { addRefToCalculateArea };
+  };
+
+  return { useBody };
 };
+
+export const useAddRefToCalculateArea = (): ((e: HTMLElement | null) => void) => {
+  const [{ useBody }] = useState(createAddRefToCalculateArea);
+  const { addRefToCalculateArea } = useBody();
+
+  return addRefToCalculateArea;
+};
+
+export const useResetArea = (): (() => void) =>
+  (useContext(SetBlockingStateAndCalculateAreaMethodsContext) ?? throwError()).resetArea;
 
 function throwError(): never {
   throw Error('blocking parameters context provider is missing');

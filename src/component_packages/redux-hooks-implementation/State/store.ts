@@ -1,33 +1,27 @@
-import { DEF_GRID_SIZE } from '@compare-react-state-management-solutions/control-panel';
-import { getNextKey } from '@compare-react-state-management-solutions/get-next-key';
 import { useState } from 'react';
-import { createStore, Store } from 'redux';
-import type { ActionReturn, ActionType } from './actionTypes';
-import { appReducer, initializeState } from './reducer';
-import type { State } from './StateInterface';
+import { createStore } from 'redux';
+import { createReducer } from './reducer';
+import type { AppStore } from './StateInterface';
+interface UseRefreshStageReturn {
+  store: AppStore;
+  gridSize: number;
+  commandToRefreshStage: CommandToRefreshStage;
+}
 
-export const useCreateStore = (): [
-  Store<State, ActionReturn<ActionType>>,
-  string,
-  (p: { gridSize: number }) => void
-] => {
-  const [store, provideStore] = useState<Store<State, ActionReturn<ActionType>>>(() => {
-    initializeState(DEF_GRID_SIZE);
+type CommandToRefreshStage = (arg: { gridSize: number }) => void;
 
-    return createStore(appReducer);
-  });
+export const useRefreshStage = ({
+  defGridSize,
+}: {
+  defGridSize: number;
+}): UseRefreshStageReturn => {
+  const [store, provideStore] = useState<AppStore>(() => createStore(createReducer()));
+  const [gridSize, setGridSize] = useState(defGridSize);
 
-  const [refreshKey, setNewKey] = useState(createFreshKey);
-
-  const commandToCreateFreshStore = ({ gridSize }: { gridSize: number }): void => {
-    initializeState(gridSize);
-    provideStore(createStore(appReducer));
-    setNewKey(createFreshKey);
+  const commandToRefreshStage: CommandToRefreshStage = ({ gridSize: nextGridSize }): void => {
+    setGridSize(nextGridSize);
+    provideStore(createStore(createReducer()));
   };
 
-  return [store, refreshKey, commandToCreateFreshStore];
+  return { store, gridSize, commandToRefreshStage };
 };
-
-function createFreshKey(): string {
-  return getNextKey('refresh-key');
-}
