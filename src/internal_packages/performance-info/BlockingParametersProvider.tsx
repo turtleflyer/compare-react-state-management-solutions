@@ -172,21 +172,22 @@ const createAddRefToCalculateArea = (): {
   useBody: () => UseBodyInUseAddRefToCalculateAreaReturn;
 } => {
   let addRefToCalculateAreaFromContext: (ref: HTMLElement) => void;
-  let currRefElement: HTMLElement;
-  let addRefToCalculateArea: AddRefToCalculateArea;
+  let currMaxRight = 0;
 
   const useBody = (): UseBodyInUseAddRefToCalculateAreaReturn => {
     ({ addRefToCalculateArea: addRefToCalculateAreaFromContext } =
       useContext(SetBlockingStateAndCalculateAreaMethodsContext) ?? throwError());
 
-    addRefToCalculateArea =
-      addRefToCalculateArea ??
-      ((ref) => {
-        if (ref && ref !== currRefElement) {
-          currRefElement = ref;
+    const addRefToCalculateArea: AddRefToCalculateArea = (ref) => {
+      if (ref) {
+        const { right } = ref.getBoundingClientRect();
+
+        if (right > currMaxRight) {
           addRefToCalculateAreaFromContext(ref);
+          currMaxRight = right;
         }
-      });
+      }
+    };
 
     return { addRefToCalculateArea };
   };
