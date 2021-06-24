@@ -1,6 +1,6 @@
 {
   "name": "@compare-react-state-management-solutions/use-interstate-component",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "private": "true",
   "main": "App.tsx",
   "dependencies": {
