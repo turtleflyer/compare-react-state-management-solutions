@@ -1,7 +1,7 @@
 {
   "name": "@compare-react-state-management-solutions/use-perf-metric",
   "private": "true",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "main": "usePerfMetric.tsx",
   "dependencies": {
     "@compare-react-state-management-solutions/get-next-key": "^0.1.0",
