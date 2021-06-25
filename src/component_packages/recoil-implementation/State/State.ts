@@ -1,7 +1,7 @@
 import { getRandomColor } from '@compare-react-state-management-solutions/random-color';
 import { useState } from 'react';
 import type { SetterOrUpdater } from 'recoil';
-import { atom, useSetRecoilState } from 'recoil';
+import { atom, snapshot_UNSTABLE, useGotoRecoilSnapshot, useSetRecoilState } from 'recoil';
 import { getNextAtom } from '../helpers/getNextAtom';
 import type {
   AlternativeForChoice,
@@ -50,6 +50,9 @@ export const alternativeForChoiceAtoms = alternativeForChoiceKeyPrefixes.map((ke
 
 export const nullPlaceholderAtom = atom({ key: 'null-placeholder-atom', default: null });
 
+const initStateSnapshot = snapshot_UNSTABLE();
+initStateSnapshot.retain();
+
 interface UseRefreshStageReturn {
   gridSize: number;
   commandToRefreshStage: CommandToRefreshStage;
@@ -63,6 +66,7 @@ export const useRefreshStage = ({
   defGridSize: number;
 }): UseRefreshStageReturn => {
   const [gridSize, setGridSize] = useState(defGridSize);
+  const initState = useGotoRecoilSnapshot();
 
   const setAlternativesForChoice = alternativeForChoiceAtoms.map(useSetRecoilState) as [
     SetterOrUpdater<HoldColorForAlternativeAtom | null>,
@@ -71,6 +75,7 @@ export const useRefreshStage = ({
 
   const commandToRefreshStage: CommandToRefreshStage = ({ gridSize: nextGridSize }) => {
     setGridSize(nextGridSize);
+    initState(initStateSnapshot);
 
     setAlternativesForChoice.forEach((setter, i) =>
       setter({ atom: createColorForAlternativeAtom(i as PixelChoice) })
