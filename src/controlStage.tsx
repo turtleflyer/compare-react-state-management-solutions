@@ -1,19 +1,24 @@
 import { drawPixels } from '@compare-react-state-management-solutions/draw-pixels';
 import { getRandomColor } from '@compare-react-state-management-solutions/random-color';
-import type { FC, ReactElement } from 'react';
-import React, { useEffect, useState } from 'react';
-import { SetterOrUpdater, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useEffect, useState } from 'react';
+import {
+  selector,
+  SetterOrUpdater,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil';
 import { drawPixelToPaint } from './helpers/drawPixelToPaint';
 import {
   alternativeForChoiceAtoms,
   choiceForPixelPlaceholderAtom,
   colorForAlternativePlaceholderAtom,
   createColorForAlternativeAtom,
+  nullPlaceholderAtom,
   rememberActiveChoiceAtom,
 } from './State/State';
 import type {
   AlternativeForChoiceAtom,
-  ChoiceForPixelAtom,
   ColorValue,
   HoldColorForAlternativeAtom,
   PixelChoice,
@@ -98,48 +103,39 @@ export const usePaintRandomSinglePixelDependedOnGridSize = ({
   };
 };
 
-const PixelToPaint: FC<{ pixelChoiceAtom: ChoiceForPixelAtom }> = ({ pixelChoiceAtom }) => {
-  const setChoice = useSetRecoilState(pixelChoiceAtom);
-
-  useEffect(() => {
-    setChoice((prevChoice) => (1 - prevChoice) as PixelChoice);
-  }, [setChoice]);
-
-  return <></>;
-};
-
 export const usePaintRandomPixelsDependedOnGridSize = ({
   gridSize,
 }: {
   gridSize: number;
-}): [(percentage: number) => void, ReactElement[]] => {
-  const [pixelsToPaint, setPixelsToPaint] = useState<ReactElement[]>([]);
+}): ((percentage: number) => void) => {
+  const [selectorToPaint, setSelectorToPaint] = useState(nullPlaceholderAtom);
+  const paintPixels = useSetRecoilState(selectorToPaint);
 
-  useEffect(
-    () => setPixelsToPaint((prevPixels) => (prevPixels.length > 0 ? [] : prevPixels)),
-    [pixelsToPaint]
-  );
+  useEffect(() => {
+    selectorToPaint !== nullPlaceholderAtom && paintPixels(null);
+  }, [paintPixels, selectorToPaint]);
 
-  return [
-    (percentage: number): void => {
-      const allPixelsNumber = gridSize ** 2;
-      const pixelsNumberToPaint = (allPixelsNumber * percentage) / ONE_HUNDRED_PERCENT;
+  return (percentage: number): void => {
+    const allPixelsNumber = gridSize ** 2;
+    const pixelsNumberToPaint = (allPixelsNumber * percentage) / ONE_HUNDRED_PERCENT;
 
-      setPixelsToPaint(
-        drawPixels(allPixelsNumber, pixelsNumberToPaint).map((p) => (
-          <PixelToPaint
-            {...{
-              pixelChoiceAtom:
-                storeAtomsMethods.get(p) ??
-                (() => {
-                  throw Error('It must be defined');
-                })(),
-            }}
-            key={p}
-          />
-        ))
-      );
-    },
-    pixelsToPaint,
-  ];
+    setSelectorToPaint(
+      selector({
+        key: 'paint-random-pixels',
+        get: () => null,
+        set: ({ set }) => {
+          drawPixels(allPixelsNumber, pixelsNumberToPaint).forEach((p) =>
+            set(
+              storeAtomsMethods.get(p) ?? throwErrorAtomMustBeDefined(),
+              (prevChoice) => (1 - prevChoice) as PixelChoice
+            )
+          );
+        },
+      })
+    );
+  };
 };
+
+function throwErrorAtomMustBeDefined(): never {
+  throw Error('Atom must be defined');
+}
