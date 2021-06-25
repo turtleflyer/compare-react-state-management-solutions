@@ -48,6 +48,8 @@ export const alternativeForChoiceAtoms = alternativeForChoiceKeyPrefixes.map((ke
   getNextAtom(key, { atom: createColorForAlternativeAtom(i as PixelChoice) })
 ) as [AlternativeForChoiceAtom, AlternativeForChoiceAtom];
 
+export const nullPlaceholderAtom = atom({ key: 'null-placeholder-atom', default: null });
+
 interface UseRefreshStageReturn {
   gridSize: number;
   commandToRefreshStage: CommandToRefreshStage;
