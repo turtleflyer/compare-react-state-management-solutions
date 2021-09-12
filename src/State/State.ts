@@ -1,8 +1,7 @@
 import { getNextKey } from '@compare-react-state-management-solutions/get-next-key';
 import { getRandomColor } from '@compare-react-state-management-solutions/random-color';
 import { useState } from 'react';
-import type { Interstate } from 'use-interstate';
-import { goInterstate } from 'use-interstate';
+import { initInterstate } from 'use-interstate';
 import type {
   AlternativeForChoice,
   AlternativeForChoiceState,
@@ -24,9 +23,8 @@ export const alternativeForChoiceKeys = [0, 1].map(
   (c) => `${alternativeForChoicePlaceholderKey}-${c}`
 ) as [AlternativeForChoice, AlternativeForChoice];
 
-export const { initInterstate, useInterstate, readInterstate, setInterstate } = goInterstate<
-  State & Interstate
->();
+export const { useInterstate, readInterstate, setInterstate, resetInterstate } =
+  initInterstate<State>();
 
 export const createColorForAlternativeForChoiceEntry = (
   choice: PixelChoice
@@ -71,7 +69,7 @@ export const useRefreshStage = ({
 };
 
 function initAppInterstate() {
-  initInterstate({
+  resetInterstate({
     ...initialState,
     ...([0, 1] as const).reduce(
       (entries, c) => ({ ...entries, ...createColorForAlternativeForChoiceEntry(c) }),

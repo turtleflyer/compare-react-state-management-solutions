@@ -5,12 +5,12 @@ import {
   alternativeForChoiceKeys,
   createColorForAlternativeForChoiceEntry,
   setInterstate,
-  useInterstate
+  useInterstate,
 } from './State/State';
 import type {
   ColorForAlternativeState,
   PixelChoice,
-  RememberActiveChoiceState
+  RememberActiveChoiceState,
 } from './State/StateInterface';
 import { rememberActiveChoiceKey } from './State/StateInterface';
 import { storeKeysMethods } from './State/storeKeysMethods';
@@ -41,7 +41,7 @@ export const useDisableRows = (): (() => void) | null =>
       : () => {
           setInterstate(() => ({
             [alternativeForChoiceKeys[1]]: null,
-            [rememberActiveChoiceKey]: 0,
+            [rememberActiveChoiceKey]: 0 as PixelChoice,
           }));
         }
   );
