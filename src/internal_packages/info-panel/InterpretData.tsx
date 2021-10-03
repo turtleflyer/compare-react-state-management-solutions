@@ -54,7 +54,7 @@ export const InterpretData: FC<{ data: DataTable; recordsOrder: string[] }> = ({
         ...gST,
         [g]: eliminateDuplicates(
           ...(gST[g] ?? []),
-          ...Object.keys((moduleTable as ModuleEntry<number>)[(g as unknown) as number])
+          ...Object.keys((moduleTable as ModuleEntry<number>)[g as unknown as number])
         ),
       }),
       gridSizesT
@@ -73,7 +73,12 @@ export const InterpretData: FC<{ data: DataTable; recordsOrder: string[] }> = ({
               ? recordsOrder.reduce(
                   (ordered, gauge) => [
                     ...ordered,
-                    ...entryTitles.filter((t) => RegExp(gauge).test(t)).sort(),
+                    ...entryTitles
+                      .filter((t) => RegExp(gauge).test(t))
+                      .sort(
+                        (title1, title2) =>
+                          Number(title1.replace(/\D/g, '')) - Number(title2.replace(/\D/g, ''))
+                      ),
                   ],
                   [] as string[]
                 )
