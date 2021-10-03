@@ -90,10 +90,7 @@ export const MassivePaintButton: FC<PaintRandomPixelsProps> = (props) => {
         />
         <div {...{ style: renderInfoContainerStyle }}>
           <WrapMetricConsumer>
-            <PerformanceInfo
-              // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-              {...{ tags: [moduleName, createName(percentsInput.padStart(3, '0'))] }}
-            />
+            <PerformanceInfo {...{ tags: [moduleName, createName(percentsInput)] }} />
           </WrapMetricConsumer>
         </div>
       </div>
