@@ -1,6 +1,6 @@
 {
   "name": "@compare-react-state-management-solutions/recoil-component",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "private": "true",
   "main": "App.tsx",
   "dependencies": {

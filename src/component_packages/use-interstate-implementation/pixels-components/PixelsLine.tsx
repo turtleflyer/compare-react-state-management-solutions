@@ -1,6 +1,6 @@
 import { getNextKey } from '@compare-react-state-management-solutions/get-next-key';
-import type { CSSProperties, FC, ReactElement } from 'react';
-import React, { useEffect, useState } from 'react';
+import type { CSSProperties, FC } from 'react';
+import React, { useState } from 'react';
 import type { PixelChoice } from '../State/StateInterface';
 import { ControlPixel } from './ControlPixel';
 
@@ -11,15 +11,11 @@ export const PixelsLine: FC<{
   length: number;
   defChoice: PixelChoice;
 }> = ({ children, length, pixelSize, defChoice }) => {
-  const [line, setLine] = useState<ReactElement[] | null>(null);
-
-  useEffect(() => {
-    const evalLine = Array(length)
+  const [line] = useState(() =>
+    Array(length)
       .fill(null)
-      .map(() => <ControlPixel {...{ pixelSize, defChoice }} key={getNextKey('c-key')} />);
-
-    setLine(evalLine);
-  }, [defChoice, length, pixelSize]);
+      .map(() => <ControlPixel {...{ pixelSize, defChoice }} key={getNextKey('c-key')} />)
+  );
 
   return (
     <div>
