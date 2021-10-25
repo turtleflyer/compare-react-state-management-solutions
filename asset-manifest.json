@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/compare-react-state-management-solutions/static/css/main.44b7dec4.chunk.css",
-    "main.js": "/compare-react-state-management-solutions/static/js/main.e4e54e7c.chunk.js",
-    "main.js.map": "/compare-react-state-management-solutions/static/js/main.e4e54e7c.chunk.js.map",
+    "main.js": "/compare-react-state-management-solutions/static/js/main.af81e067.chunk.js",
+    "main.js.map": "/compare-react-state-management-solutions/static/js/main.af81e067.chunk.js.map",
     "runtime-main.js": "/compare-react-state-management-solutions/static/js/runtime-main.cba10f47.js",
     "runtime-main.js.map": "/compare-react-state-management-solutions/static/js/runtime-main.cba10f47.js.map",
-    "static/js/2.12c9462c.chunk.js": "/compare-react-state-management-solutions/static/js/2.12c9462c.chunk.js",
-    "static/js/2.12c9462c.chunk.js.map": "/compare-react-state-management-solutions/static/js/2.12c9462c.chunk.js.map",
+    "static/js/2.e6ed500b.chunk.js": "/compare-react-state-management-solutions/static/js/2.e6ed500b.chunk.js",
+    "static/js/2.e6ed500b.chunk.js.map": "/compare-react-state-management-solutions/static/js/2.e6ed500b.chunk.js.map",
     "index.html": "/compare-react-state-management-solutions/index.html",
     "static/css/main.44b7dec4.chunk.css.map": "/compare-react-state-management-solutions/static/css/main.44b7dec4.chunk.css.map",
-    "static/js/2.12c9462c.chunk.js.LICENSE.txt": "/compare-react-state-management-solutions/static/js/2.12c9462c.chunk.js.LICENSE.txt"
+    "static/js/2.e6ed500b.chunk.js.LICENSE.txt": "/compare-react-state-management-solutions/static/js/2.e6ed500b.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.cba10f47.js",
-    "static/js/2.12c9462c.chunk.js",
+    "static/js/2.e6ed500b.chunk.js",
     "static/css/main.44b7dec4.chunk.css",
-    "static/js/main.e4e54e7c.chunk.js"
+    "static/js/main.af81e067.chunk.js"
   ]
 }
