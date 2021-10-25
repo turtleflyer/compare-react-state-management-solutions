@@ -4,6 +4,7 @@ import { drawPixelToPaint } from './helpers/drawPixelToPaint';
 import {
   alternativeForChoiceKeys,
   createColorForAlternativeForChoiceEntry,
+  readInterstate,
   setInterstate,
   useInterstate,
 } from './State/State';
@@ -35,24 +36,28 @@ export const repaintRow = (): void => {
 };
 
 export const useDisableRows = (): (() => void) | null =>
-  useInterstate.acceptSelector(({ [alternativeForChoiceKeys[1]]: possibleColor }) =>
-    possibleColor === null
-      ? null
-      : () => {
-          setInterstate({
-            [alternativeForChoiceKeys[1]]: null,
-            [rememberActiveChoiceKey]: 0 as PixelChoice,
-          });
-        }
+  useInterstate.acceptSelector(
+    ({ [alternativeForChoiceKeys[1]]: possibleColor }) =>
+      possibleColor === null
+        ? null
+        : () => {
+            setInterstate({
+              [alternativeForChoiceKeys[1]]: null,
+              [rememberActiveChoiceKey]: 0 as PixelChoice,
+            });
+          },
+    [readInterstate(alternativeForChoiceKeys[1])]
   );
 
 export const useEnableRows = (): (() => void) | null =>
-  useInterstate.acceptSelector(({ [alternativeForChoiceKeys[1]]: possibleColor }) =>
-    possibleColor === null
-      ? () => {
-          setInterstate(createColorForAlternativeForChoiceEntry(1));
-        }
-      : null
+  useInterstate.acceptSelector(
+    ({ [alternativeForChoiceKeys[1]]: possibleColor }) =>
+      possibleColor === null
+        ? () => {
+            setInterstate(createColorForAlternativeForChoiceEntry(1));
+          }
+        : null,
+    [readInterstate(alternativeForChoiceKeys[1])]
   );
 
 export const paintRandomSinglePixelDependedOnGridSize = ({
