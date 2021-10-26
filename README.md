@@ -54,13 +54,15 @@ This is a logical diagram of the application
 ![logical model](doc/logical-model.png)
 
 Any `Pixel` component has a prop `alternative` which is bound to a global state record that holds
-the value of some color. That means any pixel is subscribed to some "alternative". `ControlPixel` in
-its turn is subscribed to a "choice" that is binary. It is the key that holds the name of the
-"alternative" or `null` value. If the "choice" retains a `null`, then the controlled `Pixel` gets
-missed - the "choice" is disabled. Otherwise, it makes `Pixel` subscribe to the color correlated
-with the "alternative" name it belongs to. It introduces the test model with the dynamic
+the value of some color. That means any pixel is subscribed to some "alternative". Each
+`ControlPixel`, that is a parent of `Pixel`, has a unique key referencing to the value of "choice"
+in the global state. Thus `ControlPixel` is subscribed to its "choice" that may change at any time.
+The "choice", which is binary, in its turn is a key name that holds the "alternative" key or `null`
+value. If the "choice" retains a `null`, then the controlled `Pixel` gets missed - the "choice" is
+disabled. Otherwise, it makes `Pixel` components of that "choice" subscribe to the color correlated
+with the "alternative" they belong to. It introduces the test model with a two-level dynamic
 subscription. In the beginning, each row has its default "choice", and every "choice" of two holds a
-different "alternative". The row of the "choice" 0 follows the "choice" 1.
+different "alternative" keys. The row of the "choice" 0 follows the "choice" 1.
 
 There are several test commands to measure the performance:
 
@@ -75,8 +77,11 @@ There are several test commands to measure the performance:
   them through `ControlPixel` giving that "choice" brand new "alternative". In this case, the app
   state creates a record for the new "alternative" key with the new color value.
 
-* **Paint random pixel.** The command picks a random `ControlPixel` and dynamically changes its
-  "choice" effectively repainting the controlled `Pixel`.
+* **Paint random pixel.** The command picks a random unique key of some `ControlPixel` component and
+  changes its record's value to the opposite "choice". It notifies the component and this component
+  re-renders the controlled `Pixel` with the new "alternative" in the props (or erases the pixel, if
+  the new "choice" was disabled) and makes it dynamically resubscribe to a new color. This command
+  visually repaints the pixel in the grid.
 
 * **Paint n% random pixels.** The same as previous but picking the defined percentage of pixels.
 
