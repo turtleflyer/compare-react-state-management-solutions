@@ -1,5 +1,4 @@
-import type { FC } from 'react';
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 export interface Area {
   top: number;
@@ -134,7 +133,7 @@ const createBlockingStateAndCalculateArea = (): {
   }
 };
 
-export const BlockingParametersProvider: FC = ({ children }) => {
+export const BlockingParametersProvider = ({ children }: { children: React.ReactNode }) => {
   const [{ useBlockingArea, useBlockingState, setBlockingStateAndCalculateAreaMethods }] = useState(
     createBlockingStateAndCalculateArea
   );

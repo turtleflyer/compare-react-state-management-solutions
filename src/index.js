@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import { AppInFlexBox } from './AppInFlexBox';
 import './index.css';
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(
   <React.StrictMode>
     <AppInFlexBox />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );

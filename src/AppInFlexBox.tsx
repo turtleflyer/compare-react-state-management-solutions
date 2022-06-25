@@ -3,10 +3,12 @@ import {
   PerfInfoProvider,
 } from '@compare-react-state-management-solutions/performance-info';
 import type { CSSProperties, FC } from 'react';
-import React, { useState } from 'react';
-import { version } from '../package.json';
+import { useState } from 'react';
+import packageConfig from '../package.json';
 import { App } from './App';
 import { InfoPanel, TAB_HEADER_HEIGHT } from './internal_packages/info-panel/InfoPanel';
+
+const { version } = packageConfig;
 
 const DEF_GRID_SIZE = 32;
 
