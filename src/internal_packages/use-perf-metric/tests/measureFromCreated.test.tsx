@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { act, render } from '@testing-library/react';
-import React from 'react';
 import type { PerformanceEntrySimplified } from './assets/PerformanceObserver.supported.mock';
 import { createMockedPerfObserver } from './assets/PerformanceObserver.supported.mock';
 import type { Retrieve } from './assets/TestComponent';
