@@ -2,6 +2,7 @@ export const choiceForPixelPlaceholderKey = 'choice-for-pixel';
 
 export type ChoiceForPixelState = Record<ChoiceForPixel, PixelChoice>;
 export type ChoiceForPixel = typeof choiceForPixelPlaceholderKey;
+// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 export type PixelChoice = 0 | 1;
 
 export const colorForAlternativeKeyPrefix = 'color-for-alternative';

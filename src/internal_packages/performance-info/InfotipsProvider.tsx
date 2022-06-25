@@ -1,5 +1,4 @@
-import type { FC } from 'react';
-import React, { createContext, useState } from 'react';
+import { createContext, useState } from 'react';
 
 interface InfotipsPoolMethods {
   addTipHandler: (dispatcher: () => void) => void;
@@ -32,7 +31,10 @@ const createInfotipsPoolMethods = (): InfotipsPoolMethods => {
   };
 };
 
-export const InfotipsProvider: FC<InfotipsProviderProps> = ({ popupDelay, children }) => {
+export const InfotipsProvider = ({
+  popupDelay,
+  children,
+}: InfotipsProviderProps & { children: React.ReactNode }) => {
   const [infotipsContextValue] = useState<InfotipsContextValue>(() => ({
     popupDelay,
     ...createInfotipsPoolMethods(),
