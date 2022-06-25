@@ -1,10 +1,10 @@
 {
   "name": "@compare-react-state-management-solutions/control-panel",
   "private": "true",
-  "version": "4.1.2",
+  "version": "4.2.0",
   "main": "ControlPanel.tsx",
   "dependencies": {
-    "@compare-react-state-management-solutions/use-perf-metric": "^0.4.0",
-    "react": "^17.0.1"
+    "@compare-react-state-management-solutions/use-perf-metric": "^0.5.0",
+    "react": "^18.2.0"
   }
 }

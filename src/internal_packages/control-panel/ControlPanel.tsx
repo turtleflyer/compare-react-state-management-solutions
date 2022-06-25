@@ -6,7 +6,7 @@ import {
 import type { WrapMetricConsumerProps } from '@compare-react-state-management-solutions/use-perf-metric';
 import { usePerfMetric } from '@compare-react-state-management-solutions/use-perf-metric';
 import type { CSSProperties, FC, ReactElement } from 'react';
-import React, { cloneElement, useEffect, useState } from 'react';
+import { cloneElement, useEffect, useState } from 'react';
 import type { ChooseGridProps } from './ChooseGrid';
 import { ChooseGrid } from './ChooseGrid';
 import { DisableOrEnableRowsButton, DisableOrEnableRowsHook } from './DisableOrEnableRowsButton';
@@ -157,6 +157,7 @@ const createUseBody = ({
      */
     const [onGridChosenEnhanced, setOnGridChosenEnhanced] = useState<
       (arg: { gridSize: number }) => void
+      // eslint-disable-next-line react/display-name
     >(() => () => null);
 
     /**
@@ -175,6 +176,7 @@ const createUseBody = ({
       callback: () => wantToMountCallbackFirstRun(),
     });
 
+    // eslint-disable-next-line react/display-name
     wantToMountCallback = () =>
       blockingState.toBlock && blockingState.readyToRender && containerHeight !== null
         ? ({
@@ -198,6 +200,7 @@ const createUseBody = ({
       } as const;
     };
 
+    // eslint-disable-next-line react/display-name
     readyToMountCallback = () =>
       pixelStageWithPropsAdded && !blockingState.toBlock
         ? ({ type: 'stage mounted', callback: () => stageMountedCallback() } as const)
@@ -238,6 +241,7 @@ const createUseBody = ({
       return { type: 'stage mounted', callback: null } as const;
     };
 
+    // eslint-disable-next-line react/display-name
     wantToUnmountCallback = () =>
       blockingState.toBlock && blockingState.readyToRender
         ? ({
@@ -254,6 +258,7 @@ const createUseBody = ({
       }
 
       setStateToBlock();
+      // eslint-disable-next-line react/display-name
       setOnGridChosenEnhanced(() => () => null);
 
       return {
@@ -262,6 +267,7 @@ const createUseBody = ({
       } as const;
     };
 
+    // eslint-disable-next-line react/display-name
     readyToUnmountCallback = () =>
       pixelStageWithPropsAdded || blockingState.toBlock
         ? null
@@ -291,6 +297,7 @@ const createUseBody = ({
       } as const;
     };
 
+    // eslint-disable-next-line react/display-name
     stageUnmountedCallback = () =>
       gridSize === nextGridSize
         ? ({

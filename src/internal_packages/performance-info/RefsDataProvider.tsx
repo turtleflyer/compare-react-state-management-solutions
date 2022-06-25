@@ -1,5 +1,4 @@
-import type { FC } from 'react';
-import React, { createContext, useState } from 'react';
+import { createContext, useState } from 'react';
 
 export interface RefsProviderAssets {
   provideModuleNameAndRef: (modNAndRef: [string, HTMLElement]) => void;
@@ -24,7 +23,7 @@ const createRefsProviderAssets = (): RefsProviderAssets => {
   return { provideModuleNameAndRef, getRef };
 };
 
-export const RefsDataProvider: FC = ({ children }) => {
+export const RefsDataProvider = ({ children }: { children: React.ReactNode }) => {
   const [refAssets] = useState(() => createRefsProviderAssets());
 
   return <RefsContext.Provider {...{ value: refAssets }}>{children}</RefsContext.Provider>;

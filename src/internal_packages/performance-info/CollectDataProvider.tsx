@@ -1,6 +1,6 @@
 import type { PerfMetric } from '@compare-react-state-management-solutions/use-perf-metric';
-import type { Dispatch, FC, SetStateAction } from 'react';
-import React, { createContext, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import { createContext, useState } from 'react';
 
 export type Tags = [string, ...(string | number)[]];
 
@@ -52,7 +52,7 @@ const createCollectDataProviderAssets = (): {
   return { useGetDataPoolContextValue, perfInfoDataMethods };
 };
 
-export const CollectDataProvider: FC = ({ children }) => {
+export const CollectDataProvider = ({ children }: { children: React.ReactNode }) => {
   const [{ useGetDataPoolContextValue, perfInfoDataMethods }] = useState(() =>
     createCollectDataProviderAssets()
   );

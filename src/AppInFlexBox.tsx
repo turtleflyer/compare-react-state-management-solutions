@@ -7,8 +7,10 @@ import { App as ReduxHooksApp } from '@compare-react-state-management-solutions/
 import { App as UseInterstateApp } from '@compare-react-state-management-solutions/use-interstate-component';
 import type { CSSProperties, FC } from 'react';
 import { useState } from 'react';
-import { version } from '../package.json';
+import packageConfig from '../package.json';
 import { InfoPanel, TAB_HEADER_HEIGHT } from './internal_packages/info-panel/InfoPanel';
+
+const { version } = packageConfig;
 
 const DEF_GRID_SIZE = 32;
 

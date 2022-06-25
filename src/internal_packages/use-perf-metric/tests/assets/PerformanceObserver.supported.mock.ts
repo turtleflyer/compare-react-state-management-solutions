@@ -23,7 +23,7 @@ export const createMockedPerfObserver = (): {
     }
   ) => void;
 
-  mockPerformanceMark: (name: string) => void;
+  mockPerformanceMark: (name: string) => any;
 
   MockedPerformanceObserver: typeof PerformanceObserver;
 } => {
@@ -69,9 +69,8 @@ export const createMockedPerfObserver = (): {
     }
   };
 
-  const mockPerformanceMark = (name: string): void => {
+  const mockPerformanceMark = (name: string): any => {
     perfMarkNamesRequested = [...perfMarkNamesRequested, name];
-    // requestsOnPerfMarkFlag = true;
   };
 
   class MockedPerformanceObserver implements PerformanceObserver {
